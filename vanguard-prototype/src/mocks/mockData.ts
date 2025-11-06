@@ -82,3 +82,27 @@ export default {
   mockControls,
   mockRequests,
 }
+
+// Helpers to mutate the in-memory mock data during development/testing.
+export function generateVGCPId(): string {
+  // Try to find the max numeric suffix and increment
+  const nums = mockControls
+    .map((c) => {
+      const m = String(c.id).match(/(\d{5})$/)
+      return m ? Number(m[1]) : NaN
+    })
+    .filter((n) => !Number.isNaN(n))
+  const max = nums.length ? Math.max(...nums) : 0
+  const next = (max + 1).toString().padStart(5, '0')
+  return `VGCP-${next}`
+}
+
+export function addMockControl(c: Control): Control {
+  mockControls.push(c)
+  return c
+}
+
+export function addMockRequest(r: TestRequest): TestRequest {
+  mockRequests.push(r)
+  return r
+}
