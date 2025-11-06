@@ -1,6 +1,7 @@
 import './App.css'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import Summary from './pages/Summary'
+import Board from './pages/Board'
 import ControlsList from './pages/ControlsList'
 import IndividualControl from './pages/IndividualControl'
 import CreateState from './pages/CreateState'
@@ -27,6 +28,7 @@ function App() {
             <Link to="/controls">Controls List</Link>
             <Link to="/active-testing">Active Controls</Link>
             <Link to="/requests">Requests</Link>
+            <Link to="/board">Board</Link>
           </nav>
         </header>
 
@@ -50,6 +52,7 @@ function App() {
             <Route path="/requests/:id/update" element={<UpdateIndividualRequest />} />
             <Route path="/requests/:id/comment" element={<CommentOnIndividualRequest />} />
 
+            <Route path="/board" element={<Board />} />
             <Route path="*" element={<div>Page not found</div>} />
           </Routes>
         </main>
