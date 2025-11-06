@@ -1,78 +1,80 @@
-export type Control = {
-  id: string
-  title: string
-  description?: string
-  status: 'draft' | 'active' | 'testing' | 'retired'
-  owner?: string
-  lastTested?: string // ISO date string
-  relatedRequests?: string[]
-}
-
-export type Request = {
-  id: string
-  title: string
-  description?: string
-  status: 'open' | 'in-progress' | 'closed' | 'retired'
-  createdBy?: string
-  createdAt?: string // ISO date string
-  relatedControlId?: string
-}
+import type { Control, TestRequest } from '../lib/types'
 
 export const mockControls: Control[] = [
   {
-    id: 'C-001',
-    title: 'Access Control: Admin Accounts',
-    description: 'Ensure admin accounts have MFA and are logged.',
-    status: 'active',
+    id: 'VGCP-00001',
+    name: 'Access control for administrative accounts',
+    description: 'Ensure admin accounts have MFA, strong password policy and activity logging enabled.',
     owner: 'Alice Johnson',
-    lastTested: '2025-10-15T09:30:00Z',
-    relatedRequests: ['R-101'],
+    sme: 'Carlos Rivera',
+    tester: 'Morgan Lee',
+    needsEscalation: false,
+    dat: { status: 'Testing Completed', step: 'Evidence review' },
+    oet: { status: 'In Progress', step: 'Sampling' },
+    testingNotes: 'Initial sampling complete; one exception noted and logged.',
+    startDate: '2025-09-01',
+    dueDate: '2025-09-30',
+    eta: '2025-09-24',
+    completedDate: '2025-10-02',
   },
   {
-    id: 'C-002',
-    title: 'Data Encryption at Rest',
-    description: 'All sensitive data encrypted using AES-256.',
-    status: 'testing',
+    id: 'VGCP-00002',
+    name: 'Data encryption at rest',
+    description: 'All sensitive data stored in production must be encrypted at rest using approved keys.',
     owner: 'Bob Smith',
-    lastTested: '2025-09-30T14:00:00Z',
-    relatedRequests: ['R-102', 'R-103'],
+    sme: 'Dana White',
+    tester: 'Eve Tester',
+    needsEscalation: true,
+    dat: { status: 'In Progress', step: 'Key rotation verification' },
+    oet: { status: 'Not Started' },
+    testingNotes: 'Waiting for key rotation logs.',
+    startDate: '2025-08-10',
+    dueDate: '2025-09-10',
+    eta: undefined,
+    completedDate: undefined,
   },
   {
-    id: 'C-003',
-    title: 'Secure Development Lifecycle',
-    description: 'SAST and code reviews are performed on every release.',
-    status: 'draft',
+    id: 'VGCP-00003',
+    name: 'Secure development lifecycle',
+    description: 'SAST and code review processes are followed prior to release.',
     owner: 'Carol Lee',
+    sme: undefined,
+    tester: 'Frank Auditor',
+    needsEscalation: false,
+    dat: { status: 'Not Started' },
+    oet: { status: 'Not Started' },
+    testingNotes: undefined,
+    startDate: undefined,
+    dueDate: undefined,
+    eta: undefined,
+    completedDate: undefined,
   },
 ]
 
-export const mockRequests: Request[] = [
+export const mockRequests: TestRequest[] = [
   {
-    id: 'R-101',
-    title: 'Request test evidence for admin MFA',
-    description: 'Need proof that admin accounts are enrolled in MFA and logs retained.',
-    status: 'open',
-    createdBy: 'Eve Tester',
-    createdAt: '2025-10-20T12:00:00Z',
-    relatedControlId: 'C-001',
+    id: 'r' + String(Date.now() - 1000000),
+    controlId: 'VGCP-00001',
+    requestedBy: 'Grace QA',
+    scope: 'Provide MFA enrollment evidence for all admin accounts for Q3.',
+    dueDate: '2025-10-10',
+    status: 'Pending',
   },
   {
-    id: 'R-102',
-    title: 'Encryption key rotation details',
-    description: 'Provide the last two key rotation events and procedure.',
-    status: 'in-progress',
-    createdBy: 'Frank Auditor',
-    createdAt: '2025-08-11T08:45:00Z',
-    relatedControlId: 'C-002',
+    id: 'r' + String(Date.now() - 500000),
+    controlId: 'VGCP-00002',
+    requestedBy: 'Henry Auditor',
+    scope: 'Provide last two encryption key rotation events and related tickets.',
+    dueDate: '2025-09-20',
+    status: 'In Progress',
   },
   {
-    id: 'R-103',
-    title: 'SAST results for release v1.4.0',
-    description: 'Attach SAST report and remediation tickets.',
-    status: 'closed',
-    createdBy: 'Grace QA',
-    createdAt: '2025-07-01T16:20:00Z',
-    relatedControlId: 'C-002',
+    id: 'r' + String(Date.now()),
+    controlId: 'VGCP-00003',
+    requestedBy: 'Ivy Analyst',
+    scope: 'Attach SAST report for release v1.4.0',
+    dueDate: '2025-11-01',
+    status: 'Complete',
   },
 ]
 

@@ -23,7 +23,7 @@ function App() {
     <BrowserRouter>
       <div className="app-shell">
         <header className="app-header">
-          <h1>Vanguard Prototype — Flow</h1>
+          <h1>Vanguard Control System (Prototype)</h1>
           <nav className="app-nav">
             <Link to="/">Summary</Link>
             <Link to="/controls">Controls List</Link>
