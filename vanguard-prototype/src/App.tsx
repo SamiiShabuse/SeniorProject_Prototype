@@ -16,6 +16,7 @@ import CommentOnIndividualRequest from './pages/CommentOnIndividualRequest'
 import IndividualCorrespondingControl from './pages/IndividualCorrespondingControl'
 import UpdateIndividualControlTestingDetails from './pages/UpdateIndividualControlTestingDetails'
 import AssignTesterToCorrespondingControl from './pages/AssignTesterToCorrespondingControl'
+import MockDisplay from './pages/MockDisplay'
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Link to="/active-testing">Active Controls</Link>
             <Link to="/requests">Requests</Link>
             <Link to="/board">Board</Link>
+            <Link to="/mock">Mock Data</Link>
           </nav>
         </header>
 
@@ -53,6 +55,7 @@ function App() {
             <Route path="/requests/:id/comment" element={<CommentOnIndividualRequest />} />
 
             <Route path="/board" element={<Board />} />
+            <Route path="/mock" element={<MockDisplay />} />
             <Route path="*" element={<div>Page not found</div>} />
           </Routes>
         </main>
