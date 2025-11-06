@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { mockControls } from '../mocks/mockData'
 
 export default function ActiveControlsTestingList() {
-  const [showMock, setShowMock] = useState(false)
+  const [showMock, setShowMock] = useState(true)
 
   const testing = mockControls.filter((c) => c.status === 'testing')
 
@@ -13,7 +13,9 @@ export default function ActiveControlsTestingList() {
       <p>List of active controls under testing.</p>
 
       <p>
-        <a href="#" onClick={(e) => { e.preventDefault(); setShowMock((s) => !s) }}>Show mock testing controls</a>
+        <a href="#" onClick={(e) => { e.preventDefault(); setShowMock((s) => !s) }}>
+          {showMock ? 'Hide mock testing controls' : 'Show mock testing controls'}
+        </a>
       </p>
 
       {showMock ? (
@@ -24,9 +26,7 @@ export default function ActiveControlsTestingList() {
           ))}
         </ul>
       ) : (
-        <ul>
-          <li><Link to="/corresponding/101">Corresponding Control #101</Link></li>
-        </ul>
+        <div style={{ color: '#666' }}><em>Mock data hidden</em></div>
       )}
     </div>
   )

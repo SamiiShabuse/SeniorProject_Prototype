@@ -1,12 +1,11 @@
 import './Board.css'
-import BoardView from '../components/kanban/BoardView'
 import { useState } from 'react'
 import { mockControls } from '../mocks/mockData'
 import Column from '../components/kanban/Column'
 import Card from '../components/kanban/Card'
 
 export default function Board() {
-  const [showMock, setShowMock] = useState(false)
+  const [showMock, setShowMock] = useState(true)
 
   const byStatus = (s: string) => mockControls.filter((c) => c.status === s)
 
@@ -17,7 +16,7 @@ export default function Board() {
 
       <p>
         <a href="#" onClick={(e) => { e.preventDefault(); setShowMock((s) => !s) }}>
-          {showMock ? 'Show placeholder board' : 'Show mock data on board'}
+          {showMock ? 'Hide mock data' : 'Show mock data on board'}
         </a>
       </p>
 
@@ -40,7 +39,7 @@ export default function Board() {
           </Column>
         </div>
       ) : (
-        <BoardView />
+        <div style={{ color: '#666' }}><em>Mock data hidden</em></div>
       )}
     </div>
   )

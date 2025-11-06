@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { mockRequests } from '../mocks/mockData'
 
 export default function IndividualRequest() {
-  const [showMock, setShowMock] = useState(false)
+  const [showMock, setShowMock] = useState(true)
 
   return (
     <div>
@@ -11,7 +11,9 @@ export default function IndividualRequest() {
       <p>Requests list / single request entry point.</p>
 
       <p>
-        <a href="#" onClick={(e) => { e.preventDefault(); setShowMock((s) => !s) }}>Show mock requests</a>
+        <a href="#" onClick={(e) => { e.preventDefault(); setShowMock((s) => !s) }}>
+          {showMock ? 'Hide mock requests' : 'Show mock requests'}
+        </a>
       </p>
 
       {showMock ? (
@@ -27,10 +29,7 @@ export default function IndividualRequest() {
           </ul>
         </div>
       ) : (
-        <div>
-          <p><Link to="/requests/create">Create Request</Link></p>
-          <p><Link to="/requests/1/update">Example Request #1</Link></p>
-        </div>
+        <div style={{ color: '#666' }}><em>Mock data hidden</em></div>
       )}
     </div>
   )
