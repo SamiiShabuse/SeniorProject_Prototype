@@ -106,3 +106,10 @@ export function addMockRequest(r: TestRequest): TestRequest {
   mockRequests.push(r)
   return r
 }
+
+export function updateMockControl(id: string, patch: Partial<Control>): Control | undefined {
+  const idx = mockControls.findIndex((c) => c.id === id)
+  if (idx === -1) return undefined
+  mockControls[idx] = { ...mockControls[idx], ...patch }
+  return mockControls[idx]
+}
