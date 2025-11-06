@@ -12,13 +12,16 @@ export default function ActiveControlsTestingList() {
     const t = Array.from(new Set(mockControls.map((c) => c.tester).filter(Boolean) as string[]))
     t.sort()
     return t
-  }, [])
+  }, [mockControls])
 
   // define what "currently working on" means: any non 'Not Started' DAT or OET
+  // or an explicit testingNotes value that indicates progress/completion.
   const isActive = (c: Control) => {
     const dat = c.dat?.status ?? 'Not Started'
     const oet = c.oet?.status ?? 'Not Started'
-    return dat !== 'Not Started' || oet !== 'Not Started'
+    if (dat !== 'Not Started' || oet !== 'Not Started') return true
+    if (c.testingNotes && !/not started/i.test(String(c.testingNotes))) return true
+    return false
   }
 
   const filtered = useMemo(() => {
@@ -28,7 +31,7 @@ export default function ActiveControlsTestingList() {
       if (selectedTester === 'Unassigned') return !c.tester
       return c.tester === selectedTester
     })
-  }, [selectedTester])
+  }, [selectedTester, mockControls])
 
   return (
     <div>

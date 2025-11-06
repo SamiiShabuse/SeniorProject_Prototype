@@ -7,7 +7,7 @@ export default function IndividualRequest() {
 
   return (
     <div>
-      <h2>Individual Request</h2>
+      <h2>Requests</h2>
       <p>Requests list / single request entry point.</p>
 
       <p>
@@ -20,10 +20,11 @@ export default function IndividualRequest() {
         <div>
           <ul>
             {mockRequests.map((r) => (
-              <li key={r.id}>
-                <strong>{r.id}</strong> — {r.title} ({r.status})
-                <div style={{ fontSize: 12, color: '#444' }}>{r.description}</div>
-                <div style={{ marginTop: 4 }}><Link to={`/requests/${r.id}/update`}>Open</Link></div>
+              <li key={r.id} style={{ marginBottom: 10 }}>
+                <div><strong>{r.id}</strong> — <em>{r.requestedBy}</em> • Status: {r.status}</div>
+                <div style={{ fontSize: 13 }}>{r.scope}</div>
+                <div style={{ fontSize: 12, color: '#444', marginTop: 4 }}>Control: {r.controlId} • Due: {r.dueDate}</div>
+                <div style={{ marginTop: 6 }}><Link to={`/requests/${r.id}/update`}>Open / Edit</Link></div>
               </li>
             ))}
           </ul>

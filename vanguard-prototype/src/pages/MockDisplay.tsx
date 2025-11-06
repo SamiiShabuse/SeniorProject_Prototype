@@ -1,6 +1,6 @@
 import React from 'react'
 import { mockControls, mockRequests } from '../mocks/mockData'
-import type { Control, Request } from '../mocks/mockData'
+import type { Control, TestRequest } from '../lib/types'
 
 const Card: React.FC<{ title: string; subtitle?: string; children?: React.ReactNode }> = ({ title, subtitle, children }) => (
   <div style={{ border: '1px solid #ddd', borderRadius: 6, padding: 12, marginBottom: 8 }}>
@@ -18,25 +18,20 @@ const MockDisplay: React.FC = () => {
       <h2>Mock Controls</h2>
       <div>
         {mockControls.map((c: Control) => (
-          <Card key={c.id} title={`${c.id} — ${c.title}`} subtitle={`${c.status} • owner: ${c.owner ?? '—'}`}>
+          <Card key={c.id} title={`${c.id} — ${c.name}`} subtitle={`Owner: ${c.owner ?? '—'}`}>
             <div style={{ fontSize: 14 }}>{c.description}</div>
-            <div style={{ marginTop: 6, fontSize: 12, color: '#444' }}>Last tested: {formatDate(c.lastTested)}</div>
-            {c.relatedRequests && c.relatedRequests.length > 0 && (
-              <div style={{ marginTop: 6, fontSize: 12 }}>
-                Related requests: {c.relatedRequests.join(', ')}
-              </div>
-            )}
+            <div style={{ marginTop: 6, fontSize: 12, color: '#444' }}>DAT: {c.dat?.status} • OET: {c.oet?.status}</div>
+            <div style={{ marginTop: 6, fontSize: 12, color: '#444' }}>Start: {formatDate(c.startDate)} • Due: {formatDate(c.dueDate)}</div>
           </Card>
         ))}
       </div>
 
       <h2 style={{ marginTop: 20 }}>Mock Requests</h2>
       <div>
-        {mockRequests.map((r: Request) => (
-          <Card key={r.id} title={`${r.id} — ${r.title}`} subtitle={`${r.status} • by ${r.createdBy ?? '—'}`}>
-            <div style={{ fontSize: 14 }}>{r.description}</div>
-            <div style={{ marginTop: 6, fontSize: 12, color: '#444' }}>Created: {formatDate(r.createdAt)}</div>
-            {r.relatedControlId && <div style={{ marginTop: 6, fontSize: 12 }}>Related control: {r.relatedControlId}</div>}
+        {mockRequests.map((r: TestRequest) => (
+          <Card key={r.id} title={`${r.id} — ${r.requestedBy}`} subtitle={`${r.status} • control: ${r.controlId}`}>
+            <div style={{ fontSize: 14 }}>{r.scope}</div>
+            <div style={{ marginTop: 6, fontSize: 12, color: '#444' }}>Due: {formatDate(r.dueDate)}</div>
           </Card>
         ))}
       </div>
