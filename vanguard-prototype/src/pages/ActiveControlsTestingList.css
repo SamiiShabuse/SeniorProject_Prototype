@@ -84,6 +84,22 @@
   color: inherit;
 }
 
+/* Make rows look clickable */
+.control-link {
+  cursor: pointer;
+  transition: box-shadow 180ms ease, transform 160ms ease, background-color 160ms ease;
+}
+.control-link:hover {
+  box-shadow: 0 6px 18px rgba(20,20,20,0.06);
+  transform: translateY(-2px);
+  background-color: #ffffff;
+}
+
+.control-row.expanded .control-link {
+  background: #fff;
+  box-shadow: 0 6px 28px rgba(20,20,20,0.06);
+}
+
 .row-left {
   display: flex;
   flex-direction: column;
@@ -104,6 +120,31 @@
   padding: 6px 10px;
   border-radius: 12px;
   font-size: 13px;
+}
+
+/* chevron that rotates when open */
+.chevron {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  transition: transform 240ms ease;
+  transform: rotate(0deg);
+  color: #333;
+}
+.chevron.open { transform: rotate(180deg); }
+
+/* animated expand/collapse panel */
+.expanded-panel {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 320ms ease, opacity 260ms ease;
+  opacity: 0;
+}
+.expanded-panel.open {
+  max-height: 800px; /* generous max */
+  opacity: 1;
 }
 
 .empty {
