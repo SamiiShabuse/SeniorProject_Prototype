@@ -35,7 +35,7 @@ export default function ControlsList() {
 
             <ul className="control-list">
               {controls.map((c: Control) => (
-                <li key={c.id} className="control-row">
+                <li key={c.id} className={`control-row ${expandedId === c.id ? 'expanded' : ''}`}>
                   <div
                     className="control-link"
                     role="button"
@@ -49,10 +49,11 @@ export default function ControlsList() {
                     </div>
                     <div className="row-right">
                       <div className="badge">Last Testing on {formatBadgeDate(c.completedDate ?? c.dueDate)}</div>
+                      <span className={`chevron ${expandedId === c.id ? 'open' : ''}`} style={{ marginLeft: 10 }}>▾</span>
                     </div>
                   </div>
 
-                  {expandedId === c.id && (
+                  <div className={`expanded-panel ${expandedId === c.id ? 'open' : ''}`}>
                     <div style={{ marginTop: 8, marginLeft: 4 }}>
                       <div className="expanded-card" style={{ padding: 12 }}>
                         <div style={{ flex: 1 }}>
@@ -67,7 +68,7 @@ export default function ControlsList() {
                         </div>
                       </div>
                     </div>
-                  )}
+                  </div>
                 </li>
               ))}
             </ul>
