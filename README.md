@@ -19,3 +19,15 @@ npm install
 
 npm run dev
 ```
+
+# How To Login
+
+Just use some random email address followed by @vanguard.com with some random
+
+```bash
+# Example login info
+
+trevorYang@vanguard.com
+
+trevorYang
+```
