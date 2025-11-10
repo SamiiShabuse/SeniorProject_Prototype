@@ -62,22 +62,60 @@ export default function Summary() {
     <div className="panel">
       <h2>Summary</h2>
       <p className="muted">Overview of controls and requests. Click through to view details.</p>
+      {/* Top-level KPI row */}
+      <div style={{ display: 'flex', gap: 16, marginTop: 12, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+        <div style={{ padding: 14, border: '1px solid #eee', borderRadius: 8, minWidth: 180 }}>
+          <div style={{ fontSize: 12, color: '#666' }}>Total Controls</div>
+          <div style={{ fontSize: 20, fontWeight: 700 }}>{mockControls.length}</div>
+        </div>
 
-      <div style={{ display: 'flex', gap: 24, marginTop: 12, alignItems: 'flex-start' }}>
-        <div style={{ padding: 12, border: '1px solid #eee', borderRadius: 8 }}>
-          <h3 style={{ margin: '0 0 8px 0' }}>Controls (DAT status)</h3>
-          <PieChart data={datSlices} />
-          <div style={{ marginTop: 8 }}>
+        <div style={{ padding: 14, border: '1px solid #eee', borderRadius: 8, minWidth: 180 }}>
+          <div style={{ fontSize: 12, color: '#666' }}>Active Controls</div>
+          <div style={{ fontSize: 20, fontWeight: 700 }}>{mockControls.filter((c) => (c.dat?.status ?? '').toLowerCase() !== 'completed' && !(String(c.dat?.status ?? '').trim() === '' && /completed/i.test(String(c.testingNotes ?? '') + String(c.description ?? '')))).length}</div>
+        </div>
+
+        <div style={{ padding: 14, border: '1px solid #eee', borderRadius: 8, minWidth: 260, flex: '1 1 320px' }}>
+          <div style={{ fontSize: 12, color: '#666' }}>Overall completion</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ flex: 1 }}>
+              {(() => {
+                const total = mockControls.length
+                const completed = mockControls.filter((c) => String(c.dat?.status ?? '').toLowerCase() === 'completed' || /completed/i.test(String(c.testingNotes ?? '') + String(c.description ?? ''))).length
+                const pct = total === 0 ? 0 : Math.round((completed / total) * 100)
+                return (
+                  <>
+                    <div style={{ height: 10, background: '#eee', borderRadius: 6, overflow: 'hidden' }}>
+                      <div style={{ width: `${pct}%`, height: '100%', background: '#4caf50', transition: 'width 400ms ease' }} />
+                    </div>
+                    <div style={{ fontSize: 12, color: '#666', marginTop: 6 }}>{completed} completed — {pct}%</div>
+                  </>
+                )
+              })()}
+            </div>
+            <div style={{ width: 60, textAlign: 'right', fontWeight: 700 }}>{mockRequests.length}</div>
+          </div>
+        </div>
+
+        {/* DAT pie + legend */}
+        <div style={{ padding: 12, border: '1px solid #eee', borderRadius: 8, display: 'flex', gap: 16, alignItems: 'center' }}>
+          <div>
+            <h3 style={{ margin: '0 0 8px 0' }}>Controls (DAT)</h3>
+            <PieChart data={datSlices} />
+          </div>
+          <div style={{ minWidth: 160 }}>
             {datSlices.map((s) => (
-              <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+              <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
                 <span style={{ width: 12, height: 12, background: s.color, display: 'inline-block', borderRadius: 3 }} />
                 <div style={{ fontSize: 13 }}>{s.label}: <strong>{s.value}</strong></div>
               </div>
             ))}
           </div>
         </div>
+      </div>
 
-        <div style={{ padding: 12, border: '1px solid #eee', borderRadius: 8, minWidth: 220 }}>
+      {/* Second row: requests breakdown + upcoming + top owners */}
+      <div style={{ display: 'flex', gap: 16, marginTop: 18, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+        <div style={{ padding: 12, border: '1px solid #eee', borderRadius: 8, minWidth: 260 }}>
           <h3 style={{ margin: '0 0 8px 0' }}>Requests</h3>
           <div style={{ fontSize: 14 }}>
             {Object.keys(reqCounts).length === 0 && <div>No requests</div>}
@@ -87,6 +125,41 @@ export default function Summary() {
           </div>
           <div style={{ marginTop: 12 }}>
             <Link to="/controls">View Controls</Link> | <Link to="/requests">View Requests</Link>
+          </div>
+        </div>
+
+        <div style={{ padding: 12, border: '1px solid #eee', borderRadius: 8, minWidth: 320, flex: '1 1 420px' }}>
+          <h3 style={{ margin: '0 0 8px 0' }}>Upcoming due controls</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {mockControls
+              .filter((c) => c.dueDate)
+              .sort((a, b) => String(a.dueDate).localeCompare(String(b.dueDate)))
+              .slice(0, 6)
+              .map((c) => (
+                <div key={c.id} style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
+                  <div style={{ fontSize: 13 }}><Link to={`/controls/${c.id}`}>{c.name}</Link></div>
+                  <div style={{ fontSize: 13, color: '#444' }}>{String(c.dueDate)}</div>
+                </div>
+              ))}
+          </div>
+        </div>
+
+        <div style={{ padding: 12, border: '1px solid #eee', borderRadius: 8, minWidth: 220 }}>
+          <h3 style={{ margin: '0 0 8px 0' }}>Top owners</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            {(() => {
+              const ownerCounts = mockControls.reduce<Record<string, number>>((acc, c) => {
+                const k = c.owner ?? 'Unassigned'
+                acc[k] = (acc[k] ?? 0) + 1
+                return acc
+              }, {})
+              return Object.entries(ownerCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 6)
+                .map(([k, v]) => (
+                  <div key={k} style={{ fontSize: 13 }}>{k}: <strong>{v}</strong></div>
+                ))
+            })()}
           </div>
         </div>
       </div>
