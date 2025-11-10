@@ -18,13 +18,20 @@ export default function ActiveControlsTestingList() {
   }
 
   // define what "currently working on" means: any non 'Not Started' DAT or OET
-  // or an explicit testingNotes value that indicates progress/completion.
+  // For the Active Controls page we consider a control active unless
+  // its DAT status is explicitly 'Completed' (case-insensitive).
+  // If DAT is missing, treat the control as active.
   function isActive(c: any) {
-    const dat = c.dat?.status ?? 'Not Started'
-    const oet = c.oet?.status ?? 'Not Started'
-    if (dat !== 'Not Started' || oet !== 'Not Started') return true
-    if (c.testingNotes && !/not started/i.test(String(c.testingNotes))) return true
-    return false
+    // Prefer DAT.status when present. If DAT.status exists, only exclude when it's 'Completed'.
+    const datRaw = String(c.dat?.status ?? '').trim()
+    if (datRaw) return datRaw.toLowerCase() !== 'completed'
+
+    // If DAT.status is missing, fall back to testingNotes or description which sometimes contain 'Completed'.
+    const notes = String(c.testingNotes ?? '') + ' ' + String(c.description ?? '')
+    if (/completed/i.test(notes)) return false
+
+    // Default to active when no explicit 'Completed' marker is found.
+    return true
   }
 
   const filtered = mockControls.filter(isActive)
