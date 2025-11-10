@@ -31,20 +31,7 @@ export default function ControlsList() {
       <div className="controls-container">
         {showMock ? (
           <>
-            {controls.length > 0 && (
-              <div className="expanded-card">
-                <div className="expanded-left">
-                  <h3 className="control-title">{controls[0].name}</h3>
-                  <p className="control-desc">{controls[0].description ?? 'No description provided.'}</p>
-                </div>
-                <div className="expanded-right">
-                  <div className="meta"><strong>Control Owner:</strong> {controls[0].owner}</div>
-                  <div className="meta"><strong>Control SME:</strong> {controls[0].sme ?? '—'}</div>
-                  <div className="meta"><strong>Control Escalation Required:</strong> {controls[0].needsEscalation ? 'Yes' : 'No'}</div>
-                  {controls[0].testingNotes && <div className="status-badge">In Testing</div>}
-                </div>
-              </div>
-            )}
+            {/* top example removed per design — list rows will show expandable details */}
 
             <ul className="control-list">
               {controls.map((c: Control) => (
