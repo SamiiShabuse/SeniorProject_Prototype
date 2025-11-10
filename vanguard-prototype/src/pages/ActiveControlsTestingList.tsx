@@ -1,11 +1,10 @@
-import { Link } from 'react-router-dom'
 import { useState } from 'react'
-import { mockControls, mockRequests } from '../mocks/mockData'
+import { mockControls } from '../mocks/mockData'
 import './ActiveControlsTestingList.css'
 
 export default function ActiveControlsTestingList() {
   const [showMock, setShowMock] = useState(true)
-  const [openRequests, setOpenRequests] = useState<Record<string, boolean>>({})
+  const [expandedId, setExpandedId] = useState<string | null>(null)
 
 
   // (previously filtered list by 'active' status — not needed for requests view)
@@ -18,22 +17,17 @@ export default function ActiveControlsTestingList() {
     return `${m[3]}/${m[2]}/${m[1]}`
   }
 
-  // derive a small set of controls to show for a request.
-  // Prefer controls that match the request.controlId; then fill with nearby controls.
-  function controlsForRequest(reqIndex: number, req: any) {
-    const found = mockControls.filter((c) => String(c.id) === String(req.controlId))
-    if (found.length >= 3) return found.slice(0, 3)
-    // pick the control that matches and then a couple more nearby
-    const extras: any[] = []
-    if (mockControls.length > 0) {
-      const baseIndex = Math.max(0, reqIndex % mockControls.length)
-      for (let i = 0; i < 3 && extras.length < 3; i++) {
-        const pick = mockControls[(baseIndex + i) % mockControls.length]
-        if (!found.find((f) => f.id === pick.id)) extras.push(pick)
-      }
-    }
-    return [...found, ...extras].slice(0, 3)
+  // define what "currently working on" means: any non 'Not Started' DAT or OET
+  // or an explicit testingNotes value that indicates progress/completion.
+  function isActive(c: any) {
+    const dat = c.dat?.status ?? 'Not Started'
+    const oet = c.oet?.status ?? 'Not Started'
+    if (dat !== 'Not Started' || oet !== 'Not Started') return true
+    if (c.testingNotes && !/not started/i.test(String(c.testingNotes))) return true
+    return false
   }
+
+  const filtered = mockControls.filter(isActive)
 
   return (
     <div className="control-list-page">
@@ -50,7 +44,7 @@ export default function ActiveControlsTestingList() {
       <div className="controls-container">
         {showMock ? (
           <>
-            {/* Tabs area (visual only) */}
+            {/* Tabs */}
             <div style={{ display: 'flex', gap: 18, marginBottom: 12 }}>
               <div style={{ borderBottom: '2px solid #eee', paddingBottom: 8 }}>Request</div>
               <div style={{ color: '#888', paddingBottom: 8 }}>Status</div>
@@ -58,55 +52,44 @@ export default function ActiveControlsTestingList() {
             </div>
 
             <ul className="control-list">
-              {mockRequests.length === 0 && <li className="empty">No requests available</li>}
-
-              {mockRequests.map((r, idx) => {
-                const key = String(r.id || `req-${idx}`)
-                const isOpen = Boolean(openRequests[key])
-                const rows = controlsForRequest(idx, r)
-                return (
-                  <li key={key} className={`control-row ${isOpen ? 'expanded' : ''}`}>
-                    <div
-                      className="control-link"
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => setOpenRequests((s) => ({ ...s, [key]: !s[key] }))}
-                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setOpenRequests((s) => ({ ...s, [key]: !s[key] })) }}
-                    >
-                            <div className="row-left">
-                              <div className="row-title">Request #{idx + 1}</div>
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
-                              <div className="badge" style={{ marginRight: 12 }}>{r.status ?? 'In Progress'}</div>
-                              <span className={`chevron ${isOpen ? 'open' : ''}`}>▾</span>
-                            </div>
+              {filtered.length === 0 && <li className="empty">No active controls found</li>}
+              {filtered.map((c: any) => (
+                <li key={c.id} className={`control-row ${expandedId === c.id ? 'expanded' : ''}`}>
+                  <div
+                    className="control-link"
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => setExpandedId((s) => (s === c.id ? null : c.id))}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setExpandedId((s) => (s === c.id ? null : c.id)) }}
+                  >
+                    <div className="row-left">
+                      <div className="row-title">{c.name}</div>
+                      <div className="row-sub">Owner: {c.owner} • Tester: {c.tester ?? '—'}</div>
                     </div>
+                    <div className="row-right">
+                      <div className="badge">Last Testing on {formatBadgeDate(c.completedDate ?? c.dueDate)}</div>
+                      <span className={`chevron ${expandedId === c.id ? 'open' : ''}`} style={{ marginLeft: 10 }}>▾</span>
+                    </div>
+                  </div>
 
-                    <div className={`expanded-panel ${isOpen ? 'open' : ''}`}>
-                      <div style={{ marginTop: 8 }}>
-                        <div className="expanded-card">
-                          <div style={{ flex: 1 }}>
-                            {/* Render a simple table-like list of controls */}
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 160px 140px 140px 160px', gap: 8, alignItems: 'center' }}>
-                              {rows.map((c: any) => (
-                                <div key={`${key}-row-${c.id}`} style={{ display: 'contents' }}>
-                                  <div style={{ padding: '8px 0' }}>
-                                    <Link to={`/controls/${c.id}`} style={{ color: '#1a88ff' }}>{c.name}</Link>
-                                  </div>
-                                  <div style={{ padding: '8px 0', fontWeight: 600 }}>{c.tester ?? c.tester ?? '—'}</div>
-                                  <div style={{ padding: '8px 0' }}>Started on {formatBadgeDate(c.startDate)}</div>
-                                  <div style={{ padding: '8px 0' }}>ETA {formatBadgeDate(c.dueDate)}</div>
-                                  <div style={{ padding: '8px 0' }}>{c.testingNotes ? String(c.testingNotes) : (r.scope ? String(r.scope).slice(0, 40) : '—')}</div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
+                  <div className={`expanded-panel ${expandedId === c.id ? 'open' : ''}`}>
+                    <div style={{ marginTop: 8, marginLeft: 4 }}>
+                      <div className="expanded-card" style={{ padding: 12 }}>
+                        <div style={{ flex: 1 }}>
+                          <h4 style={{ marginTop: 0 }}>{c.name}</h4>
+                          <p style={{ margin: 0 }}>{c.description ?? 'No additional details.'}</p>
+                        </div>
+                        <div style={{ width: 260, marginLeft: 16 }}>
+                          <div className="meta"><strong>Owner:</strong> {c.owner}</div>
+                          <div className="meta"><strong>SME:</strong> {c.sme ?? '—'}</div>
+                          <div className="meta"><strong>Escalation:</strong> {c.needsEscalation ? 'Yes' : 'No'}</div>
+                          {c.testingNotes && <div style={{ marginTop: 8 }}><strong>Notes:</strong><div style={{ marginTop: 6 }}>{c.testingNotes}</div></div>}
                         </div>
                       </div>
                     </div>
-                  </li>
-                )
-              })}
+                  </div>
+                </li>
+              ))}
             </ul>
           </>
         ) : (
