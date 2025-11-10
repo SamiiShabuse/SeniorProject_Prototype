@@ -38,128 +38,160 @@ function PieChart({ data, size = 160 }: { data: Slice[]; size?: number }) {
 }
 
 export default function Summary() {
-  // compute DAT status distribution
-  const datBuckets = new Map<string, number>()
+  // compute DAT status distribution and helper fns
   const datLabels = ['Not Started', 'In Progress', 'Testing Completed', 'Addressing Comments', 'Completed']
-  datLabels.forEach((l) => datBuckets.set(l, 0))
+  const datCounts: Record<string, number> = {}
+  datLabels.forEach((l) => (datCounts[l] = 0))
 
+  // categorize each control into a DAT label
   mockControls.forEach((c) => {
-    const s = c.dat?.status ?? 'Not Started'
-    datBuckets.set(s, (datBuckets.get(s) ?? 0) + 1)
+    const raw = String(c.dat?.status ?? '').trim()
+    let label = 'Not Started'
+    if (!raw) {
+      // fallback: some sheets put 'Completed' into notes/description
+      if (/completed/i.test(String(c.testingNotes ?? '') + String(c.description ?? ''))) label = 'Completed'
+      else label = 'Not Started'
+    } else {
+      const s = raw.toLowerCase()
+      if (s.includes('not')) label = 'Not Started'
+      else if (s.includes('progress') || s.includes('in progress')) label = 'In Progress'
+      else if (s.includes('testing')) label = 'Testing Completed'
+      else if (s.includes('address') || s.includes('comments')) label = 'Addressing Comments'
+      else if (s.includes('complete')) label = 'Completed'
+      else label = 'In Progress'
+    }
+    datCounts[label] = (datCounts[label] ?? 0) + 1
   })
 
-  const palette = ['#4caf50', '#ff9800', '#2196f3', '#9c27b0', '#607d8b']
+  const statusColors: Record<string, string> = {
+    'Not Started': '#9aa4b2',
+    'In Progress': '#1a88ff',
+    'Testing Completed': '#f6a623',
+    'Addressing Comments': '#ff7043',
+    Completed: '#4caf50',
+  }
 
-  const datSlices: Slice[] = datLabels.map((label, i) => ({ label, value: datBuckets.get(label) ?? 0, color: palette[i % palette.length] }))
+  const datSlices: Slice[] = datLabels.map((label) => ({ label, value: datCounts[label] ?? 0, color: statusColors[label] ?? '#ccc' }))
 
-  // requests by status
-  const reqCounts = mockRequests.reduce<Record<string, number>>((acc, r) => {
-    acc[r.status] = (acc[r.status] ?? 0) + 1
-    return acc
-  }, {})
+  function formatBadgeDate(d?: string) {
+    if (!d) return '—'
+    const dt = new Date(d)
+    if (isNaN(dt.getTime())) return String(d)
+    return dt.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+  }
 
   return (
-    <div className="panel">
-      <h2>Summary</h2>
-      <p className="muted">Overview of controls and requests. Click through to view details.</p>
-      {/* Top-level KPI row */}
-      <div style={{ display: 'flex', gap: 16, marginTop: 12, alignItems: 'flex-start', flexWrap: 'wrap' }}>
-        <div style={{ padding: 14, border: '1px solid #eee', borderRadius: 8, minWidth: 180 }}>
-          <div style={{ fontSize: 12, color: '#666' }}>Total Controls</div>
-          <div style={{ fontSize: 20, fontWeight: 700 }}>{mockControls.length}</div>
+    <div className="panel" style={{ maxWidth: 1100, margin: '0 auto' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12 }}>
+        <div>
+          <h2 style={{ margin: 0 }}>Overview</h2>
+          <p className="muted" style={{ marginTop: 6 }}>Live dashboard of controls and requests — actionable insights at a glance.</p>
         </div>
-
-        <div style={{ padding: 14, border: '1px solid #eee', borderRadius: 8, minWidth: 180 }}>
-          <div style={{ fontSize: 12, color: '#666' }}>Active Controls</div>
-          <div style={{ fontSize: 20, fontWeight: 700 }}>{mockControls.filter((c) => (c.dat?.status ?? '').toLowerCase() !== 'completed' && !(String(c.dat?.status ?? '').trim() === '' && /completed/i.test(String(c.testingNotes ?? '') + String(c.description ?? '')))).length}</div>
-        </div>
-
-        <div style={{ padding: 14, border: '1px solid #eee', borderRadius: 8, minWidth: 260, flex: '1 1 320px' }}>
-          <div style={{ fontSize: 12, color: '#666' }}>Overall completion</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{ flex: 1 }}>
-              {(() => {
-                const total = mockControls.length
-                const completed = mockControls.filter((c) => String(c.dat?.status ?? '').toLowerCase() === 'completed' || /completed/i.test(String(c.testingNotes ?? '') + String(c.description ?? ''))).length
-                const pct = total === 0 ? 0 : Math.round((completed / total) * 100)
-                return (
-                  <>
-                    <div style={{ height: 10, background: '#eee', borderRadius: 6, overflow: 'hidden' }}>
-                      <div style={{ width: `${pct}%`, height: '100%', background: '#4caf50', transition: 'width 400ms ease' }} />
-                    </div>
-                    <div style={{ fontSize: 12, color: '#666', marginTop: 6 }}>{completed} completed — {pct}%</div>
-                  </>
-                )
-              })()}
-            </div>
-            <div style={{ width: 60, textAlign: 'right', fontWeight: 700 }}>{mockRequests.length}</div>
-          </div>
-        </div>
-
-        {/* DAT pie + legend */}
-        <div style={{ padding: 12, border: '1px solid #eee', borderRadius: 8, display: 'flex', gap: 16, alignItems: 'center' }}>
-          <div>
-            <h3 style={{ margin: '0 0 8px 0' }}>Controls (DAT)</h3>
-            <PieChart data={datSlices} />
-          </div>
-          <div style={{ minWidth: 160 }}>
-            {datSlices.map((s) => (
-              <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                <span style={{ width: 12, height: 12, background: s.color, display: 'inline-block', borderRadius: 3 }} />
-                <div style={{ fontSize: 13 }}>{s.label}: <strong>{s.value}</strong></div>
-              </div>
-            ))}
-          </div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid #ddd', background: '#fff' }}>Export</button>
+          <button style={{ padding: '8px 12px', borderRadius: 8, border: 'none', background: '#1a88ff', color: '#fff' }}>Refresh</button>
         </div>
       </div>
 
-      {/* Second row: requests breakdown + upcoming + top owners */}
-      <div style={{ display: 'flex', gap: 16, marginTop: 18, alignItems: 'flex-start', flexWrap: 'wrap' }}>
-        <div style={{ padding: 12, border: '1px solid #eee', borderRadius: 8, minWidth: 260 }}>
-          <h3 style={{ margin: '0 0 8px 0' }}>Requests</h3>
-          <div style={{ fontSize: 14 }}>
-            {Object.keys(reqCounts).length === 0 && <div>No requests</div>}
-            {Object.entries(reqCounts).map(([k, v]) => (
-              <div key={k} style={{ marginBottom: 6 }}>{k}: <strong>{v}</strong></div>
-            ))}
-          </div>
-          <div style={{ marginTop: 12 }}>
-            <Link to="/controls">View Controls</Link> | <Link to="/requests">View Requests</Link>
-          </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginTop: 16 }}>
+        <div style={{ padding: 16, borderRadius: 12, background: 'linear-gradient(180deg,#fff,#fbfcff)', boxShadow: '0 6px 18px rgba(20,20,20,0.04)' }}>
+          <div style={{ fontSize: 12, color: '#666' }}>Total Controls</div>
+          <div style={{ fontSize: 22, fontWeight: 800 }}>{mockControls.length}</div>
+          <div style={{ fontSize: 12, color: '#999', marginTop: 8 }}>All controls imported from tracker</div>
         </div>
 
-        <div style={{ padding: 12, border: '1px solid #eee', borderRadius: 8, minWidth: 320, flex: '1 1 420px' }}>
-          <h3 style={{ margin: '0 0 8px 0' }}>Upcoming due controls</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {mockControls
-              .filter((c) => c.dueDate)
-              .sort((a, b) => String(a.dueDate).localeCompare(String(b.dueDate)))
-              .slice(0, 6)
-              .map((c) => (
-                <div key={c.id} style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
-                  <div style={{ fontSize: 13 }}><Link to={`/controls/${c.id}`}>{c.name}</Link></div>
-                  <div style={{ fontSize: 13, color: '#444' }}>{String(c.dueDate)}</div>
+        <div style={{ padding: 16, borderRadius: 12, background: '#fff', boxShadow: '0 6px 18px rgba(20,20,20,0.04)' }}>
+          <div style={{ fontSize: 12, color: '#666' }}>Active Controls</div>
+          <div style={{ fontSize: 22, fontWeight: 800 }}>{mockControls.filter((c) => (c.dat?.status ?? '').toLowerCase() !== 'completed' && !(String(c.dat?.status ?? '').trim() === '' && /completed/i.test(String(c.testingNotes ?? '') + String(c.description ?? '')))).length}</div>
+          <div style={{ fontSize: 12, color: '#999', marginTop: 8 }}>Based on DAT status (and notes)</div>
+        </div>
+
+        <div style={{ padding: 16, borderRadius: 12, background: '#fff', boxShadow: '0 6px 18px rgba(20,20,20,0.04)' }}>
+          <div style={{ fontSize: 12, color: '#666' }}>Open Requests</div>
+          <div style={{ fontSize: 22, fontWeight: 800 }}>{mockRequests.filter((r) => (r.status ?? '').toLowerCase() !== 'complete').length}</div>
+          <div style={{ fontSize: 12, color: '#999', marginTop: 8 }}>Requests needing attention</div>
+        </div>
+
+        <div style={{ padding: 16, borderRadius: 12, background: '#fff', boxShadow: '0 6px 18px rgba(20,20,20,0.04)' }}>
+          <div style={{ fontSize: 12, color: '#666' }}>Completion</div>
+          {(() => {
+            const total = mockControls.length
+            const completed = mockControls.filter((c) => String(c.dat?.status ?? '').toLowerCase() === 'completed' || /completed/i.test(String(c.testingNotes ?? '') + String(c.description ?? ''))).length
+            const pct = total === 0 ? 0 : Math.round((completed / total) * 100)
+            return (
+              <>
+                <div style={{ fontSize: 22, fontWeight: 800 }}>{pct}%</div>
+                <div style={{ height: 8, background: '#f0f0f0', borderRadius: 6, overflow: 'hidden', marginTop: 8 }}>
+                  <div style={{ width: `${pct}%`, height: '100%', background: '#4caf50', transition: 'width 600ms ease' }} />
+                </div>
+                <div style={{ fontSize: 12, color: '#999', marginTop: 8 }}>{completed} of {total} completed</div>
+              </>
+            )
+          })()}
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 16, marginTop: 18 }}>
+        <div style={{ padding: 16, borderRadius: 12, background: '#fff', boxShadow: '0 8px 28px rgba(20,20,20,0.04)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h3 style={{ margin: 0 }}>Controls (DAT)</h3>
+            <div style={{ fontSize: 13, color: '#666' }}>Distribution by DAT status</div>
+          </div>
+          <div style={{ display: 'flex', gap: 24, marginTop: 12, alignItems: 'center' }}>
+            <PieChart data={datSlices} size={160} />
+            <div>
+              {datSlices.map((s) => (
+                <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+                  <span style={{ width: 12, height: 12, background: s.color, display: 'inline-block', borderRadius: 4 }} />
+                  <div style={{ fontSize: 14 }}>{s.label}</div>
+                  <div style={{ marginLeft: 'auto', fontWeight: 700 }}>{s.value}</div>
                 </div>
               ))}
+            </div>
           </div>
         </div>
 
-        <div style={{ padding: 12, border: '1px solid #eee', borderRadius: 8, minWidth: 220 }}>
-          <h3 style={{ margin: '0 0 8px 0' }}>Top owners</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            {(() => {
-              const ownerCounts = mockControls.reduce<Record<string, number>>((acc, c) => {
-                const k = c.owner ?? 'Unassigned'
-                acc[k] = (acc[k] ?? 0) + 1
-                return acc
-              }, {})
-              return Object.entries(ownerCounts)
-                .sort((a, b) => b[1] - a[1])
+        <div style={{ display: 'grid', gap: 16 }}>
+          <div style={{ padding: 12, borderRadius: 12, background: '#fff', boxShadow: '0 8px 18px rgba(20,20,20,0.04)' }}>
+            <h4 style={{ margin: '0 0 8px 0' }}>Upcoming due controls</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {mockControls
+                .filter((c) => c.dueDate)
+                .sort((a, b) => String(a.dueDate).localeCompare(String(b.dueDate)))
                 .slice(0, 6)
-                .map(([k, v]) => (
-                  <div key={k} style={{ fontSize: 13 }}>{k}: <strong>{v}</strong></div>
-                ))
-            })()}
+                .map((c) => (
+                  <div key={c.id} style={{ display: 'flex', gap: 12, alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                      <div style={{ width: 40, height: 40, borderRadius: 8, background: '#f3f6fb', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>{(c.owner || '—').split(' ').map((p:any)=>p[0]).slice(0,2).join('')}</div>
+                      <div style={{ fontSize: 13 }}><Link to={`/controls/${c.id}`}>{c.name}</Link></div>
+                    </div>
+                    <div style={{ fontSize: 13, color: '#444' }}>{formatBadgeDate(c.dueDate)}</div>
+                  </div>
+                ))}
+            </div>
+          </div>
+
+          <div style={{ padding: 12, borderRadius: 12, background: '#fff', boxShadow: '0 8px 18px rgba(20,20,20,0.04)' }}>
+            <h4 style={{ margin: '0 0 8px 0' }}>Top owners</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {(() => {
+                const ownerCounts = mockControls.reduce<Record<string, number>>((acc, c) => {
+                  const k = (c.owner || 'Unassigned') as string
+                  acc[k] = (acc[k] ?? 0) + 1
+                  return acc
+                }, {})
+                return Object.entries(ownerCounts)
+                  .sort((a, b) => b[1] - a[1])
+                  .slice(0, 6)
+                  .map(([k, v]) => (
+                    <div key={k} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <div style={{ width: 8, height: 8, borderRadius: 2, background: '#1a88ff' }} />
+                      <div style={{ flex: 1 }}>{k}</div>
+                      <div style={{ fontWeight: 700 }}>{v}</div>
+                    </div>
+                  ))
+              })()}
+            </div>
           </div>
         </div>
       </div>
