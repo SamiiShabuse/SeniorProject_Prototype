@@ -2,17 +2,10 @@ import { Link } from 'react-router-dom'
 import { useMemo, useState } from 'react'
 import { mockControls } from '../mocks/mockData'
 import type { Control } from '../lib/types'
+import './ActiveControlsTestingList.css'
 
 export default function ActiveControlsTestingList() {
   const [showMock, setShowMock] = useState(true)
-  const [selectedTester, setSelectedTester] = useState<'All' | 'Unassigned' | string>('All')
-
-  // collect unique testers from mock controls
-  const testers = useMemo(() => {
-    const t = Array.from(new Set(mockControls.map((c) => c.tester).filter(Boolean) as string[]))
-    t.sort()
-    return t
-  }, [mockControls])
 
   // define what "currently working on" means: any non 'Not Started' DAT or OET
   // or an explicit testingNotes value that indicates progress/completion.
@@ -24,60 +17,67 @@ export default function ActiveControlsTestingList() {
     return false
   }
 
-  const filtered = useMemo(() => {
-    return mockControls.filter((c) => {
-      if (!isActive(c)) return false
-      if (selectedTester === 'All') return true
-      if (selectedTester === 'Unassigned') return !c.tester
-      return c.tester === selectedTester
-    })
-  }, [selectedTester, mockControls])
+  const filtered = useMemo(() => mockControls.filter((c) => isActive(c)), [mockControls])
+
+  function formatBadgeDate(d?: string) {
+    if (!d) return '01/01/2025'
+    // expect ISO 'YYYY-MM-DD' — output 'DD/MM/YYYY'
+    const m = String(d).match(/(\d{4})-(\d{2})-(\d{2})/)
+    if (!m) return d
+    return `${m[3]}/${m[2]}/${m[1]}`
+  }
 
   return (
-    <div>
-      <h2>Active Controls Testing List</h2>
-      <p>List of active controls under testing.</p>
+    <div className="control-list-page">
+      <h2>Control List</h2>
 
-      <p>
+      <p style={{ marginTop: 6, color: '#444' }}>A list of active controls and testing status.</p>
+
+      <p style={{ marginTop: 8 }}>
         <a href="#" onClick={(e) => { e.preventDefault(); setShowMock((s) => !s) }}>
           {showMock ? 'Hide mock testing controls' : 'Show mock testing controls'}
         </a>
       </p>
 
-      {showMock ? (
-        <div>
-          <div style={{ marginBottom: 12 }}>
-            <strong>Filter by tester:</strong>
-              <div style={{ marginTop: 8 }}>
-                <label htmlFor="tester-select" style={{ display: 'block', marginBottom: 6 }}>Choose tester</label>
-                <select
-                  id="tester-select"
-                  value={selectedTester}
-                  onChange={(e) => setSelectedTester(e.target.value)}
-                  style={{ padding: '6px 8px', minWidth: 240 }}
-                >
-                  <option value="All">All</option>
-                  <option value="Unassigned">Unassigned</option>
-                  {testers.map((t) => (
-                    <option key={t} value={t}>{t}</option>
-                  ))}
-                </select>
+      <div className="controls-container">
+        {showMock ? (
+          <>
+            {filtered.length > 0 && (
+              <div className="expanded-card">
+                <div className="expanded-left">
+                  <h3 className="control-title">{filtered[0].name}</h3>
+                  <p className="control-desc">{filtered[0].description ?? 'No description provided.'}</p>
+                </div>
+                <div className="expanded-right">
+                  <div className="meta"><strong>Control Owner:</strong> {filtered[0].owner}</div>
+                  <div className="meta"><strong>Control SME:</strong> {filtered[0].sme ?? '—'}</div>
+                  <div className="meta"><strong>Control Escalation Required:</strong> {filtered[0].needsEscalation ? 'Yes' : 'No'}</div>
+                  {filtered[0].testingNotes && <div className="status-badge">In Testing</div>}
+                </div>
               </div>
-          </div>
+            )}
 
-          <ul>
-            {filtered.length === 0 && <li>No controls match the selected tester / active status</li>}
-            {filtered.map((c) => (
-              <li key={c.id} style={{ marginBottom: 8 }}>
-                <Link to={`/controls/${c.id}`}>{c.id} — {c.name}</Link>
-                <div style={{ fontSize: 13, color: '#444' }}>Owner: {c.owner} • Tester: {c.tester ?? '—'}</div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : (
-        <div style={{ color: '#666' }}><em>Mock data hidden</em></div>
-      )}
+            <ul className="control-list">
+              {filtered.length === 0 && <li className="empty">No controls match the selected tester / active status</li>}
+              {filtered.map((c) => (
+                <li key={c.id} className="control-row">
+                  <Link to={`/controls/${c.id}`} className="control-link">
+                    <div className="row-left">
+                      <div className="row-title">{c.name}</div>
+                      <div className="row-sub">Owner: {c.owner} • Tester: {c.tester ?? '—'}</div>
+                    </div>
+                    <div className="row-right">
+                      <div className="badge">Last Testing on {formatBadgeDate(c.completedDate ?? c.dueDate)}</div>
+                    </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <div style={{ color: '#666' }}><em>Mock data hidden</em></div>
+        )}
+      </div>
     </div>
   )
 }
