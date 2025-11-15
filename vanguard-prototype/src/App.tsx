@@ -32,7 +32,7 @@ function AuthenticatedApp({ onLogout }: { onLogout: () => void }) {
   }
 
   return (
-    <div className={`app-shell ${layout === 'left' ? 'with-left-sidebar' : ''}`}>
+    <div className={`app-shell ${layout === 'left' ? 'with-left-sidebar' : ''} ${layout === 'top' ? 'with-topbar' : ''}`}>
       <header className="app-header">
         <h1>Vanguard Control System (Prototype)</h1>
         <nav className="app-nav">

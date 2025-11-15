@@ -43,6 +43,24 @@
 .with-left-sidebar .app-nav { display: flex; flex-direction: column; gap: 10px; }
 .with-left-sidebar .app-main { margin-top: 18px; margin-left: 260px; width: calc(100% - 260px); }
 
+/* Top bar fixed styling to match the left-sidebar look */
+.with-topbar .app-header {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+  background: var(--panel);
+  box-shadow: 0 6px 20px rgba(9,30,66,0.08);
+  z-index: 1000;
+}
+.with-topbar .app-header .title { margin: 0 12px 0 0 }
+.with-topbar .app-nav { gap: 12px }
+.with-topbar .app-main { margin-top: 92px; width: auto }
+
 /* small card/panel helper */
 .panel {
   background: var(--panel);
