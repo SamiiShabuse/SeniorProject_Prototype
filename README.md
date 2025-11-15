@@ -31,3 +31,12 @@ trevorYang@vanguard.com
 
 trevorYang
 ```
+
+# Regenerate new mock data
+
+To regenerate data, run: 
+```bash
+node scripts/generate_mock_data.cjs 
+
+#then copy the file to src/mocks/
+```
