@@ -39,14 +39,45 @@
   z-index: 1000;
   overflow: auto;
 }
-.with-left-sidebar .app-header .title { margin-bottom: 12px }
-.with-left-sidebar .app-nav { display: flex; flex-direction: column; gap: 10px; }
+.with-left-sidebar .app-header h1 { 
+  margin: 0 0 12px 0;
+  font-size: 18px;
+}
+.with-left-sidebar .app-nav { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 10px;
+  margin-top: 0; /* Reset default margin */
+}
 .with-left-sidebar .app-main { margin-top: 18px; margin-left: 260px; width: calc(100% - 260px); }
 
 /* Positioning variants for where the nav lives inside the left sidebar */
-.with-left-sidebar.nav-pos-top .app-nav { margin-top: 8px; margin-bottom: 0; }
-.with-left-sidebar.nav-pos-middle .app-nav { margin-top: auto; margin-bottom: auto; }
-.with-left-sidebar.nav-pos-bottom .app-nav { margin-top: auto; margin-bottom: 12px; }
+.with-left-sidebar.nav-pos-top .app-header {
+  justify-content: flex-start;
+}
+.with-left-sidebar.nav-pos-top .app-header h1 {
+  margin-bottom: 12px;
+}
+.with-left-sidebar.nav-pos-top .app-nav { 
+  margin-top: 0 !important; 
+  margin-bottom: auto !important; 
+}
+
+.with-left-sidebar.nav-pos-middle .app-header {
+  justify-content: center;
+}
+.with-left-sidebar.nav-pos-middle .app-nav { 
+  margin-top: auto !important; 
+  margin-bottom: auto !important; 
+}
+
+.with-left-sidebar.nav-pos-bottom .app-header {
+  justify-content: flex-end;
+}
+.with-left-sidebar.nav-pos-bottom .app-nav { 
+  margin-top: auto !important; 
+  margin-bottom: 12px !important; 
+}
 
 /* Top bar fixed styling to match the left-sidebar look */
 .with-topbar .app-header {
