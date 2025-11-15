@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { mockControls, mockRequests } from '../mocks/mockData'
+import { mockControls } from '../mocks/mockData'
 import type { Control } from '../lib/types'
 import './ActiveControlsTestingList.css'
 import ControlModal from '../components/ControlModal'

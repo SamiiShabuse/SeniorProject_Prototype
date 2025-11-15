@@ -1,0 +1,2651 @@
+{
+  "controls": [
+    {
+      "id": "VGCP-10000",
+      "name": "Procedure Name",
+      "description": "DAT Status",
+      "owner": "Liam O'Connor",
+      "sme": "Procedure Name",
+      "tester": "Diana Foster",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "DAT Status",
+      "startDate": "2025-05-25",
+      "dueDate": "2025-07-17"
+    },
+    {
+      "id": "VGCP-10001",
+      "name": "UPDATE: The Security Risk Management Committee, consisting of senior leadership, meets periodically to report operational status, discuss risk, and set the direction for the enterprise security program.",
+      "description": "Completed",
+      "owner": "Isabella Chen",
+      "sme": "UPDATE: The Security Risk Management Committee, consisting of senior leadership, meets periodically to report operational status, discuss risk, and set the direction for the enterprise security program.",
+      "tester": "Selina Park",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Testing Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-09-28",
+      "dueDate": "2025-12-02",
+      "completedDate": "2025-12-18"
+    },
+    {
+      "id": "VGCP-10002",
+      "name": "Threat reports with identified vulnerabilities are distributed to stakeholders to action upon.",
+      "description": "Completed",
+      "owner": "Emma Thompson",
+      "sme": "Threat reports with identified vulnerabilities are distributed to stakeholders to action upon.",
+      "tester": "Chris Wong",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Testing Completed"
+      },
+      "oet": {
+        "status": "Addressing Comments"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-12-17"
+    },
+    {
+      "id": "VGCP-10003",
+      "name": "Red Team Exercises are conducted to test and improve detection and prevention capabilities",
+      "description": "Completed",
+      "owner": "Alice Johnson",
+      "sme": "Red Team Exercises are conducted to test and improve detection and prevention capabilities",
+      "tester": "Eve Tester",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Testing Completed"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-10-30",
+      "dueDate": "2025-11-26",
+      "completedDate": "2025-11-26"
+    },
+    {
+      "id": "VGCP-10004",
+      "name": "Purple Team Exercise are conducted to test and improve detection and prevention capabilities",
+      "description": "Completed",
+      "owner": "Nathan Kim",
+      "sme": "Purple Team Exercise are conducted to test and improve detection and prevention capabilities",
+      "tester": "Alex Kim",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Testing Completed"
+      },
+      "oet": {
+        "status": "Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-05-27",
+      "dueDate": "2025-06-27",
+      "completedDate": "2025-07-16"
+    },
+    {
+      "id": "VGCP-10005",
+      "name": "Standard Operating Procedures for SIEM monitoring rules and alerts are established through a formal process.",
+      "description": "Completed",
+      "owner": "James Wilson",
+      "sme": "Standard Operating Procedures for SIEM monitoring rules and alerts are established through a formal process.",
+      "tester": "Eric Chang",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Testing Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-02-14",
+      "dueDate": "2025-04-15",
+      "completedDate": "2025-04-26"
+    },
+    {
+      "id": "VGCP-10006",
+      "name": "All transactions are monitored for fraud and accounts with potential fraud are investigated (Accumulation)",
+      "description": "Completed",
+      "owner": "Grace Hopper",
+      "sme": "All transactions are monitored for fraud and accounts with potential fraud are investigated (Accumulation)",
+      "tester": "Selina Park",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Testing Completed"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-04-08",
+      "dueDate": "2025-06-24",
+      "eta": "2025-06-23",
+      "completedDate": "2025-07-11"
+    },
+    {
+      "id": "VGCP-10007",
+      "name": "SIEM rules are recertified annually through a formal process",
+      "description": "Completed",
+      "owner": "Carol Lee",
+      "sme": "SIEM rules are recertified annually through a formal process",
+      "tester": "Chris Wong",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Testing Completed"
+      },
+      "oet": {
+        "status": "Testing Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-01-22",
+      "dueDate": "2025-04-04",
+      "eta": "2025-03-27",
+      "completedDate": "2025-04-26"
+    },
+    {
+      "id": "VGCP-10008",
+      "name": "NEW CONTROL: The Incident Response Plan between Blackrock and Vanguard is reviewed and approved at least annualy for security handling",
+      "description": "Completed",
+      "owner": "Olivia Martinez",
+      "sme": "NEW CONTROL: The Incident Response Plan between Blackrock and Vanguard is reviewed and approved at least annualy for security handling",
+      "tester": "Eve Tester",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Testing Completed"
+      },
+      "oet": {
+        "status": "Testing Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-04-12",
+      "dueDate": "2025-07-07",
+      "completedDate": "2025-07-20"
+    },
+    {
+      "id": "VGCP-10009",
+      "name": "NEW CONTROL: A BI-Annual table-top exercise (TTX) is conducted of a secuirty incident notice from Blackrock and action items are documented to adress uncovered gaps",
+      "description": "Completed",
+      "owner": "Liam O'Connor",
+      "sme": "NEW CONTROL: A BI-Annual table-top exercise (TTX) is conducted of a secuirty incident notice from Blackrock and action items are documented to adress uncovered gaps",
+      "tester": "Alex Kim",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Testing Completed"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-09-13",
+      "dueDate": "2025-11-03",
+      "eta": "2025-11-07",
+      "completedDate": "2025-11-06"
+    },
+    {
+      "id": "VGCP-10010",
+      "name": "NEW CONTROL: All transactions are monitored for fraud and accounts with potential fraud are investigated (Pension)",
+      "description": "Completed",
+      "owner": "Bob Smith",
+      "sme": "NEW CONTROL: All transactions are monitored for fraud and accounts with potential fraud are investigated (Pension)",
+      "tester": "Noah Brooks",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "In Progress"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-12-14"
+    },
+    {
+      "id": "VGCP-10011",
+      "name": "All suspected fraudulent activity related to the Super Annuation business are documented as cases, further investigated, and elevated as necessary.",
+      "description": "Completed",
+      "owner": "Olivia Martinez",
+      "sme": "All suspected fraudulent activity related to the Super Annuation business are documented as cases, further investigated, and elevated as necessary.",
+      "tester": "Diana Foster",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-06-03",
+      "dueDate": "2025-06-30",
+      "completedDate": "2025-07-21"
+    },
+    {
+      "id": "VGCP-10012",
+      "name": "CyberArk/ID Vault is used to authorize, limit, and record administrative access for SWIFT deployments.",
+      "description": "Completed",
+      "owner": "Katherine Brown",
+      "sme": "CyberArk/ID Vault is used to authorize, limit, and record administrative access for SWIFT deployments.",
+      "tester": "Frank Auditor",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-07-26",
+      "dueDate": "2025-09-07",
+      "eta": "2025-09-04",
+      "completedDate": "2025-10-04"
+    },
+    {
+      "id": "VGCP-10013",
+      "name": "The vulnerability scanning tool is monitored for availability and ability to receive updates",
+      "description": "Completed",
+      "owner": "Hector Alvarez",
+      "sme": "The vulnerability scanning tool is monitored for availability and ability to receive updates",
+      "tester": "Bella Torres",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Addressing Comments"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-08-11",
+      "dueDate": "2025-09-02",
+      "completedDate": "2025-09-23"
+    },
+    {
+      "id": "VGCP-10014",
+      "name": "The vulnerability scanning tool scheduled to routinely scan the environment",
+      "description": "Completed",
+      "owner": "David Nguyen",
+      "sme": "The vulnerability scanning tool scheduled to routinely scan the environment",
+      "tester": "Morgan Lee",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-10-30",
+      "dueDate": "2025-12-05",
+      "eta": "2025-11-30",
+      "completedDate": "2025-12-17"
+    },
+    {
+      "id": "VGCP-10015",
+      "name": "An authentication reconciliation is conducted for the vulnerability scanning tool on a regular basis",
+      "description": "Completed",
+      "owner": "Paul Anderson",
+      "sme": "An authentication reconciliation is conducted for the vulnerability scanning tool on a regular basis",
+      "tester": "Noah Brooks",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-01-01",
+      "dueDate": "2025-01-18",
+      "eta": "2025-01-19",
+      "completedDate": "2025-01-31"
+    },
+    {
+      "id": "VGCP-10016",
+      "name": "Credentials used for authenticated vulnerability scanning are protected through CyberArk.",
+      "description": "Completed",
+      "owner": "Maria Garcia",
+      "sme": "Credentials used for authenticated vulnerability scanning are protected through CyberArk.",
+      "tester": "Diana Foster",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-04-09",
+      "dueDate": "2025-06-11",
+      "eta": "2025-06-08",
+      "completedDate": "2025-07-05"
+    },
+    {
+      "id": "VGCP-10017",
+      "name": "The vulnerability scanning tool scheduled to routinely scan the environment",
+      "description": "Completed",
+      "owner": "Isabella Chen",
+      "sme": "The vulnerability scanning tool scheduled to routinely scan the environment",
+      "tester": "Frank Auditor",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Testing Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-04-17",
+      "dueDate": "2025-06-06",
+      "completedDate": "2025-06-30"
+    },
+    {
+      "id": "VGCP-10018",
+      "name": "Access requests for the Qualys application are processed by an authorized administrator upon receipt of a valid Sailpoint request",
+      "description": "Completed",
+      "owner": "Frank Miller",
+      "sme": "Access requests for the Qualys application are processed by an authorized administrator upon receipt of a valid Sailpoint request",
+      "tester": "Bella Torres",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-06-09",
+      "dueDate": "2025-08-15",
+      "eta": "2025-08-07",
+      "completedDate": "2025-08-14"
+    },
+    {
+      "id": "VGCP-10019",
+      "name": "Critical SWIFT File Integrity Monitoring Rules are recertified annually through a documented formal process",
+      "description": "Completed",
+      "owner": "Bob Smith",
+      "sme": "Critical SWIFT File Integrity Monitoring Rules are recertified annually through a documented formal process",
+      "tester": "Morgan Lee",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-08-01",
+      "dueDate": "2025-10-23",
+      "completedDate": "2025-10-28"
+    },
+    {
+      "id": "VGCP-10020",
+      "name": "Vulnerabilities are rated for risk according to predefined criteria.",
+      "description": "Completed",
+      "owner": "Isabella Chen",
+      "sme": "Vulnerabilities are rated for risk according to predefined criteria.",
+      "tester": "Eric Chang",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-02-27",
+      "dueDate": "2025-04-10",
+      "completedDate": "2025-04-27"
+    },
+    {
+      "id": "VGCP-10021",
+      "name": "Information from the vulnerability scanning tool is documented and reported.",
+      "description": "Completed",
+      "owner": "Emma Thompson",
+      "sme": "Information from the vulnerability scanning tool is documented and reported.",
+      "tester": "Selina Park",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "In Progress"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-04-21",
+      "dueDate": "2025-06-19",
+      "eta": "2025-06-18",
+      "completedDate": "2025-07-12"
+    },
+    {
+      "id": "VGCP-10022",
+      "name": "Critical SWIFT File Integrity Monitoring rules are created through a formal process",
+      "description": "Completed",
+      "owner": "Alice Johnson",
+      "sme": "Critical SWIFT File Integrity Monitoring rules are created through a formal process",
+      "tester": "Chris Wong",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Testing Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-10-27"
+    },
+    {
+      "id": "VGCP-10023",
+      "name": "UPDATE: Unique RSA Tokens or YubiKeys are assigned to individual users, and users are enrolled in Okta SSO, based on access management workflow, to support multi-factor authentication",
+      "description": "Completed",
+      "owner": "Nathan Kim",
+      "sme": "UPDATE: Unique RSA Tokens or YubiKeys are assigned to individual users, and users are enrolled in Okta SSO, based on access management workflow, to support multi-factor authentication",
+      "tester": "Eve Tester",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-08-05",
+      "dueDate": "2025-08-22",
+      "completedDate": "2025-08-26"
+    },
+    {
+      "id": "VGCP-10024",
+      "name": "A host reconciliation is conducted for the vulnerability scanning tool on a regular basis",
+      "description": "Completed",
+      "owner": "James Wilson",
+      "sme": "A host reconciliation is conducted for the vulnerability scanning tool on a regular basis",
+      "tester": "Alex Kim",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-09-26",
+      "dueDate": "2025-10-29",
+      "eta": "2025-11-01",
+      "completedDate": "2025-11-07"
+    },
+    {
+      "id": "VGCP-10025",
+      "name": "Assets excluded from vulnerability scanning are reviewed and approved through a formal process",
+      "description": "Completed",
+      "owner": "Grace Hopper",
+      "sme": "Assets excluded from vulnerability scanning are reviewed and approved through a formal process",
+      "tester": "Eric Chang",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-06-24",
+      "dueDate": "2025-08-17",
+      "eta": "2025-08-20",
+      "completedDate": "2025-09-13"
+    },
+    {
+      "id": "VGCP-10026",
+      "name": "Assets excluded from vulnerability scanning are scanned semi-annually",
+      "description": "Completed",
+      "owner": "Carol Lee",
+      "sme": "Assets excluded from vulnerability scanning are scanned semi-annually",
+      "tester": "Selina Park",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Addressing Comments"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-01-11",
+      "dueDate": "2025-03-18",
+      "completedDate": "2025-04-07"
+    },
+    {
+      "id": "VGCP-10027",
+      "name": "Vulnerabilities that cannot be remediated or remediated within SLA follow a formal exception process.",
+      "description": "Completed",
+      "owner": "Olivia Martinez",
+      "sme": "Vulnerabilities that cannot be remediated or remediated within SLA follow a formal exception process.",
+      "tester": "Chris Wong",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-03-05",
+      "dueDate": "2025-05-26",
+      "completedDate": "2025-06-21"
+    },
+    {
+      "id": "VGCP-10028",
+      "name": "Failed authentication attempts from the vulnerability scanning tool are tracked and remediated",
+      "description": "Completed",
+      "owner": "Liam O'Connor",
+      "sme": "Failed authentication attempts from the vulnerability scanning tool are tracked and remediated",
+      "tester": "Eve Tester",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "In Progress"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-02-20",
+      "dueDate": "2025-03-12",
+      "completedDate": "2025-03-12"
+    },
+    {
+      "id": "VGCP-10029",
+      "name": "A Cyber Security Awareness Program is maintained by ES&F for National Cyber Security Awareness Month",
+      "description": "Completed",
+      "owner": "Hector Alvarez",
+      "sme": "A Cyber Security Awareness Program is maintained by ES&F for National Cyber Security Awareness Month",
+      "tester": "Alex Kim",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Testing Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-05-10",
+      "dueDate": "2025-06-13",
+      "eta": "2025-06-06",
+      "completedDate": "2025-07-04"
+    },
+    {
+      "id": "VGCP-10030",
+      "name": "Security requirements for Vanguard applications are documented and maintained to protect against malicious attacks.",
+      "description": "Completed",
+      "owner": "Olivia Martinez",
+      "sme": "Security requirements for Vanguard applications are documented and maintained to protect against malicious attacks.",
+      "tester": "Noah Brooks",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-10-24",
+      "dueDate": "2025-12-29",
+      "completedDate": "2026-01-03"
+    },
+    {
+      "id": "VGCP-10031",
+      "name": "Physical Security Officer resources, equipment and related systems are deployed as a layered construct, enterprise-wide.",
+      "description": "Completed",
+      "owner": "Katherine Brown",
+      "sme": "Physical Security Officer resources, equipment and related systems are deployed as a layered construct, enterprise-wide.",
+      "tester": "Diana Foster",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-08-24",
+      "dueDate": "2025-09-20",
+      "completedDate": "2025-09-20"
+    },
+    {
+      "id": "VGCP-10032",
+      "name": "A host reconciliation is conducted for the vulnerability scanning tool on a regular basis",
+      "description": "Completed",
+      "owner": "Hector Alvarez",
+      "sme": "A host reconciliation is conducted for the vulnerability scanning tool on a regular basis",
+      "tester": "Frank Auditor",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-05-01",
+      "dueDate": "2025-06-02",
+      "completedDate": "2025-06-02"
+    },
+    {
+      "id": "VGCP-10033",
+      "name": "NEW CONTROL: SWIFT #3 Swift-specific Training (Phishing)",
+      "description": "Completed",
+      "owner": "David Nguyen",
+      "sme": "NEW CONTROL: SWIFT #3 Swift-specific Training (Phishing)",
+      "tester": "Bella Torres",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "In Progress"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-06-22",
+      "dueDate": "2025-08-10",
+      "completedDate": "2025-08-16"
+    },
+    {
+      "id": "VGCP-10034",
+      "name": "Threat intelligence reports and follow-up reports are generated for security department heads and the CISO",
+      "description": "Completed",
+      "owner": "Paul Anderson",
+      "sme": "Threat intelligence reports and follow-up reports are generated for security department heads and the CISO",
+      "tester": "Morgan Lee",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Addressing Comments"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-09-09",
+      "dueDate": "2025-10-24",
+      "completedDate": "2025-10-23"
+    },
+    {
+      "id": "VGCP-10035",
+      "name": "The VSPL Information Security Policy Framework is reviewed and approved on an annual basis",
+      "description": "Completed",
+      "owner": "Maria Garcia",
+      "sme": "The VSPL Information Security Policy Framework is reviewed and approved on an annual basis",
+      "tester": "Noah Brooks",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-10-06",
+      "dueDate": "2025-12-27",
+      "completedDate": "2026-01-13"
+    },
+    {
+      "id": "VGCP-10036",
+      "name": "Vanguard reviews annual information security attestations related to CPS 234 from Grow",
+      "description": "Completed",
+      "owner": "Isabella Chen",
+      "sme": "Vanguard reviews annual information security attestations related to CPS 234 from Grow",
+      "tester": "Diana Foster",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-02-17",
+      "dueDate": "2025-04-30",
+      "eta": "2025-04-26",
+      "completedDate": "2025-05-11"
+    },
+    {
+      "id": "VGCP-10037",
+      "name": "VIA crew are required to take annual fraud training to understand how to identify and report suspected and actual fraud events",
+      "description": "Completed",
+      "owner": "Frank Miller",
+      "sme": "VIA crew are required to take annual fraud training to understand how to identify and report suspected and actual fraud events",
+      "tester": "Frank Auditor",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-05-07",
+      "dueDate": "2025-08-01",
+      "completedDate": "2025-08-03"
+    },
+    {
+      "id": "VGCP-10038",
+      "name": "NEW CONTROL: Multi-channel client notifications - Following any Change of Details or cash redemption request, multi-channel notifications are sent to the registered mobile Ph, email and web-portal secure message account advising the client of the change/redemption",
+      "description": "Completed",
+      "owner": "Bob Smith",
+      "sme": "NEW CONTROL: Multi-channel client notifications - Following any Change of Details or cash redemption request, multi-channel notifications are sent to the registered mobile Ph, email and web-portal secure message account advising the client of the change/redemption",
+      "tester": "Bella Torres",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Addressing Comments"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-03-14",
+      "dueDate": "2025-05-09",
+      "completedDate": "2025-05-12"
+    },
+    {
+      "id": "VGCP-10039",
+      "name": "Qualys Application IDs as related to the SWIFT environment have their passwords rotated annually.",
+      "description": "Completed",
+      "owner": "Nathan Kim",
+      "sme": "Qualys Application IDs as related to the SWIFT environment have their passwords rotated annually.",
+      "tester": "Morgan Lee",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-05-06",
+      "dueDate": "2025-07-18",
+      "completedDate": "2025-07-26"
+    },
+    {
+      "id": "VGCP-10040",
+      "name": "TWS Application IDs as related to the SWIFT environment have their passwords rotated annually.",
+      "description": "Completed",
+      "owner": "Emma Thompson",
+      "sme": "TWS Application IDs as related to the SWIFT environment have their passwords rotated annually.",
+      "tester": "Eric Chang",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-10-08",
+      "dueDate": "2025-12-30",
+      "completedDate": "2026-01-05"
+    },
+    {
+      "id": "VGCP-10041",
+      "name": "UPDATE: Threat Intelligence is ingested, analyzed, and triaged for handling based on priority and severity",
+      "description": "Completed",
+      "owner": "Alice Johnson",
+      "sme": "UPDATE: Threat Intelligence is ingested, analyzed, and triaged for handling based on priority and severity",
+      "tester": "Selina Park",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-06-18",
+      "dueDate": "2025-09-10",
+      "completedDate": "2025-09-29"
+    },
+    {
+      "id": "VGCP-10042",
+      "name": "Vanguard reviews annual information security attestations related to CPS 234 from AIA",
+      "description": "Completed",
+      "owner": "Nathan Kim",
+      "sme": "Vanguard reviews annual information security attestations related to CPS 234 from AIA",
+      "tester": "Chris Wong",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "In Progress"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-09-06",
+      "dueDate": "2025-09-28",
+      "eta": "2025-09-26",
+      "completedDate": "2025-10-08"
+    },
+    {
+      "id": "VGCP-10043",
+      "name": "Vanguard reviews annual information security attestations related to CPS 234 from JP Morgan",
+      "description": "Completed",
+      "owner": "James Wilson",
+      "sme": "Vanguard reviews annual information security attestations related to CPS 234 from JP Morgan",
+      "tester": "Eve Tester",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "In Progress"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-11-25"
+    },
+    {
+      "id": "VGCP-10044",
+      "name": "An Asset Vulnerability Test (AVT) is conducted for the SWS-SwiftNet Application annually",
+      "description": "Completed",
+      "owner": "Grace Hopper",
+      "sme": "An Asset Vulnerability Test (AVT) is conducted for the SWS-SwiftNet Application annually",
+      "tester": "Alex Kim",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-07-02",
+      "dueDate": "2025-07-25",
+      "completedDate": "2025-08-07"
+    },
+    {
+      "id": "VGCP-10045",
+      "name": "Ineffective information security controls are evaluated as potential material weaknesses and results are reported to the OST for notification as needed",
+      "description": "Completed",
+      "owner": "Carol Lee",
+      "sme": "Ineffective information security controls are evaluated as potential material weaknesses and results are reported to the OST for notification as needed",
+      "tester": "Eric Chang",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-03-27",
+      "dueDate": "2025-05-28",
+      "completedDate": "2025-06-06"
+    },
+    {
+      "id": "VGCP-10046",
+      "name": "VSPL Fraud Risk Assessment Profile Is reviewed and approved annually",
+      "description": "Completed",
+      "owner": "Olivia Martinez",
+      "sme": "VSPL Fraud Risk Assessment Profile Is reviewed and approved annually",
+      "tester": "Noah Brooks",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Addressing Comments"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-07-23",
+      "dueDate": "2025-10-08",
+      "completedDate": "2025-10-12"
+    },
+    {
+      "id": "VGCP-10047",
+      "name": "Simulated phishing e-mails are sent to all crew for security awareness training.",
+      "description": "Completed",
+      "owner": "Liam O'Connor",
+      "sme": "Simulated phishing e-mails are sent to all crew for security awareness training.",
+      "tester": "Diana Foster",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-10-27"
+    },
+    {
+      "id": "VGCP-10048",
+      "name": "Out-of-sync ID Vault passwords for Individual privileged accounts are reconciled with source systems to support continued CyberArk use for MFA and password rotation.",
+      "description": "Completed",
+      "owner": "Hector Alvarez",
+      "sme": "Out-of-sync ID Vault passwords for Individual privileged accounts are reconciled with source systems to support continued CyberArk use for MFA and password rotation.",
+      "tester": "Frank Auditor",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-12-30"
+    },
+    {
+      "id": "VGCP-10049",
+      "name": "SWIFT LSO and RSO accounts are each protected in CyberArk and have separate safes and AD groups to ensure separation of duties.",
+      "description": "Completed",
+      "owner": "Emma Thompson",
+      "sme": "SWIFT LSO and RSO accounts are each protected in CyberArk and have separate safes and AD groups to ensure separation of duties.",
+      "tester": "Bella Torres",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "In Progress"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-03-20",
+      "dueDate": "2025-05-02",
+      "eta": "2025-05-07",
+      "completedDate": "2025-05-09"
+    },
+    {
+      "id": "VGCP-10050",
+      "name": "SSH Keys",
+      "description": "Completed",
+      "owner": "Katherine Brown",
+      "sme": "SSH Keys",
+      "tester": "Noah Brooks",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-09-03",
+      "dueDate": "2025-11-17",
+      "completedDate": "2025-12-08"
+    },
+    {
+      "id": "VGCP-10051",
+      "name": "Individual OS privileged account users must use two-factor authentication to obtain their secure OS password, which is stored and rotated in ID Vault.",
+      "description": "Completed",
+      "owner": "Hector Alvarez",
+      "sme": "Individual OS privileged account users must use two-factor authentication to obtain their secure OS password, which is stored and rotated in ID Vault.",
+      "tester": "Eric Chang",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-11-22"
+    },
+    {
+      "id": "VGCP-10052",
+      "name": "Monthly quality control checks are performed between SWIFT privileged accounts and ID Vault to ensure all privileged accounts are in ID Vault. Discrepancies are researched and remediated by the ID Vault Team.",
+      "description": "Completed",
+      "owner": "David Nguyen",
+      "sme": "Monthly quality control checks are performed between SWIFT privileged accounts and ID Vault to ensure all privileged accounts are in ID Vault. Discrepancies are researched and remediated by the ID Vault Team.",
+      "tester": "Selina Park",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-10-09",
+      "dueDate": "2025-10-29",
+      "eta": "2025-10-23",
+      "completedDate": "2025-10-31"
+    },
+    {
+      "id": "VGCP-10053",
+      "name": "Shared account session usage conducted on SWIFT servers are protected by a cryptographic protocol.",
+      "description": "Completed",
+      "owner": "Paul Anderson",
+      "sme": "Shared account session usage conducted on SWIFT servers are protected by a cryptographic protocol.",
+      "tester": "Chris Wong",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "In Progress"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-05-01",
+      "dueDate": "2025-06-11",
+      "eta": "2025-06-03",
+      "completedDate": "2025-07-06"
+    },
+    {
+      "id": "VGCP-10054",
+      "name": "NEW CONTROL: Fraud operations resourcing conducted by appropriately skilled and experienced personnel, independent of operational business units",
+      "description": "Completed",
+      "owner": "Maria Garcia",
+      "sme": "NEW CONTROL: Fraud operations resourcing conducted by appropriately skilled and experienced personnel, independent of operational business units",
+      "tester": "Eve Tester",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-05-11",
+      "dueDate": "2025-06-22",
+      "completedDate": "2025-07-07"
+    },
+    {
+      "id": "VGCP-10055",
+      "name": "Annual Review of the Fraud Risk Management Policy Framework",
+      "description": "Completed",
+      "owner": "Isabella Chen",
+      "sme": "Annual Review of the Fraud Risk Management Policy Framework",
+      "tester": "Alex Kim",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Testing Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-10-08",
+      "dueDate": "2025-12-15",
+      "eta": "2025-12-09",
+      "completedDate": "2025-12-22"
+    },
+    {
+      "id": "VGCP-10056",
+      "name": "Fraud awareness material and reporting mechanisms are published on Vanguard’s public website to enable members to identify and report incidences of suspected fraud.",
+      "description": "Completed",
+      "owner": "Frank Miller",
+      "sme": "Fraud awareness material and reporting mechanisms are published on Vanguard’s public website to enable members to identify and report incidences of suspected fraud.",
+      "tester": "Eric Chang",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-09-02",
+      "dueDate": "2025-11-29",
+      "completedDate": "2025-12-25"
+    },
+    {
+      "id": "VGCP-10057",
+      "name": "Critical SWIFT File Integrity Monitoring rules are created through a formal process",
+      "description": "Completed",
+      "owner": "Bob Smith",
+      "sme": "Critical SWIFT File Integrity Monitoring rules are created through a formal process",
+      "tester": "Selina Park",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-03-28",
+      "dueDate": "2025-06-11",
+      "eta": "2025-06-12",
+      "completedDate": "2025-06-16"
+    },
+    {
+      "id": "VGCP-10058",
+      "name": "NEW CONTROL: Information from the cloud vulnerability scanning tool is documented and reported.",
+      "description": "Completed",
+      "owner": "Nathan Kim",
+      "sme": "NEW CONTROL: Information from the cloud vulnerability scanning tool is documented and reported.",
+      "tester": "Chris Wong",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-06-05",
+      "dueDate": "2025-07-09",
+      "completedDate": "2025-07-19"
+    },
+    {
+      "id": "VGCP-10059",
+      "name": "SWIFT: Cloud vulnerability Issues are rated for risk according to predefined criteria.",
+      "description": "Completed",
+      "owner": "Katherine Brown",
+      "sme": "SWIFT: Cloud vulnerability Issues are rated for risk according to predefined criteria.",
+      "tester": "Eve Tester",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-10-28",
+      "dueDate": "2025-11-19",
+      "completedDate": "2025-12-07"
+    },
+    {
+      "id": "VGCP-10060",
+      "name": "SWIFT: Cloud vulnerability Findings are rated for risk according to predefined criteria.",
+      "description": "Completed",
+      "owner": "Bob Smith",
+      "sme": "SWIFT: Cloud vulnerability Findings are rated for risk according to predefined criteria.",
+      "tester": "Morgan Lee",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Addressing Comments"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-02-07",
+      "dueDate": "2025-04-27",
+      "completedDate": "2025-05-12"
+    },
+    {
+      "id": "VGCP-10061",
+      "name": "SWIFT: Cloud vulnerabilities that cannot be remediated or remediated within SLA follow a formal exception process",
+      "description": "Completed",
+      "owner": "Nathan Kim",
+      "sme": "SWIFT: Cloud vulnerabilities that cannot be remediated or remediated within SLA follow a formal exception process",
+      "tester": "Noah Brooks",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-11-22"
+    },
+    {
+      "id": "VGCP-10062",
+      "name": "Critical File Integrity Monitoring rules for cloud SWIFT applications are created through a formal process",
+      "description": "Completed",
+      "owner": "James Wilson",
+      "sme": "Critical File Integrity Monitoring rules for cloud SWIFT applications are created through a formal process",
+      "tester": "Diana Foster",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-07-17",
+      "dueDate": "2025-08-18",
+      "eta": "2025-08-15",
+      "completedDate": "2025-09-14"
+    },
+    {
+      "id": "VGCP-10063",
+      "name": "Critical File Integrity Monitoring rules for cloud SWIFT applications are recertified annually through a documented formal process",
+      "description": "In Progress",
+      "owner": "Grace Hopper",
+      "sme": "Critical File Integrity Monitoring rules for cloud SWIFT applications are recertified annually through a documented formal process",
+      "tester": "Frank Auditor",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "In Progress",
+      "startDate": "2025-10-05",
+      "dueDate": "2025-11-19"
+    },
+    {
+      "id": "VGCP-10064",
+      "name": "NEW CONTROL: Scans are monitored and acted upon if running >72 hours (SAEP)",
+      "description": "Completed",
+      "owner": "Carol Lee",
+      "sme": "NEW CONTROL: Scans are monitored and acted upon if running >72 hours (SAEP)",
+      "tester": "Bella Torres",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-04-06",
+      "dueDate": "2025-07-02",
+      "completedDate": "2025-07-19"
+    },
+    {
+      "id": "VGCP-10065",
+      "name": "NEW CONTROL: The Wiz System Health dashboard monitors system health for Swift (SAEP)",
+      "description": "Completed",
+      "owner": "Olivia Martinez",
+      "sme": "NEW CONTROL: The Wiz System Health dashboard monitors system health for Swift (SAEP)",
+      "tester": "Morgan Lee",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Testing Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-03-14",
+      "dueDate": "2025-05-26",
+      "completedDate": "2025-05-26"
+    },
+    {
+      "id": "VGCP-10066",
+      "name": "Multifactor Authentication is enforced for logging into Australian Vanguard portal",
+      "description": "Completed",
+      "owner": "Liam O'Connor",
+      "sme": "Multifactor Authentication is enforced for logging into Australian Vanguard portal",
+      "tester": "Noah Brooks",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-05-12",
+      "dueDate": "2025-07-06",
+      "completedDate": "2025-07-17"
+    },
+    {
+      "id": "VGCP-10067",
+      "name": "An electronic Identity Verification (IDV) check is conducted as part of the Know Your Customer (KYC)/Anti-Money laundering (AML) onboarding of Direct Investor accounts and for Superannuation account consolidation.",
+      "description": "Completed",
+      "owner": "Hector Alvarez",
+      "sme": "An electronic Identity Verification (IDV) check is conducted as part of the Know Your Customer (KYC)/Anti-Money laundering (AML) onboarding of Direct Investor accounts and for Superannuation account consolidation.",
+      "tester": "Diana Foster",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Addressing Comments"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-08-21",
+      "dueDate": "2025-09-15",
+      "completedDate": "2025-09-27"
+    },
+    {
+      "id": "VGCP-10068",
+      "name": "OKTA automatic account lookout is enforced for both invalid Multifactor Authentication (MFA) attempts and password attempts.",
+      "description": "Completed",
+      "owner": "Emma Thompson",
+      "sme": "OKTA automatic account lookout is enforced for both invalid Multifactor Authentication (MFA) attempts and password attempts.",
+      "tester": "Frank Auditor",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-11-04"
+    },
+    {
+      "id": "VGCP-10069",
+      "name": "Every 2 years a table-top exercise (TTX) is conducted of a scenario-based security event within the SWIFT network and action items are documented to address uncovered gaps.",
+      "description": "Completed",
+      "owner": "Alice Johnson",
+      "sme": "Every 2 years a table-top exercise (TTX) is conducted of a scenario-based security event within the SWIFT network and action items are documented to address uncovered gaps.",
+      "tester": "Bella Torres",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Addressing Comments"
+      },
+      "oet": {
+        "status": "Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-01-28",
+      "dueDate": "2025-03-21",
+      "completedDate": "2025-04-14"
+    },
+    {
+      "id": "VGCP-10070",
+      "name": "Enterprise Security & Fraud generates role descriptions in compliance with established HR processes.",
+      "description": "Completed",
+      "owner": "Hector Alvarez",
+      "sme": "Enterprise Security & Fraud generates role descriptions in compliance with established HR processes.",
+      "tester": "Alex Kim",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Testing Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-07-14",
+      "dueDate": "2025-10-06",
+      "completedDate": "2025-10-14"
+    },
+    {
+      "id": "VGCP-10071",
+      "name": "NDA and SLAs are documented and established within the service agreement between Vanguard and BlackRock",
+      "description": "Completed",
+      "owner": "David Nguyen",
+      "sme": "NDA and SLAs are documented and established within the service agreement between Vanguard and BlackRock",
+      "tester": "Eric Chang",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Addressing Comments"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-10-01",
+      "dueDate": "2025-10-24",
+      "completedDate": "2025-10-23"
+    },
+    {
+      "id": "VGCP-10072",
+      "name": "The annual risk acceptance of BlackRock’s usage of Vanguard’s BIC is conducted",
+      "description": "Completed",
+      "owner": "Alice Johnson",
+      "sme": "The annual risk acceptance of BlackRock’s usage of Vanguard’s BIC is conducted",
+      "tester": "Selina Park",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-12-20"
+    },
+    {
+      "id": "VGCP-10073",
+      "name": "Antimalware software protections are optimally configured",
+      "description": "Completed",
+      "owner": "Maria Garcia",
+      "sme": "Antimalware software protections are optimally configured",
+      "tester": "Chris Wong",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-11-23"
+    },
+    {
+      "id": "VGCP-10074",
+      "name": "Firewall Rule Requests are reviewed and approved",
+      "description": "Completed",
+      "owner": "Isabella Chen",
+      "sme": "Firewall Rule Requests are reviewed and approved",
+      "tester": "Eve Tester",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-05-30",
+      "dueDate": "2025-08-02",
+      "completedDate": "2025-08-04"
+    },
+    {
+      "id": "VGCP-10075",
+      "name": "An end-to-end comprehensive firewall rule review is conducted on an annual basis for SWIFT secure zone perimeter firewalls.",
+      "description": "Completed",
+      "owner": "Frank Miller",
+      "sme": "An end-to-end comprehensive firewall rule review is conducted on an annual basis for SWIFT secure zone perimeter firewalls.",
+      "tester": "Alex Kim",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "In Progress"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-08-18",
+      "dueDate": "2025-11-03",
+      "eta": "2025-10-27",
+      "completedDate": "2025-11-26"
+    },
+    {
+      "id": "VGCP-10076",
+      "name": "The Information Security Incident Response Team (ISIRT) Plan is reviewed and approved at least annually for security incident handling",
+      "description": "Completed",
+      "owner": "Bob Smith",
+      "sme": "The Information Security Incident Response Team (ISIRT) Plan is reviewed and approved at least annually for security incident handling",
+      "tester": "Eric Chang",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-06-08",
+      "dueDate": "2025-08-24",
+      "completedDate": "2025-08-24"
+    },
+    {
+      "id": "VGCP-10077",
+      "name": "New hires are assigned security training within 60 days.",
+      "description": "Completed",
+      "owner": "Nathan Kim",
+      "sme": "New hires are assigned security training within 60 days.",
+      "tester": "Selina Park",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Testing Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-01-25",
+      "dueDate": "2025-02-24",
+      "eta": "2025-02-19",
+      "completedDate": "2025-03-01"
+    },
+    {
+      "id": "VGCP-10078",
+      "name": "Targeted role groups get consistent and needed training.",
+      "description": "Completed",
+      "owner": "Katherine Brown",
+      "sme": "Targeted role groups get consistent and needed training.",
+      "tester": "Chris Wong",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-05-13",
+      "dueDate": "2025-07-20",
+      "completedDate": "2025-07-27"
+    },
+    {
+      "id": "VGCP-10079",
+      "name": "An Identity and Access Management Policy applies security principles of need-to-know, least privilege, and separation of duties.",
+      "description": "Completed",
+      "owner": "Grace Hopper",
+      "sme": "An Identity and Access Management Policy applies security principles of need-to-know, least privilege, and separation of duties.",
+      "tester": "Eve Tester",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-07-04",
+      "dueDate": "2025-08-30",
+      "completedDate": "2025-09-16"
+    },
+    {
+      "id": "VGCP-10080",
+      "name": "A Vulnerability Management Policy is reviewed and approved annually to define vulnerability management requirements.",
+      "description": "Not Started",
+      "owner": "Nathan Kim",
+      "sme": "A Vulnerability Management Policy is reviewed and approved annually to define vulnerability management requirements.",
+      "tester": "Morgan Lee",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Not Started",
+      "startDate": "2025-06-07",
+      "dueDate": "2025-07-24"
+    },
+    {
+      "id": "VGCP-10081",
+      "name": "SWIFT Application IDs have their passwords rotated annually",
+      "description": "Completed",
+      "owner": "James Wilson",
+      "sme": "SWIFT Application IDs have their passwords rotated annually",
+      "tester": "Noah Brooks",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-08-03",
+      "dueDate": "2025-08-30",
+      "completedDate": "2025-09-03"
+    },
+    {
+      "id": "VGCP-10082",
+      "name": "Information Destruction Policy review and approval",
+      "description": "Completed",
+      "owner": "Grace Hopper",
+      "sme": "Information Destruction Policy review and approval",
+      "tester": "Diana Foster",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-01-08",
+      "dueDate": "2025-03-18",
+      "completedDate": "2025-03-29"
+    },
+    {
+      "id": "VGCP-10083",
+      "name": "Enterprise Security and Fraud Policy Governance Committee",
+      "description": "Completed",
+      "owner": "Carol Lee",
+      "sme": "Enterprise Security and Fraud Policy Governance Committee",
+      "tester": "Frank Auditor",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-08-14",
+      "dueDate": "2025-10-08",
+      "completedDate": "2025-10-12"
+    },
+    {
+      "id": "VGCP-10084",
+      "name": "Vanguard third-party procurement contract templates include terms related to information security requirements",
+      "description": "Completed",
+      "owner": "Paul Anderson",
+      "sme": "Vanguard third-party procurement contract templates include terms related to information security requirements",
+      "tester": "Bella Torres",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-11-02"
+    },
+    {
+      "id": "VGCP-10085",
+      "name": "Procurement Guidelines exist to outline the strategy for Supplier Lifecycle",
+      "description": "Completed",
+      "owner": "Liam O'Connor",
+      "sme": "Procurement Guidelines exist to outline the strategy for Supplier Lifecycle",
+      "tester": "Morgan Lee",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-11-24",
+      "dueDate": "2025-12-20",
+      "completedDate": "2025-12-20"
+    },
+    {
+      "id": "VGCP-10086",
+      "name": "SWIFT SIEM rules are created and monitored through a formal process",
+      "description": "Completed",
+      "owner": "Hector Alvarez",
+      "sme": "SWIFT SIEM rules are created and monitored through a formal process",
+      "tester": "Noah Brooks",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "In Progress"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-04-12",
+      "dueDate": "2025-05-03",
+      "eta": "2025-05-03",
+      "completedDate": "2025-05-11"
+    },
+    {
+      "id": "VGCP-10087",
+      "name": "SWIFT SIEM rules are recertified annually through a formal process",
+      "description": "In Review",
+      "owner": "Emma Thompson",
+      "sme": "SWIFT SIEM rules are recertified annually through a formal process",
+      "tester": "Diana Foster",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "In Review",
+      "startDate": "2025-06-26",
+      "dueDate": "2025-08-13"
+    },
+    {
+      "id": "VGCP-10088",
+      "name": "SIEM rules are created through a formal process",
+      "description": "In Review",
+      "owner": "Alice Johnson",
+      "sme": "SIEM rules are created through a formal process",
+      "tester": "Frank Auditor",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "In Review",
+      "startDate": "2025-08-09",
+      "dueDate": "2025-10-15",
+      "completedDate": "2025-10-27"
+    },
+    {
+      "id": "VGCP-10089",
+      "name": "SIEM rules are recertified annually through a formal process",
+      "description": "In Review",
+      "owner": "Maria Garcia",
+      "sme": "SIEM rules are recertified annually through a formal process",
+      "tester": "Bella Torres",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Addressing Comments"
+      },
+      "testingNotes": "In Review",
+      "startDate": "2025-12-07"
+    },
+    {
+      "id": "VGCP-10090",
+      "name": "SWIFT lookup tables are recertified annually through a formal process",
+      "description": "Completed",
+      "owner": "David Nguyen",
+      "sme": "SWIFT lookup tables are recertified annually through a formal process",
+      "tester": "Alex Kim",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-04-29",
+      "dueDate": "2025-06-11",
+      "completedDate": "2025-06-11"
+    },
+    {
+      "id": "VGCP-10091",
+      "name": "An Authentication Framework is in place for Vanguard’s externally facing client applications",
+      "description": "Completed",
+      "owner": "Alice Johnson",
+      "sme": "An Authentication Framework is in place for Vanguard’s externally facing client applications",
+      "tester": "Eric Chang",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Testing Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-08-11",
+      "dueDate": "2025-09-12",
+      "completedDate": "2025-09-28"
+    },
+    {
+      "id": "VGCP-10092",
+      "name": "Cloud vulnerability Issues are rated for risk according to predefined criteria.",
+      "description": "In Progress",
+      "owner": "Maria Garcia",
+      "sme": "Cloud vulnerability Issues are rated for risk according to predefined criteria.",
+      "tester": "Selina Park",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "In Progress",
+      "startDate": "2025-06-08",
+      "dueDate": "2025-08-07"
+    },
+    {
+      "id": "VGCP-10093",
+      "name": "Cloud vulnerability Findings are rated for risk according to predefined criteria.",
+      "description": "In Progress",
+      "owner": "Isabella Chen",
+      "sme": "Cloud vulnerability Findings are rated for risk according to predefined criteria.",
+      "tester": "Chris Wong",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "In Progress",
+      "startDate": "2025-10-05",
+      "dueDate": "2025-10-22",
+      "completedDate": "2025-11-08"
+    },
+    {
+      "id": "VGCP-10094",
+      "name": "Cloud vulnerabilities that cannot be remediated or remediated within SLA follow a formal acceptance process.",
+      "description": "In Progress",
+      "owner": "Frank Miller",
+      "sme": "Cloud vulnerabilities that cannot be remediated or remediated within SLA follow a formal acceptance process.",
+      "tester": "Eve Tester",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "In Progress",
+      "startDate": "2025-01-09",
+      "dueDate": "2025-04-01",
+      "eta": "2025-04-04"
+    },
+    {
+      "id": "VGCP-10095",
+      "name": "The Technical Security Advisors team provides quarterly vulnerability risk reports to the CISO senior management.",
+      "description": "Completed",
+      "owner": "Bob Smith",
+      "sme": "The Technical Security Advisors team provides quarterly vulnerability risk reports to the CISO senior management.",
+      "tester": "Alex Kim",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-06-27",
+      "dueDate": "2025-09-22",
+      "completedDate": "2025-10-02"
+    },
+    {
+      "id": "VGCP-10096",
+      "name": "An ad hoc vulnerability scan profile is defined in a standardized procedure.",
+      "description": "Completed",
+      "owner": "Olivia Martinez",
+      "sme": "An ad hoc vulnerability scan profile is defined in a standardized procedure.",
+      "tester": "Morgan Lee",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-09-15",
+      "dueDate": "2025-10-10",
+      "completedDate": "2025-10-11"
+    },
+    {
+      "id": "VGCP-10097",
+      "name": "Multifactor Authentication is enforced for all outgoing money movement transactions and for any changes made to high-risk data made by a client",
+      "description": "Completed",
+      "owner": "Katherine Brown",
+      "sme": "Multifactor Authentication is enforced for all outgoing money movement transactions and for any changes made to high-risk data made by a client",
+      "tester": "Noah Brooks",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-05-05",
+      "dueDate": "2025-07-27",
+      "completedDate": "2025-08-05"
+    },
+    {
+      "id": "VGCP-10098",
+      "name": "A Fraud and Corruption Control Plan exists to outline VIA’s fraud and corruption control approach and is reviewed annually",
+      "description": "Completed",
+      "owner": "Grace Hopper",
+      "sme": "A Fraud and Corruption Control Plan exists to outline VIA’s fraud and corruption control approach and is reviewed annually",
+      "tester": "Diana Foster",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Testing Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-02-23",
+      "dueDate": "2025-04-17",
+      "completedDate": "2025-04-30"
+    },
+    {
+      "id": "VGCP-10099",
+      "name": "Information security leadership and major programs responsibilities defined",
+      "description": "Completed",
+      "owner": "David Nguyen",
+      "sme": "Information security leadership and major programs responsibilities defined",
+      "tester": "Frank Auditor",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-06-27",
+      "dueDate": "2025-08-27",
+      "completedDate": "2025-09-05"
+    },
+    {
+      "id": "VGCP-10100",
+      "name": "Global Security partners with the various service providers for travel security and threat intelligence.",
+      "description": "Completed",
+      "owner": "Emma Thompson",
+      "sme": "Global Security partners with the various service providers for travel security and threat intelligence.",
+      "tester": "Alex Kim",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-08-21",
+      "dueDate": "2025-09-08",
+      "completedDate": "2025-09-17"
+    },
+    {
+      "id": "VGCP-10101",
+      "name": "ES&F Global Enterprise Security / Governance, Risk and Control team has a CyberReg team which focuses on legal or regulatory requirements for cybersecurity.",
+      "description": "Completed",
+      "owner": "Alice Johnson",
+      "sme": "ES&F Global Enterprise Security / Governance, Risk and Control team has a CyberReg team which focuses on legal or regulatory requirements for cybersecurity.",
+      "tester": "Eric Chang",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Addressing Comments"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-04-13",
+      "dueDate": "2025-06-07",
+      "eta": "2025-06-11",
+      "completedDate": "2025-06-09"
+    },
+    {
+      "id": "VGCP-10102",
+      "name": "The CyberReg function receives key information from various stakeholders related to legal and regulatory requirements.",
+      "description": "Completed",
+      "owner": "Maria Garcia",
+      "sme": "The CyberReg function receives key information from various stakeholders related to legal and regulatory requirements.",
+      "tester": "Selina Park",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-07-01",
+      "dueDate": "2025-09-07",
+      "completedDate": "2025-09-30"
+    },
+    {
+      "id": "VGCP-10103",
+      "name": "A post-mortem, including lessons learned, is conducted for all declared security incidents.",
+      "description": "Completed",
+      "owner": "James Wilson",
+      "sme": "A post-mortem, including lessons learned, is conducted for all declared security incidents.",
+      "tester": "Chris Wong",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-08-17",
+      "dueDate": "2025-09-05",
+      "completedDate": "2025-09-25"
+    },
+    {
+      "id": "VGCP-10104",
+      "name": "Detected events are rated for impact based on established criteria",
+      "description": "Completed",
+      "owner": "Frank Miller",
+      "sme": "Detected events are rated for impact based on established criteria",
+      "tester": "Eve Tester",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-03-21",
+      "dueDate": "2025-06-13",
+      "eta": "2025-06-13",
+      "completedDate": "2025-06-14"
+    },
+    {
+      "id": "VGCP-10105",
+      "name": "An Insider Threat Protection Program is established to detect, prevent, or respond to insider threats.",
+      "description": "Completed",
+      "owner": "Carol Lee",
+      "sme": "An Insider Threat Protection Program is established to detect, prevent, or respond to insider threats.",
+      "tester": "Alex Kim",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "In Progress"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-02-27",
+      "dueDate": "2025-04-02",
+      "eta": "2025-03-27",
+      "completedDate": "2025-04-28"
+    },
+    {
+      "id": "VGCP-10106",
+      "name": "Vulnerabilities are rated for risk according to predefined criteria.",
+      "description": "Completed",
+      "owner": "Olivia Martinez",
+      "sme": "Vulnerabilities are rated for risk according to predefined criteria.",
+      "tester": "Eric Chang",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Testing Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-05-17",
+      "dueDate": "2025-07-04",
+      "completedDate": "2025-07-21"
+    },
+    {
+      "id": "VGCP-10107",
+      "name": "Assets excluded from vulnerability scanning are reviewed and approved through a formal process",
+      "description": "Completed",
+      "owner": "Katherine Brown",
+      "sme": "Assets excluded from vulnerability scanning are reviewed and approved through a formal process",
+      "tester": "Noah Brooks",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-08-26",
+      "dueDate": "2025-10-23",
+      "completedDate": "2025-11-10"
+    },
+    {
+      "id": "VGCP-10108",
+      "name": "Vulnerabilities that cannot be remediated or remediated within SLA follow a formal exception process.",
+      "description": "Completed",
+      "owner": "Hector Alvarez",
+      "sme": "Vulnerabilities that cannot be remediated or remediated within SLA follow a formal exception process.",
+      "tester": "Diana Foster",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-02-04",
+      "dueDate": "2025-04-18",
+      "completedDate": "2025-05-11"
+    },
+    {
+      "id": "VGCP-10109",
+      "name": "Assets excluded from vulnerability scanning are scanned semi-annually",
+      "description": "Completed",
+      "owner": "David Nguyen",
+      "sme": "Assets excluded from vulnerability scanning are scanned semi-annually",
+      "tester": "Frank Auditor",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Completed"
+      },
+      "oet": {
+        "status": "Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-01-13",
+      "dueDate": "2025-01-27",
+      "completedDate": "2025-02-16"
+    },
+    {
+      "id": "VGCP-10110",
+      "name": "Assets excluded from routine and semi-annually vulnerability scanning are documented as risks and recertified twice every year.",
+      "description": "Completed",
+      "owner": "Katherine Brown",
+      "sme": "Assets excluded from routine and semi-annually vulnerability scanning are documented as risks and recertified twice every year.",
+      "tester": "Morgan Lee",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-07-09",
+      "dueDate": "2025-08-28",
+      "eta": "2025-08-25",
+      "completedDate": "2025-09-08"
+    },
+    {
+      "id": "VGCP-10111",
+      "name": "Users are removed from Cisive in a timely manner following UARs and terminations",
+      "description": "In Review",
+      "owner": "Grace Hopper",
+      "sme": "Users are removed from Cisive in a timely manner following UARs and terminations",
+      "tester": "Noah Brooks",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Addressing Comments"
+      },
+      "testingNotes": "In Review",
+      "startDate": "2025-09-16",
+      "dueDate": "2025-11-14"
+    },
+    {
+      "id": "VGCP-10112",
+      "name": "VGCP-05367: Global Security meets with Cisive every two weeks to provide updates and to notify the team of any changes.",
+      "description": "Completed",
+      "owner": "David Nguyen",
+      "sme": "VGCP-05367: Global Security meets with Cisive every two weeks to provide updates and to notify the team of any changes.",
+      "tester": "Eric Chang",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-10-22"
+    },
+    {
+      "id": "VGCP-10113",
+      "name": "A nine-day bank hold is applied after changes are made to a client's account details",
+      "description": "Completed",
+      "owner": "Paul Anderson",
+      "sme": "A nine-day bank hold is applied after changes are made to a client's account details",
+      "tester": "Selina Park",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-02-23",
+      "dueDate": "2025-05-21",
+      "completedDate": "2025-05-29"
+    },
+    {
+      "id": "VGCP-10114",
+      "name": "Personal Investor IDPS accounts restricted to a maximum of one (1) external bank account linked to cash hub at any time",
+      "description": "Not Started",
+      "owner": "Liam O'Connor",
+      "sme": "Personal Investor IDPS accounts restricted to a maximum of one (1) external bank account linked to cash hub at any time",
+      "tester": "Chris Wong",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Not Started",
+      "startDate": "2025-05-14",
+      "dueDate": "2025-06-08",
+      "eta": "2025-06-02"
+    },
+    {
+      "id": "VGCP-10115",
+      "name": "Vanguard is responsible for managing Vendor adherence to the terms and conditions stated within their service agreements with Cisive.",
+      "owner": "Isabella Chen",
+      "sme": "Vanguard is responsible for managing Vendor adherence to the terms and conditions stated within their service agreements with Cisive.",
+      "tester": "Eve Tester",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Addressing Comments"
+      },
+      "startDate": "2025-03-31",
+      "dueDate": "2025-05-27"
+    },
+    {
+      "id": "VGCP-10116",
+      "name": "Vanguard reviews results of Cisive's background checks immediately upon notification. Vanguard relies on Cisive to have effective controls surrounding data accuracy.",
+      "owner": "Emma Thompson",
+      "sme": "Vanguard reviews results of Cisive's background checks immediately upon notification. Vanguard relies on Cisive to have effective controls surrounding data accuracy.",
+      "tester": "Alex Kim",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "startDate": "2025-05-22",
+      "dueDate": "2025-08-04"
+    },
+    {
+      "id": "VGCP-10117",
+      "name": "All PII entered into Cisive is reviewed for accuracy and any discrepancies identified are communicated and revised as necessary.",
+      "owner": "Bob Smith",
+      "sme": "All PII entered into Cisive is reviewed for accuracy and any discrepancies identified are communicated and revised as necessary.",
+      "tester": "Eric Chang",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "In Progress"
+      },
+      "testingNotes": "All test cases passed",
+      "startDate": "2025-07-14",
+      "dueDate": "2025-07-29"
+    },
+    {
+      "id": "VGCP-10118",
+      "name": "All outbound e-mails sent to Cisive from Vanguard are appropriately protected and monitored",
+      "description": "Completed",
+      "owner": "Nathan Kim",
+      "sme": "All outbound e-mails sent to Cisive from Vanguard are appropriately protected and monitored",
+      "tester": "Selina Park",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Addressing Comments"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-03-30",
+      "dueDate": "2025-06-18",
+      "completedDate": "2025-07-11"
+    },
+    {
+      "id": "VGCP-10119",
+      "name": "Logging and tracking for potential fraud at personal.vanguard.com are in place.",
+      "description": "Not Started",
+      "owner": "James Wilson",
+      "sme": "Logging and tracking for potential fraud at personal.vanguard.com are in place.",
+      "tester": "Chris Wong",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Not Started",
+      "startDate": "2025-10-28",
+      "dueDate": "2025-12-15",
+      "eta": "2025-12-14"
+    },
+    {
+      "id": "VGCP-10120",
+      "name": "An annual table-top exercise (TTX) is conducted of a scenario-based security event and action items are documented to address uncovered gaps.",
+      "description": "Completed",
+      "owner": "Alice Johnson",
+      "sme": "An annual table-top exercise (TTX) is conducted of a scenario-based security event and action items are documented to address uncovered gaps.",
+      "tester": "Bella Torres",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Testing Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-12-02"
+    },
+    {
+      "id": "VGCP-10121",
+      "name": "NACHA - A Web Application Firewall is in place to mitigate attacks against the Personal Investor Website",
+      "description": "Completed",
+      "owner": "Maria Garcia",
+      "sme": "NACHA - A Web Application Firewall is in place to mitigate attacks against the Personal Investor Website",
+      "tester": "Morgan Lee",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-07-18",
+      "dueDate": "2025-08-11",
+      "completedDate": "2025-08-30"
+    },
+    {
+      "id": "VGCP-10122",
+      "name": "NACHA - Physical Security controls exist at Vanguard Data Centers and are evaluated annually for effectiveness",
+      "description": "Completed",
+      "owner": "James Wilson",
+      "sme": "NACHA - Physical Security controls exist at Vanguard Data Centers and are evaluated annually for effectiveness",
+      "tester": "Noah Brooks",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-09-09",
+      "dueDate": "2025-10-19",
+      "completedDate": "2025-11-12"
+    },
+    {
+      "id": "VGCP-10123",
+      "name": "NACHA - A process exists where new or updated accounts are validated before WEB debits can occur",
+      "description": "Completed",
+      "owner": "Frank Miller",
+      "sme": "NACHA - A process exists where new or updated accounts are validated before WEB debits can occur",
+      "tester": "Diana Foster",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Completed"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-07-30",
+      "dueDate": "2025-08-15",
+      "completedDate": "2025-08-16"
+    },
+    {
+      "id": "VGCP-10124",
+      "name": "Business Impact Assessments (BIAs) are required for all new applications and when existing systems are upgraded.",
+      "description": "In Review",
+      "owner": "Carol Lee",
+      "sme": "Business Impact Assessments (BIAs) are required for all new applications and when existing systems are upgraded.",
+      "tester": "Frank Auditor",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Addressing Comments"
+      },
+      "testingNotes": "In Review",
+      "startDate": "2025-12-23"
+    },
+    {
+      "id": "VGCP-10125",
+      "name": "NACHA - IT Application Security assessments are performed periodically and at consistent intervals to identify any new vulnerabilities that are dispositioned in accordance with Vanguard requirements.",
+      "description": "In Review",
+      "owner": "Olivia Martinez",
+      "sme": "NACHA - IT Application Security assessments are performed periodically and at consistent intervals to identify any new vulnerabilities that are dispositioned in accordance with Vanguard requirements.",
+      "tester": "Bella Torres",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "In Review",
+      "startDate": "2025-01-06",
+      "dueDate": "2025-02-19"
+    },
+    {
+      "id": "VGCP-10126",
+      "name": "A risk assessment methodology and program exists to determine the testing frequency of assets",
+      "description": "In Review",
+      "owner": "Katherine Brown",
+      "sme": "A risk assessment methodology and program exists to determine the testing frequency of assets",
+      "tester": "Morgan Lee",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "In Progress"
+      },
+      "testingNotes": "In Review",
+      "startDate": "2025-03-27",
+      "dueDate": "2025-05-23",
+      "eta": "2025-05-23"
+    },
+    {
+      "id": "VGCP-10127",
+      "name": "A risk assessment methodology and program exists to determine how risks are to be treated",
+      "description": "In Review",
+      "owner": "Hector Alvarez",
+      "sme": "A risk assessment methodology and program exists to determine how risks are to be treated",
+      "tester": "Noah Brooks",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Testing Completed"
+      },
+      "testingNotes": "In Review",
+      "startDate": "2025-06-15",
+      "dueDate": "2025-08-25"
+    },
+    {
+      "id": "VGCP-10128",
+      "name": "NACHA - Vanguard maintains architecture diagrams for infrastructure hosting personal.vanguard.com and client bank instruction information.",
+      "description": "In Review",
+      "owner": "David Nguyen",
+      "sme": "NACHA - Vanguard maintains architecture diagrams for infrastructure hosting personal.vanguard.com and client bank instruction information.",
+      "tester": "Diana Foster",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "In Review",
+      "startDate": "2025-07-24",
+      "dueDate": "2025-09-26"
+    },
+    {
+      "id": "VGCP-10129",
+      "name": "Access to DB2 tables containing banking instruction data follows the enterprise process.",
+      "description": "In Review",
+      "owner": "Alice Johnson",
+      "sme": "Access to DB2 tables containing banking instruction data follows the enterprise process.",
+      "tester": "Frank Auditor",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "In Progress"
+      },
+      "testingNotes": "In Review",
+      "startDate": "2025-09-14",
+      "dueDate": "2025-12-03",
+      "eta": "2025-11-28"
+    },
+    {
+      "id": "VGCP-10130",
+      "name": "A network reconciliation is conducted to detect networks missing from Qualys and remediate the discrepancies to support breadth-of-coverage.",
+      "description": "Completed",
+      "owner": "Grace Hopper",
+      "sme": "A network reconciliation is conducted to detect networks missing from Qualys and remediate the discrepancies to support breadth-of-coverage.",
+      "tester": "Eve Tester",
+      "needsEscalation": false,
+      "dat": {
+        "status": "Not Started"
+      },
+      "oet": {
+        "status": "Not Started"
+      },
+      "testingNotes": "Completed",
+      "startDate": "2025-04-13",
+      "dueDate": "2025-05-23",
+      "completedDate": "2025-06-07"
+    }
+  ],
+  "requests": [
+    {
+      "id": "r1763222517880-0-2043",
+      "controlId": "VGCP-10020",
+      "requestedBy": "Jack Compliance",
+      "scope": "Submit evidence of quarterly access reviews completed in Q2.",
+      "dueDate": "2025-08-07",
+      "status": "Pending"
+    },
+    {
+      "id": "r1763222517880-1-4802",
+      "controlId": "VGCP-10014",
+      "requestedBy": "Olivia Assessor",
+      "scope": "Submit evidence of quarterly access reviews completed in Q2.",
+      "dueDate": "2025-05-11",
+      "status": "Complete"
+    },
+    {
+      "id": "r1763222517880-2-7561",
+      "controlId": "VGCP-10007",
+      "requestedBy": "Kelly Reviewer",
+      "scope": "Document firewall rule changes and approval workflow.",
+      "dueDate": "2025-04-26",
+      "status": "Complete"
+    },
+    {
+      "id": "r1763222517880-3-320",
+      "controlId": "VGCP-10001",
+      "requestedBy": "Paul Verifier",
+      "scope": "Document firewall rule changes and approval workflow.",
+      "dueDate": "2025-07-16",
+      "status": "In Progress"
+    },
+    {
+      "id": "r1763222517880-4-3079",
+      "controlId": "VGCP-10044",
+      "requestedBy": "Kelly Reviewer",
+      "scope": "Document firewall rule changes and approval workflow.",
+      "dueDate": "2025-08-07",
+      "status": "In Progress"
+    },
+    {
+      "id": "r1763222517880-5-5837",
+      "controlId": "VGCP-10038",
+      "requestedBy": "Paul Verifier",
+      "scope": "Provide audit logs for privileged account access in last 30 days.",
+      "dueDate": "2025-08-29",
+      "status": "In Progress"
+    },
+    {
+      "id": "r1763222517880-6-8596",
+      "controlId": "VGCP-10031",
+      "requestedBy": "Liam Inspector",
+      "scope": "Provide audit logs for privileged account access in last 30 days.",
+      "dueDate": "2025-09-21",
+      "status": "In Progress"
+    },
+    {
+      "id": "r1763222517880-7-1355",
+      "controlId": "VGCP-10025",
+      "requestedBy": "Grace QA",
+      "scope": "Provide audit logs for privileged account access in last 30 days.",
+      "dueDate": "2025-07-15",
+      "status": "Pending"
+    },
+    {
+      "id": "r1763222517880-8-4114",
+      "controlId": "VGCP-10018",
+      "requestedBy": "Liam Inspector",
+      "scope": "Submit vulnerability scan results for production environment.",
+      "dueDate": "2025-08-07",
+      "status": "Pending"
+    },
+    {
+      "id": "r1763222517880-9-6873",
+      "controlId": "VGCP-10012",
+      "requestedBy": "Henry Auditor",
+      "scope": "Submit vulnerability scan results for production environment.",
+      "dueDate": "2025-08-29",
+      "status": "Pending"
+    },
+    {
+      "id": "r1763222517880-10-9632",
+      "controlId": "VGCP-10005",
+      "requestedBy": "Maya Validator",
+      "scope": "Document incident response procedures and recent test exercises.",
+      "dueDate": "2025-09-21",
+      "status": "Pending"
+    },
+    {
+      "id": "r1763222517880-11-2391",
+      "controlId": "VGCP-10049",
+      "requestedBy": "Henry Auditor",
+      "scope": "Document incident response procedures and recent test exercises.",
+      "dueDate": "2025-07-15",
+      "status": "Pending"
+    },
+    {
+      "id": "r1763222517880-12-5150",
+      "controlId": "VGCP-10042",
+      "requestedBy": "Maya Validator",
+      "scope": "Document incident response procedures and recent test exercises.",
+      "dueDate": "2025-05-26",
+      "status": "Complete"
+    },
+    {
+      "id": "r1763222517880-13-7909",
+      "controlId": "VGCP-10036",
+      "requestedBy": "Ivy Analyst",
+      "scope": "Provide evidence of data backup and recovery testing.",
+      "dueDate": "2025-05-11",
+      "status": "Complete"
+    },
+    {
+      "id": "r1763222517880-14-668",
+      "controlId": "VGCP-10030",
+      "requestedBy": "Noah Examiner",
+      "scope": "Provide evidence of data backup and recovery testing.",
+      "dueDate": "2025-09-20",
+      "status": "In Progress"
+    },
+    {
+      "id": "r1763222517880-15-3427",
+      "controlId": "VGCP-10023",
+      "requestedBy": "Ivy Analyst",
+      "scope": "Provide evidence of data backup and recovery testing.",
+      "dueDate": "2025-07-15",
+      "status": "In Progress"
+    },
+    {
+      "id": "r1763222517880-16-6185",
+      "controlId": "VGCP-10017",
+      "requestedBy": "Olivia Assessor",
+      "scope": "Submit change management records for critical system updates.",
+      "dueDate": "2025-08-06",
+      "status": "In Progress"
+    },
+    {
+      "id": "r1763222517880-17-8944",
+      "controlId": "VGCP-10010",
+      "requestedBy": "Jack Compliance",
+      "scope": "Submit change management records for critical system updates.",
+      "dueDate": "2025-08-29",
+      "status": "In Progress"
+    },
+    {
+      "id": "r1763222517880-18-1703",
+      "controlId": "VGCP-10004",
+      "requestedBy": "Olivia Assessor",
+      "scope": "Document password policy enforcement and compliance metrics.",
+      "dueDate": "2025-09-20",
+      "status": "Pending"
+    },
+    {
+      "id": "r1763222517880-19-4462",
+      "controlId": "VGCP-10047",
+      "requestedBy": "Kelly Reviewer",
+      "scope": "Document password policy enforcement and compliance metrics.",
+      "dueDate": "2025-10-12",
+      "status": "Pending"
+    }
+  ],
+  "generatedAt": "2025-11-15T16:01:57.880Z",
+  "stats": {
+    "totalControls": 131,
+    "totalRequests": 20,
+    "statusDistribution": {
+      "dat": {
+        "Not Started": 55,
+        "Addressing Comments": 41,
+        "Testing Completed": 7,
+        "Completed": 28
+      },
+      "requests": {
+        "Pending": 8,
+        "Complete": 4,
+        "In Progress": 8
+      }
+    }
+  }
+}
