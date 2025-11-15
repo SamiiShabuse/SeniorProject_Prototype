@@ -27,22 +27,12 @@ function AuthenticatedApp({ onLogout }: { onLogout: () => void }) {
   const [navPos, setNavPos] = useState<'top' | 'middle' | 'bottom'>(() => {
     try { return (localStorage.getItem('vg_nav_pos') as 'top' | 'middle' | 'bottom') || 'bottom' } catch { return 'bottom' }
   })
-  const [topShift, setTopShift] = useState<number>(() => {
-    try { const v = Number(localStorage.getItem('vg_top_shift') || '0'); return Number.isFinite(v) ? v : 0 } catch { return 0 }
-  })
+  
 
   function toggleLayout() {
     const next = layout === 'top' ? 'left' : 'top'
     setLayout(next)
     try { localStorage.setItem('vg_layout', next) } catch {}
-    // If switching to top, make it behave like 'middle' and apply a small random upward shift
-    if (next === 'top') {
-      try { localStorage.setItem('vg_nav_pos', 'middle') } catch {}
-      setNavPos('middle')
-      const shift = Math.floor(Math.random() * 25) + 6 // 6..30 px
-      setTopShift(shift)
-      try { localStorage.setItem('vg_top_shift', String(shift)) } catch {}
-    }
   }
 
   function cycleNavPos() {
@@ -55,7 +45,7 @@ function AuthenticatedApp({ onLogout }: { onLogout: () => void }) {
 
   return (
     <div className={`app-shell ${layout === 'left' ? 'with-left-sidebar' : ''} ${layout === 'top' ? 'with-topbar' : ''} ${layout === 'left' ? `nav-pos-${navPos}` : ''}`}>
-  <header className="app-header" style={layout === 'top' && topShift ? { top: 0, transform: `translateY(-${topShift}px)` } : undefined}>
+  <header className="app-header">
         <h1>Vanguard Control System (Prototype)</h1>
         <nav className="app-nav">
           <Link to="/home">Summary</Link>
