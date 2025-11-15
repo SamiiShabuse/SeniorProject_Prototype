@@ -21,8 +21,18 @@ import AssignTesterToCorrespondingControl from './pages/AssignTesterToCorrespond
 import MockDisplay from './pages/MockDisplay'
 
 function AuthenticatedApp({ onLogout }: { onLogout: () => void }) {
+  const [layout, setLayout] = useState<'top' | 'left'>(() => {
+    try { return (localStorage.getItem('vg_layout') as 'top' | 'left') || 'top' } catch { return 'top' }
+  })
+
+  function toggleLayout() {
+    const next = layout === 'top' ? 'left' : 'top'
+    setLayout(next)
+    try { localStorage.setItem('vg_layout', next) } catch {}
+  }
+
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${layout === 'left' ? 'with-left-sidebar' : ''}`}>
       <header className="app-header">
         <h1>Vanguard Control System (Prototype)</h1>
         <nav className="app-nav">
@@ -33,6 +43,10 @@ function AuthenticatedApp({ onLogout }: { onLogout: () => void }) {
           <Link to="/board">Board</Link>
           <Link to="/mock">Mock Data</Link>
           <button style={{ marginLeft: 12 }} onClick={onLogout}>Logout</button>
+          {/* layout toggle */}
+          <button style={{ marginLeft: 8 }} onClick={toggleLayout} aria-pressed={layout === 'left'}>
+            {layout === 'left' ? 'Use Top Bar' : 'Use Left Sidebar'}
+          </button>
         </nav>
       </header>
 

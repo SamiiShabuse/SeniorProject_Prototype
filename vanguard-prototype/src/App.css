@@ -20,6 +20,18 @@
   margin-top: 18px;
 }
 
+/* Left sidebar layout when toggled: move header to left and make nav vertical */
+.with-left-sidebar { display: flex; }
+.with-left-sidebar .app-header {
+  width: 220px;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-right: 18px;
+}
+.with-left-sidebar .app-header .title { margin-bottom: 12px }
+.with-left-sidebar .app-nav { flex-direction: column; gap: 10px; }
+.with-left-sidebar .app-main { margin-top: 0; margin-left: 240px; width: calc(100% - 240px); }
+
 /* small card/panel helper */
 .panel {
   background: var(--panel);
