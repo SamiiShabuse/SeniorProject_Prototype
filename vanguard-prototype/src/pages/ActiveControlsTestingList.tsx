@@ -59,17 +59,19 @@ export default function ActiveControlsTestingList() {
     return ordered
   }, [mockRequests, mockControls])
 
-  // Group controls by assignee (tester) and sort assignees by name
+  // Group controls by assignee (tester) and sort assignees by name.
+  // Use the full mockControls list (not filtered) so the Assignee tab shows all testers.
   const controlsByAssignee = useMemo(() => {
     const map: Record<string, any[]> = {}
-    for (const c of filtered) {
-      const key = c.tester && String(c.tester).trim() !== '' ? String(c.tester) : 'Unassigned'
+    for (const c of mockControls) {
+      const raw = c.tester ?? ''
+      const key = String(raw).trim() !== '' ? String(raw).trim() : 'Unassigned'
       if (!map[key]) map[key] = []
       map[key].push(c)
     }
     const keys = Object.keys(map).sort((a, b) => a.localeCompare(b))
     return keys.map((k) => ({ assignee: k, controls: map[k] }))
-  }, [filtered])
+  }, [mockControls])
 
   return (
     <div className="control-list-page">
