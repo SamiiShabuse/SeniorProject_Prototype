@@ -2505,9 +2505,64 @@ const _sampleOwners = [
   'Frank Miller',
   'Grace Hopper',
   'Hector Alvarez',
+  'Isabella Chen',
+  'James Wilson',
+  'Katherine Brown',
+  'Liam O\'Connor',
+  'Maria Garcia',
+  'Nathan Kim',
+  'Olivia Martinez',
+  'Paul Anderson',
 ]
-const _sampleSMEs = ['Carlos Rivera', 'Dana White', 'Ivy Patel', 'Jamal Carter', 'Kira Matsumoto']
-const _sampleTesters = ['Morgan Lee', 'Eve Tester', 'Frank Auditor', 'Selina Park', 'Noah Brooks']
+const _sampleSMEs = [
+  'Carlos Rivera',
+  'Dana White',
+  'Ivy Patel',
+  'Jamal Carter',
+  'Kira Matsumoto',
+  'Lucas Schmidt',
+  'Maya Patel',
+  'Nina Rodriguez',
+  'Oscar Zhang',
+  'Priya Kumar',
+]
+const _sampleTesters = [
+  'Morgan Lee',
+  'Eve Tester',
+  'Frank Auditor',
+  'Selina Park',
+  'Noah Brooks',
+  'Alex Kim',
+  'Bella Torres',
+  'Chris Wong',
+  'Diana Foster',
+  'Eric Chang',
+]
+
+// Status options
+const _datStatuses: Array<'Not Started' | 'In Progress' | 'Testing Completed' | 'Addressing Comments' | 'Completed'> = [
+  'Not Started',
+  'In Progress',
+  'Testing Completed',
+  'Addressing Comments',
+  'Completed',
+]
+const _oetStatuses: Array<'Not Started' | 'In Progress' | 'Testing Completed' | 'Addressing Comments' | 'Completed'> = [
+  'Not Started',
+  'In Progress',
+  'Testing Completed',
+  'Addressing Comments',
+  'Completed',
+]
+
+// Simple seeded random number generator for consistent randomization
+function _seededRandom(seed: number) {
+  let value = seed
+  return () => {
+    value = (value * 9301 + 49297) % 233280
+    return value / 233280
+  }
+}
 
 function _fmtDate(d: Date) {
   const yyyy = d.getFullYear()
@@ -2516,34 +2571,104 @@ function _fmtDate(d: Date) {
   return `${yyyy}-${mm}-${dd}`
 }
 
-export const mockControls: Control[] = (_normalizedPayload.normalized as any[]).map((r, i) => {
-  // choose sensible defaults when the sheet left fields blank
-  const owner = r.owner && String(r.owner).trim() ? String(r.owner) : _sampleOwners[i % _sampleOwners.length]
-  const sme = r.sme && String(r.sme).trim() ? String(r.sme) : _sampleSMEs[i % _sampleSMEs.length]
-  const tester = _sampleTesters[i % _sampleTesters.length]
+// Generate random date within a range
+function _randomDate(start: Date, end: Date, rand: () => number): Date {
+  const startTime = start.getTime()
+  const endTime = end.getTime()
+  const randomTime = startTime + rand() * (endTime - startTime)
+  return new Date(randomTime)
+}
 
-  // If the sheet didn't provide dates, assign a deterministic, sensible date range
-  // so Kanban / Summary views show useful timelines.
+export const mockControls: Control[] = (_normalizedPayload.normalized as any[]).map((r, i) => {
+  // Create a seeded random generator for this control based on its index and ID
+  const seed = i * 7919 + (r.id ? String(r.id).split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0) : 0)
+  const rand = _seededRandom(seed)
+
+  // Randomly choose owner, SME, and tester
+  const owner = r.owner && String(r.owner).trim()
+    ? String(r.owner)
+    : _sampleOwners[Math.floor(rand() * _sampleOwners.length)]
+  const sme = r.sme && String(r.sme).trim()
+    ? String(r.sme)
+    : _sampleSMEs[Math.floor(rand() * _sampleSMEs.length)]
+  const tester = _sampleTesters[Math.floor(rand() * _sampleTesters.length)]
+
+  // Randomly assign DAT and OET statuses if not provided
+  let datStatus = r.dat?.status
+  if (!datStatus || String(datStatus).trim() === '') {
+    // Ensure we get good distribution - use index to cycle through statuses
+    datStatus = _datStatuses[Math.floor(rand() * _datStatuses.length)]
+  }
+  
+  let oetStatus = r.oet?.status
+  if (!oetStatus || String(oetStatus).trim() === '') {
+    oetStatus = _oetStatuses[Math.floor(rand() * _oetStatuses.length)]
+  }
+
+  // Randomly assign escalation (20% chance)
+  const needsEscalation = r.needsEscalation !== undefined
+    ? Boolean(r.needsEscalation)
+    : rand() < 0.2
+
+  // Generate random dates across a wider range (Jan 2025 - Dec 2025)
+  const dateRangeStart = new Date(2025, 0, 1)
+  const dateRangeEnd = new Date(2025, 11, 31)
+  
   let startDateStr: string | undefined = r.startDate ? String(r.startDate) : undefined
   if (!startDateStr) {
-    // start dates distributed across Aug-Sep 2025
-    const sd = new Date(2025, 7, 1 + (i % 60))
+    const sd = _randomDate(dateRangeStart, dateRangeEnd, rand)
     startDateStr = _fmtDate(sd)
   }
+  
   let dueDateStr: string | undefined = r.dueDate ? String(r.dueDate) : undefined
-  if (!dueDateStr && startDateStr) {
-    const sd = new Date(startDateStr)
-    sd.setDate(sd.getDate() + 30 + (i % 10))
-    dueDateStr = _fmtDate(sd)
-  }
-  let completedDateStr: string | undefined = r.completedDate ? String(r.completedDate) : undefined
-  if (!completedDateStr && /completed/i.test(String(r.testingNotes || ''))) {
-    // if testingNotes indicates completion, set a completed date a few days after due
-    if (dueDateStr) {
-      const dd = new Date(dueDateStr)
-      dd.setDate(dd.getDate() + (i % 7))
-      completedDateStr = _fmtDate(dd)
+  if (!dueDateStr) {
+    const startDate = new Date(startDateStr || dateRangeStart)
+    // Due date between 15-90 days after start
+    const daysOffset = 15 + Math.floor(rand() * 75)
+    const dueDate = new Date(startDate)
+    dueDate.setDate(dueDate.getDate() + daysOffset)
+    if (dueDate <= dateRangeEnd) {
+      dueDateStr = _fmtDate(dueDate)
     }
+  }
+  
+  let completedDateStr: string | undefined = r.completedDate ? String(r.completedDate) : undefined
+  // If status is Completed or testingNotes suggests completion, add completed date
+  if (!completedDateStr && (String(datStatus).toLowerCase().includes('complete') || /completed/i.test(String(r.testingNotes || '')))) {
+    if (dueDateStr) {
+      const dueDate = new Date(dueDateStr)
+      // Completed date between 0-30 days after due date
+      const daysOffset = Math.floor(rand() * 30)
+      const completedDate = new Date(dueDate)
+      completedDate.setDate(completedDate.getDate() + daysOffset)
+      completedDateStr = _fmtDate(completedDate)
+    }
+  }
+
+  // Randomly add ETA (30% chance)
+  let eta: string | undefined = r.eta ? String(r.eta) : undefined
+  if (!eta && rand() < 0.3 && dueDateStr) {
+    const dueDate = new Date(dueDateStr)
+    const daysOffset = Math.floor(rand() * 14) - 7 // -7 to +7 days from due date
+    const etaDate = new Date(dueDate)
+    etaDate.setDate(etaDate.getDate() + daysOffset)
+    eta = _fmtDate(etaDate)
+  }
+
+  // Randomly add testing notes (40% chance) if not present
+  let testingNotes = r.testingNotes ? String(r.testingNotes) : undefined
+  if (!testingNotes && rand() < 0.4) {
+    const noteTemplates = [
+      'Initial testing completed successfully',
+      'Pending review from QA team',
+      'Minor issues identified, addressing comments',
+      'All test cases passed',
+      'Waiting for stakeholder approval',
+      'Testing in progress, expected completion next week',
+      'Blocked pending external dependency',
+      'Re-testing after fixes applied',
+    ]
+    testingNotes = noteTemplates[Math.floor(rand() * noteTemplates.length)]
   }
 
   return {
@@ -2553,43 +2678,107 @@ export const mockControls: Control[] = (_normalizedPayload.normalized as any[]).
     owner,
     ...(sme ? { sme } : {}),
     ...(tester ? { tester } : {}),
-    needsEscalation: Boolean(r.needsEscalation),
-    dat: { status: (r.dat?.status ?? 'Not Started') as any, ...(r.dat?.step ? { step: r.dat.step } : {}) },
-    oet: { status: (r.oet?.status ?? 'Not Started') as any, ...(r.oet?.step ? { step: r.oet.step } : {}) },
-    ...(r.testingNotes ? { testingNotes: String(r.testingNotes) } : {}),
+    needsEscalation,
+    dat: { status: datStatus as any, ...(r.dat?.step ? { step: r.dat.step } : {}) },
+    oet: { status: oetStatus as any, ...(r.oet?.step ? { step: r.oet.step } : {}) },
+    ...(testingNotes ? { testingNotes } : {}),
     ...(startDateStr ? { startDate: startDateStr } : {}),
     ...(dueDateStr ? { dueDate: dueDateStr } : {}),
-    ...(r.eta ? { eta: String(r.eta) } : {}),
+    ...(eta ? { eta } : {}),
     ...(completedDateStr ? { completedDate: completedDateStr } : {}),
   }
 })
 
-export const mockRequests: TestRequest[] = [
-  {
-    id: 'r' + String(Date.now() - 1000000),
-    controlId: 'VGCP-00001',
-    requestedBy: 'Grace QA',
-    scope: 'Provide MFA enrollment evidence for all admin accounts for Q3.',
-    dueDate: '2025-10-10',
-    status: 'Pending',
-  },
-  {
-    id: 'r' + String(Date.now() - 500000),
-    controlId: 'VGCP-00002',
-    requestedBy: 'Henry Auditor',
-    scope: 'Provide last two encryption key rotation events and related tickets.',
-    dueDate: '2025-09-20',
-    status: 'In Progress',
-  },
-  {
-    id: 'r' + String(Date.now()),
-    controlId: 'VGCP-00003',
-    requestedBy: 'Ivy Analyst',
-    scope: 'Attach SAST report for release v1.4.0',
-    dueDate: '2025-11-01',
-    status: 'Complete',
-  },
+// Generate random requests for various controls
+const _requestRequesters = [
+  'Grace QA',
+  'Henry Auditor',
+  'Ivy Analyst',
+  'Jack Compliance',
+  'Kelly Reviewer',
+  'Liam Inspector',
+  'Maya Validator',
+  'Noah Examiner',
+  'Olivia Assessor',
+  'Paul Verifier',
 ]
+
+const _requestScopes = [
+  'Provide MFA enrollment evidence for all admin accounts for Q3.',
+  'Provide last two encryption key rotation events and related tickets.',
+  'Attach SAST report for release v1.4.0',
+  'Submit evidence of quarterly access reviews completed in Q2.',
+  'Document firewall rule changes and approval workflow.',
+  'Provide audit logs for privileged account access in last 30 days.',
+  'Submit vulnerability scan results for production environment.',
+  'Document incident response procedures and recent test exercises.',
+  'Provide evidence of data backup and recovery testing.',
+  'Submit change management records for critical system updates.',
+  'Document password policy enforcement and compliance metrics.',
+  'Provide evidence of security awareness training completion rates.',
+  'Submit network segmentation documentation and diagrams.',
+  'Document third-party vendor security assessments.',
+  'Provide evidence of patch management process and recent deployments.',
+]
+
+// Generate requests - create 20 requests randomly distributed across controls
+const _requestSeed = 12345
+const _numRequests = 20
+
+// Generate requests using control IDs from normalized payload
+function _generateMockRequests(): TestRequest[] {
+  const controls = _normalizedPayload.normalized as any[]
+  const maxControls = Math.min(50, controls.length)
+  
+  return Array.from({ length: _numRequests }, (_, i) => {
+    const rand = _seededRandom(_requestSeed + i * 1000)
+    
+    // Randomly select a control ID from the normalized payload
+    const controlIndex = Math.floor(rand() * maxControls)
+    const controlId = String(controls[controlIndex]?.id || controls[0]?.id || 'VGCP-10000')
+    
+    // Random status with weighted distribution (more Pending/In Progress than Complete)
+    let status: 'Pending' | 'In Progress' | 'Complete'
+    const statusRand = rand()
+    if (statusRand < 0.4) {
+      status = 'Pending'
+    } else if (statusRand < 0.75) {
+      status = 'In Progress'
+    } else {
+      status = 'Complete'
+    }
+    
+    // Random requester and scope
+    const requestedBy = _requestRequesters[Math.floor(rand() * _requestRequesters.length)]
+    const scope = _requestScopes[Math.floor(rand() * _requestScopes.length)]
+    
+    // Random due date (30-120 days from now, or in past if Complete)
+    const baseDate = new Date(2025, 5, 15) // Mid-year reference
+    let dueDate: Date
+    if (status === 'Complete') {
+      // Completed requests have past due dates
+      const daysAgo = 5 + Math.floor(rand() * 60)
+      dueDate = new Date(baseDate)
+      dueDate.setDate(dueDate.getDate() - daysAgo)
+    } else {
+      // Pending/In Progress have future due dates
+      const daysAhead = 30 + Math.floor(rand() * 90)
+      dueDate = new Date(baseDate)
+      dueDate.setDate(dueDate.getDate() + daysAhead)
+    }
+    
+    return {
+      id: `r${Date.now()}-${i}-${Math.floor(rand() * 10000)}`,
+      controlId,
+      requestedBy,
+      scope,
+      dueDate: _fmtDate(dueDate),
+      status,
+    }
+  })
+}
+
+export const mockRequests: TestRequest[] = _generateMockRequests()
 
 export default {
   mockControls,
