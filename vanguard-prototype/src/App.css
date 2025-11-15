@@ -21,16 +21,27 @@
 }
 
 /* Left sidebar layout when toggled: move header to left and make nav vertical */
-.with-left-sidebar { display: flex; }
+.with-left-sidebar { display: block; }
+
+/* make the left sidebar fixed so it remains visible even when the page scrolls */
 .with-left-sidebar .app-header {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
   width: 220px;
+  display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding-right: 18px;
+  padding: 20px;
+  background: var(--panel);
+  box-shadow: 2px 0 8px rgba(9,30,66,0.06);
+  z-index: 1000;
+  overflow: auto;
 }
 .with-left-sidebar .app-header .title { margin-bottom: 12px }
-.with-left-sidebar .app-nav { flex-direction: column; gap: 10px; }
-.with-left-sidebar .app-main { margin-top: 0; margin-left: 240px; width: calc(100% - 240px); }
+.with-left-sidebar .app-nav { display: flex; flex-direction: column; gap: 10px; }
+.with-left-sidebar .app-main { margin-top: 18px; margin-left: 260px; width: calc(100% - 260px); }
 
 /* small card/panel helper */
 .panel {
