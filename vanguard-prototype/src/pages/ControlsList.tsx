@@ -3,10 +3,11 @@ import { useState, useMemo } from 'react'
 import { mockControls } from '../mocks/mockData'
 import type { Control } from '../lib/types'
 import './ActiveControlsTestingList.css'
+import ControlModal from '../components/ControlModal'
 
 export default function ControlsList() {
   const [showMock, setShowMock] = useState(true)
-  const [expandedId, setExpandedId] = useState<string | null>(null)
+  const [selectedControl, setSelectedControl] = useState<Control | null>(null)
 
   const controls = useMemo(() => mockControls, [mockControls])
 
@@ -35,13 +36,13 @@ export default function ControlsList() {
 
             <ul className="control-list">
               {controls.map((c: Control) => (
-                <li key={c.id} className={`control-row ${expandedId === c.id ? 'expanded' : ''}`}>
+                <li key={c.id} className={`control-row`}>
                   <div
                     className="control-link"
                     role="button"
                     tabIndex={0}
-                    onClick={() => setExpandedId((s) => (s === c.id ? null : c.id))}
-                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setExpandedId((s) => (s === c.id ? null : c.id)) }}
+                      onClick={() => setSelectedControl(c)}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setSelectedControl(c) }}
                   >
                     <div className="row-left">
                       <div className="row-title">{c.name}</div>
@@ -49,26 +50,11 @@ export default function ControlsList() {
                     </div>
                     <div className="row-right">
                       <div className="badge">Last Testing on {formatBadgeDate(c.completedDate ?? c.dueDate)}</div>
-                      <span className={`chevron ${expandedId === c.id ? 'open' : ''}`} style={{ marginLeft: 10 }}>▾</span>
+                      <span className={`chevron`} style={{ marginLeft: 10 }}>▾</span>
                     </div>
                   </div>
 
-                  <div className={`expanded-panel ${expandedId === c.id ? 'open' : ''}`}>
-                    <div style={{ marginTop: 8, marginLeft: 4 }}>
-                      <div className="expanded-card" style={{ padding: 12 }}>
-                        <div style={{ flex: 1 }}>
-                          <h4 style={{ marginTop: 0 }}>{c.name}</h4>
-                          <p style={{ margin: 0 }}>{c.description ?? 'No additional details.'}</p>
-                        </div>
-                        <div style={{ width: 260, marginLeft: 16 }}>
-                          <div className="meta"><strong>Owner:</strong> {c.owner}</div>
-                          <div className="meta"><strong>SME:</strong> {c.sme ?? '—'}</div>
-                          <div className="meta"><strong>Escalation:</strong> {c.needsEscalation ? 'Yes' : 'No'}</div>
-                          {c.testingNotes && <div style={{ marginTop: 8 }}><strong>Notes:</strong><div style={{ marginTop: 6 }}>{c.testingNotes}</div></div>}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  {/* modal will show details instead of inline expanding */}
                 </li>
               ))}
             </ul>
@@ -79,6 +65,9 @@ export default function ControlsList() {
       </div>
 
       <p style={{ marginTop: 14 }}><Link to="/controls/create">Create new control</Link></p>
+      {selectedControl && (
+        <ControlModal control={selectedControl} onClose={() => setSelectedControl(null)} />
+      )}
     </div>
   )
 }
