@@ -194,7 +194,7 @@ export default function ActiveControlsTestingList() {
                 {controlsByAssignee.length === 0 && <div className="empty">No controls found</div>}
                 {controlsByAssignee.map((group) => (
                   <div key={group.assignee} style={{ marginBottom: 12 }}>
-                    <div style={{ background: '#f6f6f6', padding: '8px 12px', borderRadius: 6, marginBottom: 8 }}>{group.assignee}</div>
+                    <div style={{ background: '#f6f6f6', padding: '8px 12px', borderRadius: 6, marginBottom: 8 }}><strong>{group.assignee}</strong></div>
                     <ul className="control-list">
                       {group.controls.map((c: any) => (
                         <li key={c.id} className="control-row">
