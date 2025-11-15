@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
 import { mockControls } from '../mocks/mockData'
 import { mockRequests } from '../mocks/mockData'
+import { exportDashboardSummary } from '../utils/exportData'
 
 type Slice = { label: string; value: number; color: string }
 
@@ -151,6 +153,8 @@ function GanttChart({ controls, months }: { controls: Array<{ id: string; name: 
 }
 
 export default function Summary() {
+  const [showExportMenu, setShowExportMenu] = useState(false)
+  const [isRefreshing, setIsRefreshing] = useState(false)
   // compute DAT status distribution and helper fns
   const datLabels = ['Not Started', 'In Progress', 'Testing Completed', 'Addressing Comments', 'Completed']
   const datCounts: Record<string, number> = {}
@@ -319,9 +323,156 @@ export default function Summary() {
           <h2 style={{ margin: 0 }}>Overview Dashboard</h2>
           <p className="muted" style={{ marginTop: 6 }}>Live dashboard of controls and requests — actionable insights at a glance.</p>
         </div>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <button style={{ padding: '8px 12px', borderRadius: 8, border: '1px solid #ddd', background: '#fff', cursor: 'pointer' }}>Export</button>
-          <button style={{ padding: '8px 12px', borderRadius: 8, border: 'none', background: '#1a88ff', color: '#fff', cursor: 'pointer' }}>Refresh</button>
+        <div style={{ display: 'flex', gap: 8, position: 'relative' }}>
+          <div style={{ position: 'relative' }}>
+            <button
+              onClick={() => setShowExportMenu(!showExportMenu)}
+              style={{
+                padding: '8px 12px',
+                borderRadius: 8,
+                border: '1px solid #ddd',
+                background: '#fff',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+              }}
+            >
+              Export
+              <span style={{ fontSize: 12 }}>▾</span>
+            </button>
+            {showExportMenu && (
+              <>
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '100%',
+                    right: 0,
+                    marginTop: 4,
+                    background: '#fff',
+                    border: '1px solid #ddd',
+                    borderRadius: 8,
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                    zIndex: 1000,
+                    minWidth: 160,
+                    padding: 4,
+                  }}
+                >
+                  <button
+                    onClick={() => {
+                      exportDashboardSummary(mockControls, mockRequests, 'csv')
+                      setShowExportMenu(false)
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      textAlign: 'left',
+                      border: 'none',
+                      background: 'transparent',
+                      cursor: 'pointer',
+                      borderRadius: 4,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#f5f5f5'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'transparent'
+                    }}
+                  >
+                    Export as CSV
+                  </button>
+                  <button
+                    onClick={() => {
+                      exportDashboardSummary(mockControls, mockRequests, 'json')
+                      setShowExportMenu(false)
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      textAlign: 'left',
+                      border: 'none',
+                      background: 'transparent',
+                      cursor: 'pointer',
+                      borderRadius: 4,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#f5f5f5'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'transparent'
+                    }}
+                  >
+                    Export as JSON
+                  </button>
+                  <button
+                    onClick={() => {
+                      exportDashboardSummary(mockControls, mockRequests, 'excel')
+                      setShowExportMenu(false)
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      textAlign: 'left',
+                      border: 'none',
+                      background: 'transparent',
+                      cursor: 'pointer',
+                      borderRadius: 4,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#f5f5f5'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'transparent'
+                    }}
+                  >
+                    Export as Excel
+                  </button>
+                </div>
+                <div
+                  style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    zIndex: 999,
+                  }}
+                  onClick={() => setShowExportMenu(false)}
+                />
+              </>
+            )}
+          </div>
+          <button
+            onClick={() => {
+              setIsRefreshing(true)
+              // Reload the page to get fresh data
+              window.location.reload()
+            }}
+            disabled={isRefreshing}
+            style={{
+              padding: '8px 12px',
+              borderRadius: 8,
+              border: 'none',
+              background: isRefreshing ? '#ccc' : '#1a88ff',
+              color: '#fff',
+              cursor: isRefreshing ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+            }}
+          >
+            {isRefreshing ? (
+              <>
+                <span style={{ fontSize: 12 }}>⟳</span>
+                Refreshing...
+              </>
+            ) : (
+              <>
+                <span style={{ fontSize: 12 }}>⟳</span>
+                Refresh
+              </>
+            )}
+          </button>
         </div>
       </div>
 
