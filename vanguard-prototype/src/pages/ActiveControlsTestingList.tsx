@@ -39,27 +39,46 @@ export default function ActiveControlsTestingList() {
 
   const filtered = mockControls.filter(isActive)
 
-  // Group requests by status (use order: In Progress, Pending, Complete, then others)
-  const requestsByStatus = useMemo(() => {
-    const order = ['In Progress', 'Pending', 'Complete']
-    const map: Record<string, any[]> = {}
-    for (const r of mockRequests) {
-      const key = r.status || 'Pending'
-      if (!map[key]) map[key] = []
-      const control = mockControls.find((c) => c.id === r.controlId)
-      map[key].push({ request: r, control })
+  // Group controls by DAT status
+  const controlsByStatus = useMemo(() => {
+    const order = ['In Progress', 'Testing Completed', 'Addressing Comments', 'Not Started', 'Completed']
+    const map: Record<string, Control[]> = {}
+    
+    for (const c of filtered) {
+      // Get the DAT status, with fallback logic
+      let status = 'Not Started'
+      const datRaw = String(c.dat?.status ?? '').trim()
+      
+      if (datRaw) {
+        const s = datRaw.toLowerCase()
+        if (s.includes('not')) status = 'Not Started'
+        else if (s.includes('progress') || s.includes('in progress')) status = 'In Progress'
+        else if (s.includes('testing')) status = 'Testing Completed'
+        else if (s.includes('address') || s.includes('comments')) status = 'Addressing Comments'
+        else if (s.includes('complete')) status = 'Completed'
+        else status = 'In Progress'
+      } else {
+        // Fallback: check testingNotes or description
+        const notes = String(c.testingNotes ?? '') + ' ' + String(c.description ?? '')
+        if (/completed/i.test(notes)) status = 'Completed'
+        else status = 'Not Started'
+      }
+      
+      if (!map[status]) map[status] = []
+      map[status].push(c)
     }
-    // produce ordered array of [status, items]
-    const ordered: Array<[string, any[]]> = []
+    
+    // produce ordered array of [status, controls]
+    const ordered: Array<[string, Control[]]> = []
     for (const s of order) {
-      if (map[s]) ordered.push([s, map[s]])
+      if (map[s] && map[s].length > 0) ordered.push([s, map[s]])
     }
     // append any other statuses not in order
     for (const k of Object.keys(map)) {
-      if (!order.includes(k)) ordered.push([k, map[k]])
+      if (!order.includes(k) && map[k].length > 0) ordered.push([k, map[k]])
     }
     return ordered
-  }, [mockRequests, mockControls])
+  }, [filtered])
 
   // Group controls by assignee (tester) and sort assignees by name.
   // Use the full mockControls list (not filtered) so the Assignee tab shows all testers.
@@ -150,28 +169,27 @@ export default function ActiveControlsTestingList() {
 
             {activeTab === 'status' && (
               <div>
-                {requestsByStatus.length === 0 && <div className="empty">No requests found</div>}
-                {requestsByStatus.map(([status, items]) => (
+                {controlsByStatus.length === 0 && <div className="empty">No controls found</div>}
+                {controlsByStatus.map(([status, controls]) => (
                   <div key={status} style={{ marginBottom: 14 }}>
                     <h4 style={{ margin: '6px 0' }}>{status}</h4>
                     <ul className="control-list">
-                      {items.map((it: any) => (
-                        <li key={it.request.id} className="control-row">
+                      {controls.map((c: Control) => (
+                        <li key={c.id} className="control-row">
                           <div
                             className="control-link"
                             role="button"
                             tabIndex={0}
-                            onClick={() => it.control && setSelectedControl(it.control)}
-                            onKeyDown={(e) => { if ((e.key === 'Enter' || e.key === ' ') && it.control) setSelectedControl(it.control) }}
-                            style={{ cursor: it.control ? 'pointer' : 'default' }}
+                            onClick={() => setSelectedControl(c)}
+                            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setSelectedControl(c) }}
                           >
                             <div className="row-left">
-                              <div className="row-title">{it.control ? it.control.name : it.request.id}</div>
-                              <div className="row-sub">Requested by: {it.request.requestedBy} • Due: {formatBadgeDate(it.request.dueDate)}</div>
+                              <div className="row-title">{c.name}</div>
+                              <div className="row-sub">Owner: {c.owner} • Tester: {c.tester ?? '—'}</div>
                             </div>
                             <div className="row-right">
-                              <div className="badge">{it.request.status}</div>
-                              {it.control && <span className="chevron" style={{ marginLeft: 10 }}>▾</span>}
+                              <div className="badge">{status}</div>
+                              <span className="chevron" style={{ marginLeft: 10 }}>▾</span>
                             </div>
                           </div>
                         </li>
