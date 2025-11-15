@@ -24,6 +24,9 @@ function AuthenticatedApp({ onLogout }: { onLogout: () => void }) {
   const [layout, setLayout] = useState<'top' | 'left'>(() => {
     try { return (localStorage.getItem('vg_layout') as 'top' | 'left') || 'top' } catch { return 'top' }
   })
+  const [navPos, setNavPos] = useState<'top' | 'middle' | 'bottom'>(() => {
+    try { return (localStorage.getItem('vg_nav_pos') as 'top' | 'middle' | 'bottom') || 'bottom' } catch { return 'bottom' }
+  })
 
   function toggleLayout() {
     const next = layout === 'top' ? 'left' : 'top'
@@ -31,8 +34,16 @@ function AuthenticatedApp({ onLogout }: { onLogout: () => void }) {
     try { localStorage.setItem('vg_layout', next) } catch {}
   }
 
+  function cycleNavPos() {
+    const order: Array<'top' | 'middle' | 'bottom'> = ['top', 'middle', 'bottom']
+    const idx = order.indexOf(navPos)
+    const next = order[(idx + 1) % order.length]
+    setNavPos(next)
+    try { localStorage.setItem('vg_nav_pos', next) } catch {}
+  }
+
   return (
-    <div className={`app-shell ${layout === 'left' ? 'with-left-sidebar' : ''} ${layout === 'top' ? 'with-topbar' : ''}`}>
+    <div className={`app-shell ${layout === 'left' ? 'with-left-sidebar' : ''} ${layout === 'top' ? 'with-topbar' : ''} ${layout === 'left' ? `nav-pos-${navPos}` : ''}`}>
       <header className="app-header">
         <h1>Vanguard Control System (Prototype)</h1>
         <nav className="app-nav">
@@ -46,6 +57,10 @@ function AuthenticatedApp({ onLogout }: { onLogout: () => void }) {
           {/* layout toggle */}
           <button style={{ marginLeft: 8 }} onClick={toggleLayout} aria-pressed={layout === 'left'}>
             {layout === 'left' ? 'Use Top Bar' : 'Use Left Sidebar'}
+          </button>
+          {/* nav position cycle (only relevant for left layout) */}
+          <button style={{ marginLeft: 8 }} onClick={cycleNavPos} aria-hidden={layout !== 'left'} title="Cycle nav position (top / middle / bottom)">
+            Nav: {navPos}
           </button>
         </nav>
       </header>
