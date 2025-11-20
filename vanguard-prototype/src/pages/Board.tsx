@@ -7,7 +7,7 @@ import Column from '../components/kanban/Column'
 import Card from '../components/kanban/Card'
 
 export default function Board() {
-  const [showMock, setShowMock] = useState(true)
+  const [viewMode, setViewMode] = useState<'controls' | 'requests'>('controls')
   const navigate = useNavigate()
   const [draggedOverColumn, setDraggedOverColumn] = useState<string | null>(null)
   const [draggedItem, setDraggedItem] = useState<{ id: string; type: string } | null>(null)
@@ -71,13 +71,18 @@ export default function Board() {
       <h2>Board</h2>
       <p className="muted">A Jira-like board view (skeleton). Columns and cards are placeholders; we'll add drag/drop next.</p>
 
-      <p>
-        <a href="#" onClick={(e) => { e.preventDefault(); setShowMock((s) => !s) }}>
-          {showMock ? 'Hide mock data' : 'Show mock data on board'}
-        </a>
-      </p>
+      <div className="board-toolbar">
+        <div style={{ flex: 1 }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <label style={{ fontSize: 13, color: '#444' }}>Mode:</label>
+          <select value={viewMode} onChange={(e) => setViewMode(e.target.value as any)} style={{ padding: '6px 8px', borderRadius: 6 }}>
+            <option value="controls">Controls Kanban</option>
+            <option value="requests">Requests Kanban</option>
+          </select>
+        </div>
+      </div>
 
-      {showMock ? (
+      {viewMode === 'controls' ? (
         <div className="kanban-board">
           {datStatuses.map((ds) => (
             <Column
