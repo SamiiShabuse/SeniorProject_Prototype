@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 import { mockControls } from '../mocks/mockData'
 import { mockRequests } from '../mocks/mockData'
 import { exportDashboardSummary } from '../utils/exportData'
@@ -155,6 +155,41 @@ function GanttChart({ controls, months }: { controls: Array<{ id: string; name: 
 export default function Summary() {
   const [showExportMenu, setShowExportMenu] = useState(false)
   const [isRefreshing, setIsRefreshing] = useState(false)
+
+  // Play animation whenever the route navigates to this page
+  const location = useLocation()
+  const [playAnim, setPlayAnim] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (location.pathname === '/home') {
+      setPlayAnim(true)
+      const t = setTimeout(() => setPlayAnim(false), 1200)
+      return () => clearTimeout(t)
+    }
+    return
+  }, [location.key, location.pathname])
+
+  // simple count-up hook using requestAnimationFrame
+  function useCountUp(target: number, duration = 800, enabled = true) {
+    const [val, setVal] = useState<number>(enabled ? 0 : target)
+    useEffect(() => {
+      if (!enabled) {
+        setVal(target)
+        return
+      }
+      let start: number | null = null
+      let raf = 0
+      const step = (ts: number) => {
+        if (start === null) start = ts
+        const progress = Math.min(1, (ts - start) / duration)
+        setVal(Math.round(progress * target))
+        if (progress < 1) raf = requestAnimationFrame(step)
+      }
+      raf = requestAnimationFrame(step)
+      return () => { cancelAnimationFrame(raf) }
+    }, [target, duration, enabled])
+    return val
+  }
   // compute DAT status distribution and helper fns
   const datLabels = ['Not Started', 'In Progress', 'Testing Completed', 'Addressing Comments', 'Completed']
   const datCounts: Record<string, number> = {}
@@ -315,6 +350,22 @@ export default function Summary() {
     (c) => String(c.dat?.status ?? '').toLowerCase() === 'completed' || /completed/i.test(String(c.testingNotes ?? '') + String(c.description ?? ''))
   ).length
   const completionPct = totalControls === 0 ? 0 : Math.round((completed / totalControls) * 100)
+
+  // Animated values (play only if playAnim is true)
+  const animatedTotal = useCountUp(totalControls, 900, playAnim)
+  const animatedActive = useCountUp(activeControls, 900, playAnim)
+  const animatedOpen = useCountUp(openRequests, 900, playAnim)
+  const animatedCompletion = useCountUp(completionPct, 900, playAnim)
+
+  // For charts, produce animated slices
+  // (For performance and to avoid hook-in-loop issues, only animate the top summary numbers and completion percent.)
+
+  // stop playing anim after some time so subsequent re-renders behave normally
+  useEffect(() => {
+    if (!playAnim) return
+    const t = setTimeout(() => setPlayAnim(false), 1200)
+    return () => clearTimeout(t)
+  }, [playAnim])
 
   return (
     <div className="panel" style={{ maxWidth: 1400, margin: '0 auto', padding: 24 }}>
@@ -480,27 +531,27 @@ export default function Summary() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 24 }}>
         <div style={{ padding: 20, borderRadius: 12, background: 'linear-gradient(180deg,#fff,#fbfcff)', boxShadow: '0 6px 18px rgba(20,20,20,0.04)' }}>
           <div style={{ fontSize: 12, color: '#666', marginBottom: 8 }}>Total</div>
-          <div style={{ fontSize: 32, fontWeight: 800, color: '#172b4d' }}>{totalControls}</div>
+          <div style={{ fontSize: 32, fontWeight: 800, color: '#172b4d' }}>{animatedTotal}</div>
           <div style={{ fontSize: 12, color: '#999', marginTop: 8 }}>All controls imported</div>
         </div>
 
         <div style={{ padding: 20, borderRadius: 12, background: '#fff', boxShadow: '0 6px 18px rgba(20,20,20,0.04)' }}>
           <div style={{ fontSize: 12, color: '#666', marginBottom: 8 }}>Active</div>
-          <div style={{ fontSize: 32, fontWeight: 800, color: '#172b4d' }}>{activeControls}</div>
+          <div style={{ fontSize: 32, fontWeight: 800, color: '#172b4d' }}>{animatedActive}</div>
           <div style={{ fontSize: 12, color: '#999', marginTop: 8 }}>Based on DAT status</div>
         </div>
 
         <div style={{ padding: 20, borderRadius: 12, background: '#fff', boxShadow: '0 6px 18px rgba(20,20,20,0.04)' }}>
           <div style={{ fontSize: 12, color: '#666', marginBottom: 8 }}>Open Requests</div>
-          <div style={{ fontSize: 32, fontWeight: 800, color: '#172b4d' }}>{openRequests}</div>
+          <div style={{ fontSize: 32, fontWeight: 800, color: '#172b4d' }}>{animatedOpen}</div>
           <div style={{ fontSize: 12, color: '#999', marginTop: 8 }}>Requests needing attention</div>
         </div>
 
         <div style={{ padding: 20, borderRadius: 12, background: '#fff', boxShadow: '0 6px 18px rgba(20,20,20,0.04)' }}>
           <div style={{ fontSize: 12, color: '#666', marginBottom: 8 }}>Completion</div>
-          <div style={{ fontSize: 32, fontWeight: 800, color: '#172b4d' }}>{completionPct}%</div>
+          <div style={{ fontSize: 32, fontWeight: 800, color: '#172b4d' }}>{animatedCompletion}%</div>
           <div style={{ height: 8, background: '#f0f0f0', borderRadius: 6, overflow: 'hidden', marginTop: 8 }}>
-            <div style={{ width: `${completionPct}%`, height: '100%', background: '#4caf50', transition: 'width 600ms ease' }} />
+            <div style={{ width: `${animatedCompletion}%`, height: '100%', background: '#4caf50', transition: 'width 600ms ease' }} />
           </div>
           <div style={{ fontSize: 12, color: '#999', marginTop: 8 }}>{completed} of {totalControls} completed</div>
         </div>

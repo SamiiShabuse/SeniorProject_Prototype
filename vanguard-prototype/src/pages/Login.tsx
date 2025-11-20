@@ -31,6 +31,8 @@ export default function Login({ onLogin }: { onLogin?: () => void }) {
     // Very small fake auth: accept anything
     try {
       localStorage.setItem('vg_logged_in', 'true')
+      // signal the summary page to play the entry animation after login
+      try { localStorage.setItem('vg_play_summary_anim', '1') } catch (e) {}
       onLogin?.()
       // navigate to the home/dashboard after login
       navigate('/home')
