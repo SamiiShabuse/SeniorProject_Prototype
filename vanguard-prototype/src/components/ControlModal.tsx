@@ -1,14 +1,19 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import type { Control, TestRequest } from '../lib/types'
 import { mockRequests } from '../mocks/mockData'
 import './ControlModal.css'
+import EditControlModal from './EditControlModal'
 
 interface Props {
   control: Control
   onClose: () => void
+  editPreference?: 'route' | 'modal'
 }
 
-export default function ControlModal({ control, onClose }: Props) {
+export default function ControlModal({ control, onClose, editPreference }: Props) {
+  const navigate = useNavigate()
+  const [editing, setEditing] = useState(false)
   // filter requests for this control
   const requests: TestRequest[] = mockRequests.filter((r) => r.controlId === control.id)
 
@@ -26,7 +31,17 @@ export default function ControlModal({ control, onClose }: Props) {
         <div className="cm-header">
           <h3 className="cm-title">{control.name}</h3>
           <div className="cm-actions">
-            <button className="cm-btn">Edit Control</button>
+            <button
+              className="cm-btn"
+              onClick={() => {
+                if (editPreference === 'modal') {
+                  setEditing(true)
+                  return
+                }
+                onClose()
+                navigate(`/controls/${control.id}/update`)
+              }}
+            >Edit Control</button>
             <button className="cm-btn">Historical Changes</button>
             <button className="cm-close" aria-label="Close" onClick={onClose}>✕</button>
           </div>
@@ -78,6 +93,16 @@ export default function ControlModal({ control, onClose }: Props) {
           </div>
         </div>
       </div>
+      {editing && (
+        <EditControlModal
+          control={control}
+          onClose={() => setEditing(false)}
+          onSaved={() => {
+            // close the parent modal after save
+            onClose()
+          }}
+        />
+      )}
     </div>
   )
 }

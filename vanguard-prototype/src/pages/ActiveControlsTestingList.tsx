@@ -10,6 +10,7 @@ export default function ActiveControlsTestingList() {
   const [selectedControl, setSelectedControl] = useState<Control | null>(null)
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<'request' | 'status' | 'assignee'>('request')
+  const [editPreference, setEditPreference] = useState<'route' | 'modal'>('route')
 
 
   // (previously filtered list by 'active' status — not needed for requests view)
@@ -117,6 +118,13 @@ export default function ActiveControlsTestingList() {
             {showMock ? 'Hide mock testing controls' : 'Show mock testing controls'}
           </a>
         </p>
+        <div>
+          <label style={{ fontSize: 13, color: '#444', marginRight: 8 }}>Edit Mode:</label>
+          <select value={editPreference} onChange={(e) => setEditPreference(e.target.value as any)} style={{ padding: '6px 8px', borderRadius: 6 }}>
+            <option value="route">Route (open edit page)</option>
+            <option value="modal">Inline Modal</option>
+          </select>
+        </div>
       </div>
 
       <div className="controls-container">
@@ -322,7 +330,7 @@ export default function ActiveControlsTestingList() {
       </div>
 
       {selectedControl && (
-        <ControlModal control={selectedControl} onClose={() => setSelectedControl(null)} />
+        <ControlModal control={selectedControl} onClose={() => setSelectedControl(null)} editPreference={editPreference} />
       )}
     </div>
   )

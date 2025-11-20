@@ -10,6 +10,7 @@ export default function ControlsList() {
   const [viewMode, setViewMode] = useState<'Pop Up' | 'Compact' | 'Kanban'>('Pop Up')
   const [selectedControl, setSelectedControl] = useState<Control | null>(null)
   const [expandedId, setExpandedId] = useState<string | null>(null)
+  const [editPreference, setEditPreference] = useState<'route' | 'modal'>('route')
 
   const controls = useMemo(() => mockControls, [mockControls])
 
@@ -40,6 +41,13 @@ export default function ControlsList() {
             {showMock ? 'Hide mock data' : 'Show mock data'}
           </a>
         </p>
+        <div>
+          <label style={{ fontSize: 13, color: '#444', marginRight: 8 }}>Edit Mode:</label>
+          <select value={editPreference} onChange={(e) => setEditPreference(e.target.value as any)} style={{ padding: '6px 8px', borderRadius: 6 }}>
+            <option value="route">Route (open edit page)</option>
+            <option value="modal">Inline Modal</option>
+          </select>
+        </div>
       </div>
 
       <div className="controls-container">
@@ -104,7 +112,7 @@ export default function ControlsList() {
 
       <p style={{ marginTop: 14 }}><Link to="/controls/create">Create new control</Link></p>
       {selectedControl && (
-        <ControlModal control={selectedControl} onClose={() => setSelectedControl(null)} />
+        <ControlModal control={selectedControl} onClose={() => setSelectedControl(null)} editPreference={editPreference} />
       )}
     </div>
   )
