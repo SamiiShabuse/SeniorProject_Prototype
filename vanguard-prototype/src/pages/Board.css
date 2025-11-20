@@ -9,3 +9,47 @@
 .board-toolbar { display:flex; gap:12px; align-items:center; margin-bottom:12px }
 .board-container { background: transparent; }
 
+/* Page-scoped kanban overrides to ensure columns render side-by-side */
+.bp-kanban {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 12px 4px;
+  overflow-x: auto;
+}
+
+.control-column {
+  background: #f6f7f8;
+  border-radius: 6px;
+  width: 320px;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(9,30,66,0.08);
+}
+
+.control-column-header {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(9,30,66,0.04);
+}
+.control-title { font-size: 14px; margin: 0 0 6px 0; }
+.control-sub { font-size: 12px; color: var(--muted); }
+
+.control-cards { padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+
+.bp-card {
+  background: var(--panel);
+  border-radius: 6px;
+  padding: 10px;
+  box-shadow: 0 1px 3px rgba(9,30,66,0.06);
+  border: 1px solid rgba(9,30,66,0.04);
+}
+.bp-card .bp-card-title { font-weight: 600; margin-bottom: 6px; }
+.bp-card .bp-card-body { font-size: 13px; color: #222; margin-bottom: 6px; }
+.bp-card .bp-card-meta { font-size: 12px; color: var(--muted); }
+
+.control-card { background: linear-gradient(180deg,#ffffff,#fbfdff); }
+.request-card { background: linear-gradient(180deg,#fffaf7,#fff7f0); }
+
+.empty { color: #666; padding: 12px }
+
