@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import type { TestRequest, Control } from '../lib/types'
-import { mockControls } from '../mocks/mockData'
+import { mockControls, mockRequests } from '../mocks/mockData'
 import './ControlModal.css'
 
 interface Props {
@@ -9,20 +9,26 @@ interface Props {
 }
 
 export default function RequestModal({ request, onClose }: Props) {
-  // find related controls for this request — support single id, comma-separated ids, or an array
-  const parseControlIds = (raw: any): string[] => {
-    if (!raw) return []
-    if (Array.isArray(raw)) return raw.map(String)
-    if (typeof raw === 'string') {
-      // comma-separated list?
-      if (raw.includes(',')) return raw.split(',').map((s) => s.trim())
-      return [raw]
+  // find related controls for this request; match inline/compact logic used elsewhere:
+  // prefer exact id matches, then fill up to 3 with nearby controls from mockControls
+  function relatedControlsForRequest(req: TestRequest) {
+    const found = mockControls.filter((c) => String(c.id) === String(req.controlId))
+    if (found.length >= 3) return found.slice(0, 3)
+
+    const extras: Control[] = []
+    // determine a base index: use the request's index in mockRequests to spread selections
+    const reqIdx = mockRequests.findIndex((r) => r.id === req.id)
+    const base = Math.max(0, (reqIdx >= 0 ? reqIdx : 0) % Math.max(1, mockControls.length))
+
+    for (let i = 0; i < mockControls.length && extras.length < 3 - found.length; i++) {
+      const pick = mockControls[(base + i) % mockControls.length]
+      if (!found.find((f) => f.id === pick.id) && !extras.find((e) => e.id === pick.id)) extras.push(pick)
     }
-    return [String(raw)]
+
+    return [...found, ...extras].slice(0, 3)
   }
 
-  const controlIds = parseControlIds((request as any).controlId)
-  const controls: Control[] = mockControls.filter((c) => controlIds.includes(String(c.id)))
+  const controls = relatedControlsForRequest(request as TestRequest)
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
