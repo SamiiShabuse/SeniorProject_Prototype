@@ -7,6 +7,7 @@ import ControlModal from '../components/ControlModal'
 
 export default function ControlsList() {
   const [showMock, setShowMock] = useState(true)
+  const [viewMode, setViewMode] = useState<'List' | 'Compact' | 'Kanban'>('List')
   const [selectedControl, setSelectedControl] = useState<Control | null>(null)
 
   const controls = useMemo(() => mockControls, [mockControls])
@@ -23,13 +24,26 @@ export default function ControlsList() {
       <h2>Controls List</h2>
       <p style={{ marginTop: 6, color: '#444' }}>List of controls. Click a control to open details.</p>
 
-      <p style={{ marginTop: 8 }}>
-        <a href="#" onClick={(e) => { e.preventDefault(); setShowMock((s) => !s) }}>
-          {showMock ? 'Hide mock data' : 'Show mock data'}
-        </a>
-      </p>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 8 }}>
+        <div>
+          <label style={{ fontSize: 13, color: '#444', marginRight: 8 }}>View:</label>
+          <select value={viewMode} onChange={(e) => setViewMode(e.target.value as any)} style={{ padding: '6px 8px', borderRadius: 6 }}>
+            <option value="List">List</option>
+            <option value="Compact">Compact</option>
+            <option value="Kanban">Kanban</option>
+          </select>
+        </div>
+
+        <p style={{ margin: 0 }}>
+          <a href="#" onClick={(e) => { e.preventDefault(); setShowMock((s) => !s) }}>
+            {showMock ? 'Hide mock data' : 'Show mock data'}
+          </a>
+        </p>
+      </div>
 
       <div className="controls-container">
+        {/* placeholder: viewMode currently controls only the dropdown selection. We'll wire different renderings next. */}
+        <div style={{ marginTop: 8, fontSize: 13, color: '#666' }}>Selected view: <strong>{viewMode}</strong></div>
         {showMock ? (
           <>
             {/* top example removed per design — list rows will show expandable details */}
