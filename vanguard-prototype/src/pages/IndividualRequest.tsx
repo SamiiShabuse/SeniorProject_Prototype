@@ -12,6 +12,7 @@ export default function IndividualRequest() {
   const [openRequest, setOpenRequest] = useState<Record<string, boolean>>({})
   const [selectedRequest, setSelectedRequest] = useState<TestRequest | null>(null)
   const [showCreate, setShowCreate] = useState(false)
+  const [editPreference, setEditPreference] = useState<'route' | 'modal'>('route')
 
   function formatBadgeDate(d?: string) {
     if (!d) return '01/01/2025'
@@ -47,6 +48,14 @@ export default function IndividualRequest() {
             <option value="Pop Up">Pop Up</option>
             <option value="Compact">Compact</option>
             <option value="Kanban">Kanban</option>
+          </select>
+        </div>
+
+        <div>
+          <label style={{ fontSize: 13, color: '#444', marginRight: 8 }}>Edit Mode:</label>
+          <select value={editPreference} onChange={(e) => setEditPreference(e.target.value as any)} style={{ padding: '6px 8px', borderRadius: 6 }}>
+            <option value="route">Route (open edit page)</option>
+            <option value="modal">Inline Modal</option>
           </select>
         </div>
 
@@ -147,12 +156,12 @@ export default function IndividualRequest() {
         )}
       </div>
       {selectedRequest && (
-        <RequestModal request={selectedRequest} onClose={() => setSelectedRequest(null)} />
+        <RequestModal request={selectedRequest} onClose={() => setSelectedRequest(null)} editPreference={editPreference} />
       )}
       {showCreate && (
         <CreateRequestModal
           onClose={() => setShowCreate(false)}
-          onCreated={(r) => {
+          onCreated={(r: TestRequest) => {
             setShowCreate(false)
             // ensure mock is visible and open the new request
             setShowMock(true)

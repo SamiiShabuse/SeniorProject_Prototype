@@ -1,14 +1,20 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import type { TestRequest, Control } from '../lib/types'
 import { mockControls, mockRequests } from '../mocks/mockData'
 import './ControlModal.css'
+import EditRequestModal from './EditRequestModal'
 
 interface Props {
   request: TestRequest
   onClose: () => void
+  // preference: when editing, either navigate to the update page or open an inline edit modal
+  editPreference?: 'route' | 'modal'
 }
 
-export default function RequestModal({ request, onClose }: Props) {
+export default function RequestModal({ request, onClose, editPreference }: Props) {
+  const navigate = useNavigate()
+  const [editing, setEditing] = useState(false)
   // find related controls for this request; match inline/compact logic used elsewhere:
   // prefer exact id matches, then fill up to 3 with nearby controls from mockControls
   function relatedControlsForRequest(req: TestRequest) {
@@ -44,7 +50,20 @@ export default function RequestModal({ request, onClose }: Props) {
         <div className="cm-header">
           <h3 className="cm-title">Request {request.id}</h3>
           <div className="cm-actions">
-            <button className="cm-btn">Edit Request</button>
+            <button
+              className="cm-btn"
+              onClick={() => {
+                if (editPreference === 'modal') {
+                  setEditing(true)
+                  return
+                }
+                // default: close modal and navigate to the update page for this request
+                onClose()
+                navigate(`/requests/${request.id}/update`)
+              }}
+            >
+              Edit Request
+            </button>
             <button className="cm-close" aria-label="Close" onClick={onClose}>✕</button>
           </div>
         </div>
@@ -101,6 +120,16 @@ export default function RequestModal({ request, onClose }: Props) {
             <div className="cm-comment">No comments in mock data.</div>
           </div>
         </div>
+        {editing && (
+          <EditRequestModal
+            request={request}
+            onClose={() => setEditing(false)}
+            onSaved={() => {
+              // after saving, close the parent request modal
+              onClose()
+            }}
+          />
+        )}
       </div>
     </div>
   )
