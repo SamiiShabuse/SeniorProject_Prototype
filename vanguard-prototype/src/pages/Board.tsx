@@ -13,7 +13,7 @@ export default function Board() {
   const [draggedItem, setDraggedItem] = useState<{ id: string; type: string } | null>(null)
 
   // Use the control DAT status to build kanban columns
-  const datStatuses: PhaseStatus[] = ['Not Started', 'In Progress', 'Testing Completed', 'Addressing Comments', 'Completed']
+  const datStatuses: PhaseStatus[] = ['Not Started', 'In Progress', 'Addressing Comments', 'Completed', 'Testing Completed']
 
   const byDatStatus = (s: PhaseStatus) => mockControls.filter((c) => String(c.dat?.status ?? 'Not Started') === s)
 
