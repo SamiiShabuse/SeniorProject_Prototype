@@ -4,6 +4,7 @@ import { mockControls } from '../mocks/mockData'
 import type { Control } from '../lib/types'
 import './ActiveControlsTestingList.css'
 import ControlModal from '../components/ControlModal'
+import CreateControlModal from '../components/CreateControlModal'
 
 export default function ControlsList() {
   const [showMock, setShowMock] = useState(true)
@@ -11,8 +12,10 @@ export default function ControlsList() {
   const [selectedControl, setSelectedControl] = useState<Control | null>(null)
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [editPreference, setEditPreference] = useState<'route' | 'modal'>('route')
+  const [creating, setCreating] = useState(false)
+  const [refreshKey, setRefreshKey] = useState(0)
 
-  const controls = useMemo(() => mockControls, [mockControls])
+  const controls = useMemo(() => mockControls, [refreshKey])
 
   function formatBadgeDate(d?: string) {
     if (!d) return '01/01/2025'
@@ -48,6 +51,10 @@ export default function ControlsList() {
             <option value="modal">Inline Modal</option>
           </select>
         </div>
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 12 }}>
+        <button onClick={() => setCreating(true)} style={{ padding: '8px 12px', borderRadius: 6, background: '#1a88ff', color: '#fff', border: 'none' }}>Create New Control</button>
       </div>
 
       <div className="controls-container">
@@ -111,6 +118,12 @@ export default function ControlsList() {
       </div>
 
       <p style={{ marginTop: 14 }}><Link to="/controls/create">Create new control</Link></p>
+      {creating && (
+        <CreateControlModal
+          onClose={() => setCreating(false)}
+          onCreated={() => setRefreshKey((k) => k + 1)}
+        />
+      )}
       {selectedControl && (
         <ControlModal control={selectedControl} onClose={() => setSelectedControl(null)} editPreference={editPreference} />
       )}

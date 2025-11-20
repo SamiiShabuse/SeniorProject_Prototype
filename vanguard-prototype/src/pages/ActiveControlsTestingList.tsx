@@ -3,6 +3,7 @@ import { mockControls } from '../mocks/mockData'
 import type { Control } from '../lib/types'
 import './ActiveControlsTestingList.css'
 import ControlModal from '../components/ControlModal'
+import CreateControlModal from '../components/CreateControlModal'
 
 export default function ActiveControlsTestingList() {
   const [showMock, setShowMock] = useState(true)
@@ -11,6 +12,8 @@ export default function ActiveControlsTestingList() {
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<'request' | 'status' | 'assignee'>('request')
   const [editPreference, setEditPreference] = useState<'route' | 'modal'>('route')
+  const [creating, setCreating] = useState(false)
+  const [refreshKey, setRefreshKey] = useState(0)
 
 
   // (previously filtered list by 'active' status — not needed for requests view)
@@ -95,7 +98,7 @@ export default function ActiveControlsTestingList() {
     }
     const keys = Object.keys(map).sort((a, b) => a.localeCompare(b))
     return keys.map((k) => ({ assignee: k, controls: map[k] }))
-  }, [mockControls])
+  }, [refreshKey])
 
   return (
     <div className="control-list-page">
@@ -125,6 +128,10 @@ export default function ActiveControlsTestingList() {
             <option value="modal">Inline Modal</option>
           </select>
         </div>
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 12 }}>
+        <button onClick={() => setCreating(true)} style={{ padding: '8px 12px', borderRadius: 6, background: '#1a88ff', color: '#fff', border: 'none' }}>Create New Control</button>
       </div>
 
       <div className="controls-container">
@@ -331,6 +338,9 @@ export default function ActiveControlsTestingList() {
 
       {selectedControl && (
         <ControlModal control={selectedControl} onClose={() => setSelectedControl(null)} editPreference={editPreference} />
+      )}
+      {creating && (
+        <CreateControlModal onClose={() => setCreating(false)} onCreated={() => setRefreshKey((k) => k + 1)} />
       )}
     </div>
   )
