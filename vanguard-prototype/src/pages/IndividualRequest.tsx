@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { mockRequests, mockControls } from '../mocks/mockData'
+import CreateRequestModal from '../components/CreateRequestModal'
 import type { TestRequest } from '../lib/types'
 import RequestModal from '../components/RequestModal'
 import './ActiveControlsTestingList.css'
@@ -10,6 +11,7 @@ export default function IndividualRequest() {
   const [viewMode, setViewMode] = useState<'Pop Up' | 'Compact' | 'Kanban'>('Pop Up')
   const [openRequest, setOpenRequest] = useState<Record<string, boolean>>({})
   const [selectedRequest, setSelectedRequest] = useState<TestRequest | null>(null)
+  const [showCreate, setShowCreate] = useState(false)
 
   function formatBadgeDate(d?: string) {
     if (!d) return '01/01/2025'
@@ -53,6 +55,22 @@ export default function IndividualRequest() {
             {showMock ? 'Hide mock requests' : 'Show mock requests'}
           </a>
         </p>
+        <div style={{ marginLeft: 'auto' }}>
+          <button
+            onClick={() => setShowCreate(true)}
+            style={{
+              backgroundColor: '#1a88ff',
+              color: '#fff',
+              border: 'none',
+              padding: '8px 12px',
+              borderRadius: 6,
+              cursor: 'pointer',
+              fontWeight: 600,
+            }}
+          >
+            Create New Request
+          </button>
+        </div>
       </div>
 
       <div className="controls-container">
@@ -130,6 +148,17 @@ export default function IndividualRequest() {
       </div>
       {selectedRequest && (
         <RequestModal request={selectedRequest} onClose={() => setSelectedRequest(null)} />
+      )}
+      {showCreate && (
+        <CreateRequestModal
+          onClose={() => setShowCreate(false)}
+          onCreated={(r) => {
+            setShowCreate(false)
+            // ensure mock is visible and open the new request
+            setShowMock(true)
+            setSelectedRequest(r)
+          }}
+        />
       )}
     </div>
   )
