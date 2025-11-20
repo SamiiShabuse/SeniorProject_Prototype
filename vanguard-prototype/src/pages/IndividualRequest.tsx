@@ -1,12 +1,15 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { mockRequests, mockControls } from '../mocks/mockData'
+import type { TestRequest } from '../lib/types'
+import RequestModal from '../components/RequestModal'
 import './ActiveControlsTestingList.css'
 
 export default function IndividualRequest() {
   const [showMock, setShowMock] = useState(true)
-  const [viewMode, setViewMode] = useState<'List' | 'Compact' | 'Kanban'>('List')
+  const [viewMode, setViewMode] = useState<'Pop Up' | 'Compact' | 'Kanban'>('Pop Up')
   const [openRequest, setOpenRequest] = useState<Record<string, boolean>>({})
+  const [selectedRequest, setSelectedRequest] = useState<TestRequest | null>(null)
 
   function formatBadgeDate(d?: string) {
     if (!d) return '01/01/2025'
@@ -39,7 +42,7 @@ export default function IndividualRequest() {
         <div>
           <label style={{ fontSize: 13, color: '#444', marginRight: 8 }}>View:</label>
           <select value={viewMode} onChange={(e) => setViewMode(e.target.value as any)} style={{ padding: '6px 8px', borderRadius: 6 }}>
-            <option value="List">List</option>
+            <option value="Pop Up">Pop Up</option>
             <option value="Compact">Compact</option>
             <option value="Kanban">Kanban</option>
           </select>
@@ -74,8 +77,11 @@ export default function IndividualRequest() {
                       className="control-link"
                       role="button"
                       tabIndex={0}
-                      onClick={() => setOpenRequest((s) => ({ ...s, [key]: !s[key] }))}
-                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setOpenRequest((s) => ({ ...s, [key]: !s[key] })) }}
+                      onClick={() => {
+                        if (viewMode === 'Compact') setOpenRequest((s) => ({ ...s, [key]: !s[key] }))
+                        else setSelectedRequest(r)
+                      }}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { if (viewMode === 'Compact') setOpenRequest((s) => ({ ...s, [key]: !s[key] })); else setSelectedRequest(r) } }}
                     >
                       <div className="row-left">
                         <div className="row-title">Request #{idx + 1}</div>
@@ -85,7 +91,7 @@ export default function IndividualRequest() {
                       <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', gap: 6 }}>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                           <div className="badge" style={{ marginRight: 12 }}>{r.status ?? 'In Progress'}</div>
-                          <span className={`chevron ${isOpen ? 'open' : ''}`}>▾</span>
+                          <span className={`chevron ${isOpen ? 'open' : ''}`}>{viewMode === 'Compact' ? (isOpen ? '▴' : '▾') : '▾'}</span>
                         </div>
                         <div style={{ fontSize: 12, color: '#444' }}>Due: {formatBadgeDate(r.dueDate)}</div>
                         <div style={{ marginTop: 6 }}><Link to={`/requests/${r.id}/update`}>Open / Edit</Link></div>
@@ -122,6 +128,9 @@ export default function IndividualRequest() {
           <div style={{ color: '#666' }}><em>Mock data hidden</em></div>
         )}
       </div>
+      {selectedRequest && (
+        <RequestModal request={selectedRequest} onClose={() => setSelectedRequest(null)} />
+      )}
     </div>
   )
 }
