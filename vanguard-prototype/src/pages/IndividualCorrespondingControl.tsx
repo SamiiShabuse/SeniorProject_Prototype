@@ -10,7 +10,7 @@ export default function IndividualCorrespondingControl() {
         <Link to={`/corresponding/${id}/update`}>Update Testing Details</Link> |{' '}
         <Link to={`/corresponding/${id}/assign`}>Assign Tester</Link>
       </p>
-      <p><Link to="/active-testing">Back to Active Controls Testing List</Link></p>
+      <p><Link to="/active-testing">Back to Active Testing List</Link></p>
     </div>
   )
 }

@@ -38,7 +38,7 @@ export default function IndividualRequest() {
 
   return (
     <div className="control-list-page">
-      <h2>Active Controls Testing List</h2>
+      <h2>Active Testing List</h2>
       <p style={{ marginTop: 6, color: '#444' }}>Requests list / single request entry point.</p>
 
       <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 8 }}>

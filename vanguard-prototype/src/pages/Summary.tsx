@@ -230,6 +230,30 @@ export default function Summary() {
 
   const datSlices: Slice[] = datLabels.map((label) => ({ label, value: datCounts[label] ?? 0, color: statusColors[label] ?? '#ccc' }))
 
+  // Compute OET distribution (same buckets as DAT)
+  const oetLabels = datLabels
+  const oetCounts: Record<string, number> = {}
+  oetLabels.forEach((l) => (oetCounts[l] = 0))
+  mockControls.forEach((c) => {
+    const raw = String(c.oet?.status ?? '').trim()
+    let label = 'Not Started'
+    if (!raw) {
+      if (/completed/i.test(String(c.testingNotes ?? '') + String(c.description ?? ''))) label = 'Completed'
+      else label = 'Not Started'
+    } else {
+      const s = raw.toLowerCase()
+      if (s.includes('not')) label = 'Not Started'
+      else if (s.includes('progress') || s.includes('in progress')) label = 'In Progress'
+      else if (s.includes('testing')) label = 'Testing Completed'
+      else if (s.includes('address') || s.includes('comments')) label = 'Addressing Comments'
+      else if (s.includes('complete')) label = 'Completed'
+      else label = 'In Progress'
+    }
+    oetCounts[label] = (oetCounts[label] ?? 0) + 1
+  })
+
+  const oetSlices: Slice[] = oetLabels.map((label) => ({ label, value: oetCounts[label] ?? 0, color: statusColors[label] ?? '#ccc' }))
+
   // Compute ratings distribution (based on status)
   const ratingsLabels = ['IN PROGRESS', 'SATISFACTORY', 'NEEDS IMPROVEMENT', 'COMPLETE']
   const ratingsCounts: Record<string, number> = {
@@ -606,22 +630,42 @@ export default function Summary() {
             </div>
           </div>
         </div>
+        {/* Right column: Control Effectiveness + OET Pie */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{ padding: 20, borderRadius: 12, background: '#fff', boxShadow: '0 8px 28px rgba(20,20,20,0.04)' }}>
+            <h3 style={{ margin: '0 0 16px 0', fontSize: 18 }}>Control Effectiveness</h3>
+            <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
+              <DonutChart data={effectivenessSlices.filter((s) => s.value > 0)} size={180} progress={animProgress} />
+              <div style={{ flex: 1 }}>
+                {effectivenessSlices
+                  .filter((s) => s.value > 0)
+                  .map((s) => (
+                    <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                      <span style={{ width: 12, height: 12, background: s.color, display: 'inline-block', borderRadius: 2 }} />
+                      <div style={{ fontSize: 13, flex: 1 }}>{s.label}</div>
+                      <div style={{ fontWeight: 700, fontSize: 14 }}>{s.value}</div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </div>
 
-        {/* Control Effectiveness Donut Chart */}
-        <div style={{ padding: 20, borderRadius: 12, background: '#fff', boxShadow: '0 8px 28px rgba(20,20,20,0.04)' }}>
-          <h3 style={{ margin: '0 0 16px 0', fontSize: 18 }}>Control Effectiveness</h3>
-          <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
-            <DonutChart data={effectivenessSlices.filter((s) => s.value > 0)} size={180} progress={animProgress} />
-            <div style={{ flex: 1 }}>
-              {effectivenessSlices
-                .filter((s) => s.value > 0)
-                .map((s) => (
-                  <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-                    <span style={{ width: 12, height: 12, background: s.color, display: 'inline-block', borderRadius: 2 }} />
-                    <div style={{ fontSize: 13, flex: 1 }}>{s.label}</div>
-                    <div style={{ fontWeight: 700, fontSize: 14 }}>{s.value}</div>
-                  </div>
-                ))}
+          {/* OET distribution pie chart */}
+          <div style={{ padding: 20, borderRadius: 12, background: '#fff', boxShadow: '0 8px 28px rgba(20,20,20,0.04)' }}>
+            <h3 style={{ margin: '0 0 16px 0', fontSize: 18 }}>OET Distribution</h3>
+            <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
+              <PieChart data={oetSlices.filter((s) => s.value > 0)} size={160} progress={animProgress} />
+              <div style={{ flex: 1 }}>
+                {oetSlices
+                  .filter((s) => s.value > 0)
+                  .map((s) => (
+                    <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                      <span style={{ width: 12, height: 12, background: s.color, display: 'inline-block', borderRadius: 2 }} />
+                      <div style={{ fontSize: 13, flex: 1 }}>{s.label}</div>
+                      <div style={{ fontWeight: 700, fontSize: 14 }}>{s.value}</div>
+                    </div>
+                  ))}
+              </div>
             </div>
           </div>
         </div>
