@@ -53,3 +53,21 @@
 
 .empty { color: #666; padding: 12px }
 
+/* Map the kanban component classnames to the page styles so columns/cards render nicely */
+.kanban-board { display: flex; gap: 16px; align-items: flex-start; padding: 12px 4px; overflow-x: auto; }
+.kanban-column { background: #f6f7f8; border-radius: 6px; width: 320px; min-width: 280px; display: flex; flex-direction: column; border: 1px solid rgba(9,30,66,0.08); }
+.kanban-column-header { padding: 10px 12px; border-bottom: 1px solid rgba(9,30,66,0.04); }
+.kanban-column-header h3 { margin: 0; font-size: 14px }
+.kanban-column-count { background:#e9eef8; padding:4px 8px; border-radius:12px; font-size:12px; margin-left:8px }
+.kanban-column-body { padding: 12px; display:flex; flex-direction:column; gap:10px }
+.kanban-column-drag-over { outline: 3px dashed rgba(26,136,255,0.18); }
+
+.kanban-card { background: var(--panel); border-radius: 6px; padding: 10px; box-shadow: 0 1px 3px rgba(9,30,66,0.06); border: 1px solid rgba(9,30,66,0.04); cursor: grab }
+.kanban-card-title { font-weight: 600; margin-bottom: 6px }
+.kanban-card-subtitle { font-size: 13px; color: #444; margin-bottom: 6px }
+.kanban-card-meta { font-size: 12px; color: var(--muted) }
+
+/* Make sure long content wraps and doesn't collapse column widths */
+.kanban-column .kanban-card { word-break: break-word; white-space: normal }
+
+
