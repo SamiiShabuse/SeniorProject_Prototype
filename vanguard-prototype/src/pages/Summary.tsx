@@ -6,8 +6,9 @@ import { exportDashboardSummary } from '../utils/exportData'
 
 type Slice = { label: string; value: number; color: string }
 
-function PieChart({ data, size = 160 }: { data: Slice[]; size?: number }) {
-  const total = data.reduce((s, d) => s + d.value, 0)
+function PieChart({ data, size = 160, progress = 1 }: { data: Slice[]; size?: number; progress?: number }) {
+  // Compute final total once so proportions remain stable during animation
+  const totalFinal = data.reduce((s, d) => s + d.value, 0)
   let angle = -Math.PI / 2 // start at top
 
   const center = size / 2
@@ -25,22 +26,24 @@ function PieChart({ data, size = 160 }: { data: Slice[]; size?: number }) {
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden>
       {data.map((d, i) => {
-        const frac = total === 0 ? 0 : d.value / total
-        const nextAngle = angle + frac * Math.PI * 2
+        // compute final slice angle, then scale the slice span by progress
+        const sliceAngle = totalFinal === 0 ? 0 : (d.value / totalFinal) * Math.PI * 2
+        const displayAngle = sliceAngle * progress
+        const nextAngle = angle + displayAngle
         const path = arcPath(angle, nextAngle)
         angle = nextAngle
         return <path key={i} d={path} fill={d.color} stroke="#fff" strokeWidth={1} />
       })}
       {/* center label */}
       <text x={center} y={center} textAnchor="middle" dominantBaseline="middle" style={{ fontSize: 12, fontWeight: 600 }}>
-        {total}
+        {Math.round(totalFinal * progress)}
       </text>
     </svg>
   )
 }
 
-function DonutChart({ data, size = 180 }: { data: Slice[]; size?: number }) {
-  const total = data.reduce((s, d) => s + d.value, 0)
+function DonutChart({ data, size = 180, progress = 1 }: { data: Slice[]; size?: number; progress?: number }) {
+  const totalFinal = data.reduce((s, d) => s + d.value, 0)
   let angle = -Math.PI / 2
   const center = size / 2
   const outerRadius = size / 2 - 8
@@ -62,8 +65,9 @@ function DonutChart({ data, size = 180 }: { data: Slice[]; size?: number }) {
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden>
       {data.map((d, i) => {
-        const frac = total === 0 ? 0 : d.value / total
-        const nextAngle = angle + frac * Math.PI * 2
+        const sliceAngle = totalFinal === 0 ? 0 : (d.value / totalFinal) * Math.PI * 2
+        const displayAngle = sliceAngle * progress
+        const nextAngle = angle + displayAngle
         const path = arcPath(angle, nextAngle, true)
         angle = nextAngle
         return <path key={i} d={path} fill={d.color} stroke="#fff" strokeWidth={1} />
@@ -72,8 +76,9 @@ function DonutChart({ data, size = 180 }: { data: Slice[]; size?: number }) {
   )
 }
 
-function HorizontalBarChart({ data, height = 40 }: { data: { label: string; segments: Slice[] }[]; height?: number }) {
-  const maxValue = Math.max(...data.flatMap(d => d.segments.reduce((sum, s) => sum + s.value, 0)))
+function HorizontalBarChart({ data, height = 40, progress = 1 }: { data: { label: string; segments: Slice[] }[]; height?: number; progress?: number }) {
+  // compute final max (don't scale max with progress so bars grow to final length)
+  const maxFinal = Math.max(...data.flatMap(d => d.segments.reduce((sum, s) => sum + s.value, 0)))
   const barHeight = height / data.length
 
   return (
@@ -84,7 +89,7 @@ function HorizontalBarChart({ data, height = 40 }: { data: { label: string; segm
         return (
           <g key={rowIdx}>
             {row.segments.map((seg, segIdx) => {
-              const width = (seg.value / maxValue) * 400
+              const width = maxFinal === 0 ? 0 : (seg.value / maxFinal) * 400 * progress
               const rect = <rect key={segIdx} x={x} y={y} width={width} height={barHeight - 2} fill={seg.color} />
               x += width
               return rect
@@ -357,6 +362,30 @@ export default function Summary() {
   const animatedOpen = useCountUp(openRequests, 900, playAnim)
   const animatedCompletion = useCountUp(completionPct, 900, playAnim)
 
+  // Shared animation progress for charts (0..1)
+  function useProgress(duration = 900, enabled = true) {
+    const [p, setP] = useState<number>(enabled ? 0 : 1)
+    useEffect(() => {
+      if (!enabled) {
+        setP(1)
+        return
+      }
+      let start: number | null = null
+      let raf = 0
+      const step = (ts: number) => {
+        if (start === null) start = ts
+        const progress = Math.min(1, (ts - start) / duration)
+        setP(progress)
+        if (progress < 1) raf = requestAnimationFrame(step)
+      }
+      raf = requestAnimationFrame(step)
+      return () => cancelAnimationFrame(raf)
+    }, [duration, enabled])
+    return p
+  }
+
+  const animProgress = useProgress(250, playAnim)
+
   // For charts, produce animated slices
   // (For performance and to avoid hook-in-loop issues, only animate the top summary numbers and completion percent.)
 
@@ -563,7 +592,7 @@ export default function Summary() {
         <div style={{ padding: 20, borderRadius: 12, background: '#fff', boxShadow: '0 8px 28px rgba(20,20,20,0.04)' }}>
           <h3 style={{ margin: '0 0 16px 0', fontSize: 18 }}>Ratings</h3>
           <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
-            <PieChart data={ratingsSlices.filter((s) => s.value > 0)} size={180} />
+            <PieChart data={ratingsSlices.filter((s) => s.value > 0)} size={180} progress={animProgress} />
             <div style={{ flex: 1 }}>
               {ratingsSlices
                 .filter((s) => s.value > 0)
@@ -582,7 +611,7 @@ export default function Summary() {
         <div style={{ padding: 20, borderRadius: 12, background: '#fff', boxShadow: '0 8px 28px rgba(20,20,20,0.04)' }}>
           <h3 style={{ margin: '0 0 16px 0', fontSize: 18 }}>Control Effectiveness</h3>
           <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
-            <DonutChart data={effectivenessSlices.filter((s) => s.value > 0)} size={180} />
+            <DonutChart data={effectivenessSlices.filter((s) => s.value > 0)} size={180} progress={animProgress} />
             <div style={{ flex: 1 }}>
               {effectivenessSlices
                 .filter((s) => s.value > 0)
@@ -612,7 +641,7 @@ export default function Summary() {
           </div>
         </div>
         <div style={{ height: 80 }}>
-          <HorizontalBarChart data={testingStatusData} height={80} />
+          <HorizontalBarChart data={testingStatusData} height={80} progress={animProgress} />
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8, fontSize: 12, color: '#666' }}>
           <span>{testingStatusData[0].label}</span>
@@ -634,7 +663,7 @@ export default function Summary() {
             <div style={{ fontSize: 13, color: '#666' }}>Distribution by DAT status</div>
           </div>
           <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
-            <PieChart data={datSlices.filter((s) => s.value > 0)} size={160} />
+            <PieChart data={datSlices.filter((s) => s.value > 0)} size={160} progress={animProgress} />
             <div style={{ flex: 1 }}>
               {datSlices
                 .filter((s) => s.value > 0)
