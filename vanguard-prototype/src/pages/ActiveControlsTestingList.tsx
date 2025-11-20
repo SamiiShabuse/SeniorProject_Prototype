@@ -6,6 +6,7 @@ import ControlModal from '../components/ControlModal'
 
 export default function ActiveControlsTestingList() {
   const [showMock, setShowMock] = useState(true)
+  const [viewMode, setViewMode] = useState<'List' | 'Compact' | 'Kanban'>('List')
   const [selectedControl, setSelectedControl] = useState<Control | null>(null)
   const [activeTab, setActiveTab] = useState<'request' | 'status' | 'assignee'>('request')
 
@@ -100,13 +101,25 @@ export default function ActiveControlsTestingList() {
 
       <p style={{ marginTop: 6, color: '#444' }}>A list of active controls and testing status.</p>
 
-      <p style={{ marginTop: 8 }}>
-        <a href="#" onClick={(e) => { e.preventDefault(); setShowMock((s) => !s) }}>
-          {showMock ? 'Hide mock testing controls' : 'Show mock testing controls'}
-        </a>
-      </p>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 8 }}>
+        <div>
+          <label style={{ fontSize: 13, color: '#444', marginRight: 8 }}>View:</label>
+          <select value={viewMode} onChange={(e) => setViewMode(e.target.value as any)} style={{ padding: '6px 8px', borderRadius: 6 }}>
+            <option value="List">List</option>
+            <option value="Compact">Compact</option>
+            <option value="Kanban">Kanban</option>
+          </select>
+        </div>
+
+        <p style={{ margin: 0 }}>
+          <a href="#" onClick={(e) => { e.preventDefault(); setShowMock((s) => !s) }}>
+            {showMock ? 'Hide mock testing controls' : 'Show mock testing controls'}
+          </a>
+        </p>
+      </div>
 
       <div className="controls-container">
+        <div style={{ marginTop: 8, fontSize: 13, color: '#666' }}>Selected view: <strong>{viewMode}</strong></div>
         {showMock ? (
           <>
             {/* Tabs */}
