@@ -6,7 +6,9 @@ import ControlModal from '../components/ControlModal'
 
 export default function ActiveControlsTestingList() {
   const [showMock, setShowMock] = useState(true)
+  const [viewMode, setViewMode] = useState<'Pop Up' | 'Compact' | 'Kanban'>('Pop Up')
   const [selectedControl, setSelectedControl] = useState<Control | null>(null)
+  const [expandedId, setExpandedId] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<'request' | 'status' | 'assignee'>('request')
 
 
@@ -100,13 +102,25 @@ export default function ActiveControlsTestingList() {
 
       <p style={{ marginTop: 6, color: '#444' }}>A list of active controls and testing status.</p>
 
-      <p style={{ marginTop: 8 }}>
-        <a href="#" onClick={(e) => { e.preventDefault(); setShowMock((s) => !s) }}>
-          {showMock ? 'Hide mock testing controls' : 'Show mock testing controls'}
-        </a>
-      </p>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 8 }}>
+          <div>
+          <label style={{ fontSize: 13, color: '#444', marginRight: 8 }}>View:</label>
+          <select value={viewMode} onChange={(e) => setViewMode(e.target.value as any)} style={{ padding: '6px 8px', borderRadius: 6 }}>
+            <option value="Pop Up">Pop Up</option>
+            <option value="Compact">Compact</option>
+            <option value="Kanban">Kanban</option>
+          </select>
+        </div>
+
+        <p style={{ margin: 0 }}>
+          <a href="#" onClick={(e) => { e.preventDefault(); setShowMock((s) => !s) }}>
+            {showMock ? 'Hide mock testing controls' : 'Show mock testing controls'}
+          </a>
+        </p>
+      </div>
 
       <div className="controls-container">
+        <div style={{ marginTop: 8, fontSize: 13, color: '#666' }}>Selected view: <strong>{viewMode}</strong></div>
         {showMock ? (
           <>
             {/* Tabs */}
@@ -143,28 +157,53 @@ export default function ActiveControlsTestingList() {
             {/* Content for each tab */}
             {activeTab === 'request' && (
               <ul className="control-list">
-                {filtered.length === 0 && <li className="empty">No active controls found</li>}
-                {filtered.map((c: Control) => (
-                  <li key={c.id} className="control-row">
-                    <div
-                      className="control-link"
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => setSelectedControl(c)}
-                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setSelectedControl(c) }}
-                    >
-                      <div className="row-left">
-                        <div className="row-title">{c.name}</div>
-                        <div className="row-sub">Owner: {c.owner} • Tester: {c.tester ?? '—'}</div>
-                      </div>
-                      <div className="row-right">
-                        <div className="badge">Last Testing on {formatBadgeDate(c.completedDate ?? c.dueDate)}</div>
-                        <span className="chevron" style={{ marginLeft: 10 }}>▾</span>
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+                  {filtered.length === 0 && <li className="empty">No active controls found</li>}
+                  {filtered.map((c: Control) => {
+                    const isExpanded = viewMode === 'Compact' && expandedId === c.id
+                    return (
+                      <li key={c.id} className={`control-row ${isExpanded ? 'expanded' : ''}`}>
+                        <div
+                          className="control-link"
+                          role="button"
+                          tabIndex={0}
+                          onClick={() => {
+                            if (viewMode === 'Compact') setExpandedId((s) => (s === c.id ? null : c.id))
+                            else setSelectedControl(c)
+                          }}
+                          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { if (viewMode === 'Compact') setExpandedId((s) => (s === c.id ? null : c.id)); else setSelectedControl(c) } }}
+                        >
+                          <div className="row-left">
+                            <div className="row-title">{c.name}</div>
+                            <div className="row-sub">Owner: {c.owner} • Tester: {c.tester ?? '—'}</div>
+                          </div>
+                          <div className="row-right">
+                            <div className="badge">Last Testing on {formatBadgeDate(c.completedDate ?? c.dueDate)}</div>
+                            <span className="chevron" style={{ marginLeft: 10 }}>{isExpanded ? '▴' : '▾'}</span>
+                          </div>
+                        </div>
+
+                        {isExpanded && (
+                          <div className={`expanded-panel open`}>
+                            <div style={{ marginTop: 8 }}>
+                              <div className="expanded-card">
+                                <div style={{ display: 'flex', gap: 16 }}>
+                                  <div style={{ flex: 1 }}>
+                                    <div style={{ fontSize: 13, color: '#333', marginBottom: 8 }}>{c.description}</div>
+                                  </div>
+                                  <div style={{ width: 260 }}>
+                                    <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control Owner:</strong> {c.owner}</div>
+                                    <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control SME:</strong> {c.sme ?? '—'}</div>
+                                    <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Escalation Required:</strong> {c.needsEscalation ? 'Yes' : 'No'}</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </li>
+                    )
+                  })}
+                </ul>
             )}
 
             {activeTab === 'status' && (
@@ -174,26 +213,48 @@ export default function ActiveControlsTestingList() {
                   <div key={status} style={{ marginBottom: 14 }}>
                     <h4 style={{ margin: '6px 0' }}>{status}</h4>
                     <ul className="control-list">
-                      {controls.map((c: Control) => (
-                        <li key={c.id} className="control-row">
-                          <div
-                            className="control-link"
-                            role="button"
-                            tabIndex={0}
-                            onClick={() => setSelectedControl(c)}
-                            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setSelectedControl(c) }}
-                          >
-                            <div className="row-left">
-                              <div className="row-title">{c.name}</div>
-                              <div className="row-sub">Owner: {c.owner} • Tester: {c.tester ?? '—'}</div>
+                      {controls.map((c: Control) => {
+                        const isExpanded = viewMode === 'Compact' && expandedId === c.id
+                        return (
+                          <li key={c.id} className={`control-row ${isExpanded ? 'expanded' : ''}`}>
+                            <div
+                              className="control-link"
+                              role="button"
+                              tabIndex={0}
+                              onClick={() => { if (viewMode === 'Compact') setExpandedId((s) => (s === c.id ? null : c.id)); else setSelectedControl(c) }}
+                              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { if (viewMode === 'Compact') setExpandedId((s) => (s === c.id ? null : c.id)); else setSelectedControl(c) } }}
+                            >
+                              <div className="row-left">
+                                <div className="row-title">{c.name}</div>
+                                <div className="row-sub">Owner: {c.owner} • Tester: {c.tester ?? '—'}</div>
+                              </div>
+                              <div className="row-right">
+                                <div className="badge">{status}</div>
+                                <span className="chevron" style={{ marginLeft: 10 }}>{isExpanded ? '▴' : '▾'}</span>
+                              </div>
                             </div>
-                            <div className="row-right">
-                              <div className="badge">{status}</div>
-                              <span className="chevron" style={{ marginLeft: 10 }}>▾</span>
-                            </div>
-                          </div>
-                        </li>
-                      ))}
+
+                            {isExpanded && (
+                              <div className={`expanded-panel open`}>
+                                <div style={{ marginTop: 8 }}>
+                                  <div className="expanded-card">
+                                    <div style={{ display: 'flex', gap: 16 }}>
+                                      <div style={{ flex: 1 }}>
+                                        <div style={{ fontSize: 13, color: '#333', marginBottom: 8 }}>{c.description}</div>
+                                      </div>
+                                      <div style={{ width: 260 }}>
+                                        <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control Owner:</strong> {c.owner}</div>
+                                        <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control SME:</strong> {c.sme ?? '—'}</div>
+                                        <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Escalation Required:</strong> {c.needsEscalation ? 'Yes' : 'No'}</div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </li>
+                        )
+                      })}
                     </ul>
                   </div>
                 ))}
@@ -207,26 +268,48 @@ export default function ActiveControlsTestingList() {
                   <div key={group.assignee} style={{ marginBottom: 12 }}>
                     <div style={{ background: '#f6f6f6', padding: '8px 12px', borderRadius: 6, marginBottom: 8 }}><strong>{group.assignee}</strong></div>
                     <ul className="control-list">
-                      {group.controls.map((c: Control) => (
-                        <li key={c.id} className="control-row">
-                          <div
-                            className="control-link"
-                            role="button"
-                            tabIndex={0}
-                            onClick={() => setSelectedControl(c)}
-                            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setSelectedControl(c) }}
-                          >
-                            <div className="row-left">
-                              <div className="row-title">{c.name}</div>
-                              <div className="row-sub">Tester: {c.tester ?? '—'}</div>
+                      {group.controls.map((c: Control) => {
+                        const isExpanded = viewMode === 'Compact' && expandedId === c.id
+                        return (
+                          <li key={c.id} className={`control-row ${isExpanded ? 'expanded' : ''}`}>
+                            <div
+                              className="control-link"
+                              role="button"
+                              tabIndex={0}
+                              onClick={() => { if (viewMode === 'Compact') setExpandedId((s) => (s === c.id ? null : c.id)); else setSelectedControl(c) }}
+                              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { if (viewMode === 'Compact') setExpandedId((s) => (s === c.id ? null : c.id)); else setSelectedControl(c) } }}
+                            >
+                              <div className="row-left">
+                                <div className="row-title">{c.name}</div>
+                                <div className="row-sub">Tester: {c.tester ?? '—'}</div>
+                              </div>
+                              <div className="row-right">
+                                <div className="badge">{String(c.dat?.status ?? c.oet?.status ?? 'Not Started')}</div>
+                                <span className="chevron" style={{ marginLeft: 10 }}>{isExpanded ? '▴' : '▾'}</span>
+                              </div>
                             </div>
-                            <div className="row-right">
-                              <div className="badge">{String(c.dat?.status ?? c.oet?.status ?? 'Not Started')}</div>
-                              <span className="chevron" style={{ marginLeft: 10 }}>▾</span>
-                            </div>
-                          </div>
-                        </li>
-                      ))}
+
+                            {isExpanded && (
+                              <div className={`expanded-panel open`}>
+                                <div style={{ marginTop: 8 }}>
+                                  <div className="expanded-card">
+                                    <div style={{ display: 'flex', gap: 16 }}>
+                                      <div style={{ flex: 1 }}>
+                                        <div style={{ fontSize: 13, color: '#333', marginBottom: 8 }}>{c.description}</div>
+                                      </div>
+                                      <div style={{ width: 260 }}>
+                                        <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control Owner:</strong> {c.owner}</div>
+                                        <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control SME:</strong> {c.sme ?? '—'}</div>
+                                        <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Escalation Required:</strong> {c.needsEscalation ? 'Yes' : 'No'}</div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </li>
+                        )
+                      })}
                     </ul>
                   </div>
                 ))}

@@ -62,3 +62,10 @@ export function updateMockControl(id: string, patch: Partial<Control>): Control 
   mockControls[idx] = { ...mockControls[idx], ...patch }
   return mockControls[idx]
 }
+
+export function updateMockRequest(id: string, patch: Partial<TestRequest>): TestRequest | undefined {
+  const idx = mockRequests.findIndex((r) => r.id === id)
+  if (idx === -1) return undefined
+  mockRequests[idx] = { ...mockRequests[idx], ...patch }
+  return mockRequests[idx]
+}
