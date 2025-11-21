@@ -2,7 +2,6 @@ import './App.css'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import { useState } from 'react'
 import Summary from './pages/Summary'
-import Login from './pages/Login'
 import Board from './pages/Board'
 import ControlsList from './pages/ControlsList'
 import IndividualControl from './pages/IndividualControl'
@@ -20,7 +19,7 @@ import UpdateIndividualControlTestingDetails from './pages/UpdateIndividualContr
 import AssignTesterToCorrespondingControl from './pages/AssignTesterToCorrespondingControl'
 import MockDisplay from './pages/MockDisplay'
 
-function AuthenticatedApp({ onLogout }: { onLogout: () => void }) {
+function AuthenticatedApp() {
   const [layout, setLayout] = useState<'top' | 'left'>(() => {
     try { return (localStorage.getItem('vg_layout') as 'top' | 'left') || 'top' } catch { return 'top' }
   })
@@ -54,7 +53,6 @@ function AuthenticatedApp({ onLogout }: { onLogout: () => void }) {
           <Link to="/requests">Requests</Link>
           <Link to="/board">Board</Link>
           <Link to="/mock">Mock Data</Link>
-          <button style={{ marginLeft: 12 }} onClick={onLogout}>Logout</button>
           {/* layout toggle */}
           <button style={{ marginLeft: 8 }} onClick={toggleLayout} aria-pressed={layout === 'left'}>
             {layout === 'left' ? 'Use Top Bar' : 'Use Left Sidebar'}
@@ -96,25 +94,9 @@ function AuthenticatedApp({ onLogout }: { onLogout: () => void }) {
 }
 
 function App() {
-  const [logged, setLogged] = useState<boolean>(() => typeof window !== 'undefined' && localStorage.getItem('vg_logged_in') === 'true')
-
-  function logout() {
-    localStorage.removeItem('vg_logged_in')
-    setLogged(false)
-    // reload to get the router back to login page
-    window.location.href = '/'
-  }
-
   return (
     <BrowserRouter>
-      {logged ? (
-        <AuthenticatedApp onLogout={logout} />
-      ) : (
-        <Routes>
-          <Route path="/" element={<Login onLogin={() => setLogged(true)} />} />
-          <Route path="*" element={<Login onLogin={() => setLogged(true)} />} />
-        </Routes>
-      )}
+      <AuthenticatedApp />
     </BrowserRouter>
   )
 }
