@@ -147,7 +147,7 @@ export default function ActiveControlsTestingList() {
                 onKeyDown={(e) => { if (e.key === 'Enter') setActiveTab('request') }}
                 style={{ borderBottom: activeTab === 'request' ? '2px solid #222' : '2px solid transparent', paddingBottom: 8, cursor: 'pointer' }}
               >
-                Request
+                Control
               </div>
               <div
                 role="button"
