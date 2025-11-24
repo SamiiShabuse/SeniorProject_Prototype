@@ -2,7 +2,6 @@ import './App.css'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 
 import Summary from './pages/Summary'
-import Board from './pages/Board'
 import ControlsList from './pages/ControlsList'
 import IndividualControl from './pages/IndividualControl'
 import CreateState from './pages/CreateState'
@@ -29,7 +28,6 @@ function AuthenticatedApp() {
           <Link to="/controls">Controls List</Link>
           <Link to="/active-testing">Active Controls</Link>
           <Link to="/requests">Requests</Link>
-          <Link to="/board">Board</Link>
           <Link to="/mock">Mock Data</Link>
           {/* top navigation only; left-sidebar and bottom/nav-position controls removed per stakeholder request */}
         </nav>
@@ -55,7 +53,6 @@ function AuthenticatedApp() {
           <Route path="/requests/:id/update" element={<UpdateIndividualRequest />} />
           <Route path="/requests/:id/comment" element={<CommentOnIndividualRequest />} />
 
-          <Route path="/board" element={<Board />} />
           <Route path="/mock" element={<MockDisplay />} />
           <Route path="*" element={<div>Page not found</div>} />
         </Routes>
