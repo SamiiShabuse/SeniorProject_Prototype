@@ -266,7 +266,7 @@ export default function Summary() {
     'IN PROGRESS': '#1a88ff',
     'SATISFACTORY': '#4caf50',
     'NEEDS IMPROVEMENT': '#f6a623',
-    'COMPLETE': '#4caf50',
+    'COMPLETE': '#004d00',
   }
   const ratingsSlices: Slice[] = ratingsLabels.map((label) => ({ label, value: ratingsCounts[label] ?? 0, color: ratingsColors[label] ?? '#ccc' }))
 
