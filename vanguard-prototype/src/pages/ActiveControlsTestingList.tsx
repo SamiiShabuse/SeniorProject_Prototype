@@ -1,10 +1,11 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useContext } from 'react'
 import { mockControls } from '../mocks/mockData'
 import type { Control } from '../lib/types'
 import './ActiveControlsTestingList.css'
 import ControlModal from '../components/ControlModal'
 import CreateControlModal from '../components/CreateControlModal'
 import ControlsKanban from '../components/ControlsKanban'
+import DevContext from '../contexts/DevContext'
 
 export default function ActiveControlsTestingList() {
   const [showMock, setShowMock] = useState(true)
@@ -22,6 +23,15 @@ export default function ActiveControlsTestingList() {
     if (!m) return d
     return `${m[3]}/${m[2]}/${m[1]}`
   }
+
+  // subscribe to global devMode for immediate updates when header toggles
+  const ctx = useContext(DevContext)
+  const devMode = ctx?.devMode ?? (() => {
+    try {
+      const v = localStorage.getItem('devMode')
+      return v === null ? true : v === 'true'
+    } catch (e) { return true }
+  })()
 
   function isActive(c: any) {
     const datRaw = String(c.dat?.status ?? '').trim()
@@ -83,26 +93,34 @@ export default function ActiveControlsTestingList() {
       <p style={{ marginTop: 6, color: '#444' }}>A list of active controls and testing status.</p>
 
       <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 8 }}>
-        <div>
-          <label style={{ fontSize: 13, color: '#444', marginRight: 8 }}>View:</label>
-          <select value={viewMode} onChange={(e) => setViewMode(e.target.value as any)} style={{ padding: '6px 8px', borderRadius: 6 }}>
-            <option value="Pop Up">Pop Up</option>
-            <option value="Compact">Compact</option>
-            <option value="Kanban">Kanban</option>
-          </select>
-        </div>
-        <p style={{ margin: 0 }}>
-          <a href="#" onClick={(e) => { e.preventDefault(); setShowMock((s) => !s) }}>
-            {showMock ? 'Hide mock testing controls' : 'Show mock testing controls'}
-          </a>
-        </p>
-        <div>
-          <label style={{ fontSize: 13, color: '#444', marginRight: 8 }}>Edit Mode:</label>
-          <select value={editPreference} onChange={(e) => setEditPreference(e.target.value as any)} style={{ padding: '6px 8px', borderRadius: 6 }}>
-            <option value="route">Route (open edit page)</option>
-            <option value="modal">Inline Modal</option>
-          </select>
-        </div>
+        {devMode && (
+          <div>
+            <label style={{ fontSize: 13, color: '#444', marginRight: 8 }}>View:</label>
+            <select value={viewMode} onChange={(e) => setViewMode(e.target.value as any)} style={{ padding: '6px 8px', borderRadius: 6 }}>
+              <option value="Pop Up">Pop Up</option>
+              <option value="Compact">Compact</option>
+              <option value="Kanban">Kanban</option>
+            </select>
+          </div>
+        )}
+
+        {devMode ? (
+          <p style={{ margin: 0 }}>
+            <a href="#" onClick={(e) => { e.preventDefault(); setShowMock((s) => !s) }}>
+              {showMock ? 'Hide mock testing controls' : 'Show mock testing controls'}
+            </a>
+          </p>
+        ) : null}
+
+        {devMode && (
+          <div>
+            <label style={{ fontSize: 13, color: '#444', marginRight: 8 }}>Edit Mode:</label>
+            <select value={editPreference} onChange={(e) => setEditPreference(e.target.value as any)} style={{ padding: '6px 8px', borderRadius: 6 }}>
+              <option value="route">Route (open edit page)</option>
+              <option value="modal">Inline Modal</option>
+            </select>
+          </div>
+        )}
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 12 }}>

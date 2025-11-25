@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { mockRequests, mockControls } from '../mocks/mockData'
 import CreateRequestModal from '../components/CreateRequestModal'
 import RequestsKanban from '../components/RequestsKanban'
 import type { TestRequest } from '../lib/types'
 import RequestModal from '../components/RequestModal'
 import './ActiveControlsTestingList.css'
+import DevContext from '../contexts/DevContext'
 
 export default function IndividualRequest() {
   const [showMock, setShowMock] = useState(true)
@@ -21,6 +22,15 @@ export default function IndividualRequest() {
     if (!m) return d
     return `${m[3]}/${m[2]}/${m[1]}`
   }
+
+  // subscribe to global devMode for immediate updates when header toggles
+  const ctx = useContext(DevContext)
+  const devMode = ctx?.devMode ?? (() => {
+    try {
+      const v = localStorage.getItem('devMode')
+      return v === null ? true : v === 'true'
+    } catch (e) { return true }
+  })()
 
   // pick up to 3 controls related to a request: prefer exact id matches, then nearby controls
   function controlsForRequest(idx: number, r: any) {
@@ -43,28 +53,35 @@ export default function IndividualRequest() {
       <p style={{ marginTop: 6, color: '#444' }}>Requests list / single request entry point.</p>
 
       <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 8 }}>
-        <div>
-          <label style={{ fontSize: 13, color: '#444', marginRight: 8 }}>View:</label>
-          <select value={viewMode} onChange={(e) => setViewMode(e.target.value as any)} style={{ padding: '6px 8px', borderRadius: 6 }}>
-            <option value="Pop Up">Pop Up</option>
-            <option value="Compact">Compact</option>
-            <option value="Kanban">Kanban</option>
-          </select>
-        </div>
+        {devMode && (
+          <div>
+            <label style={{ fontSize: 13, color: '#444', marginRight: 8 }}>View:</label>
+            <select value={viewMode} onChange={(e) => setViewMode(e.target.value as any)} style={{ padding: '6px 8px', borderRadius: 6 }}>
+              <option value="Pop Up">Pop Up</option>
+              <option value="Compact">Compact</option>
+              <option value="Kanban">Kanban</option>
+            </select>
+          </div>
+        )}
 
-        <div>
-          <label style={{ fontSize: 13, color: '#444', marginRight: 8 }}>Edit Mode:</label>
-          <select value={editPreference} onChange={(e) => setEditPreference(e.target.value as any)} style={{ padding: '6px 8px', borderRadius: 6 }}>
-            <option value="route">Route (open edit page)</option>
-            <option value="modal">Inline Modal</option>
-          </select>
-        </div>
+        {devMode && (
+          <div>
+            <label style={{ fontSize: 13, color: '#444', marginRight: 8 }}>Edit Mode:</label>
+            <select value={editPreference} onChange={(e) => setEditPreference(e.target.value as any)} style={{ padding: '6px 8px', borderRadius: 6 }}>
+              <option value="route">Route (open edit page)</option>
+              <option value="modal">Inline Modal</option>
+            </select>
+          </div>
+        )}
 
-        <p style={{ margin: 0 }}>
-          <a href="#" onClick={(e) => { e.preventDefault(); setShowMock((s) => !s) }}>
-            {showMock ? 'Hide mock requests' : 'Show mock requests'}
-          </a>
-        </p>
+        {devMode ? (
+          <p style={{ margin: 0 }}>
+            <a href="#" onClick={(e) => { e.preventDefault(); setShowMock((s) => !s) }}>
+              {showMock ? 'Hide mock requests' : 'Show mock requests'}
+            </a>
+          </p>
+        ) : null}
+
         <div style={{ marginLeft: 'auto' }}>
           <button
             onClick={() => setShowCreate(true)}
