@@ -14,6 +14,8 @@ export default function ActiveControlsTestingList() {
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<'request' | 'status' | 'assignee'>('request')
   const [editPreference, setEditPreference] = useState<'route' | 'modal'>('route')
+  const [statusSearch, setStatusSearch] = useState('')
+  const [statusFilter, setStatusFilter] = useState<'All' | string>('All')
   const [creating, setCreating] = useState(false)
   const [refreshKey, setRefreshKey] = useState(0)
 
@@ -74,6 +76,34 @@ export default function ActiveControlsTestingList() {
     }
     return ordered
   }, [filtered])
+
+  const STATUS_ORDER = ['In Progress', 'Testing Completed', 'Addressing Comments', 'Not Started', 'Completed']
+
+  const filteredStatusGroups = useMemo(() => {
+    const q = String(statusSearch || '').trim().toLowerCase()
+    const groups: Array<[string, Control[]]> = []
+    for (const [status, controls] of controlsByStatus) {
+      // apply status filter if selected
+      if (statusFilter !== 'All' && status !== statusFilter) continue
+      const matched = controls.filter((c) => {
+        if (!q) return true
+        const hay = [c.name, c.description, c.owner, c.tester, c.sme, c.testingNotes, c.startDate, c.dueDate].filter(Boolean).join(' ').toLowerCase()
+        return hay.includes(q)
+      })
+      if (matched.length > 0) groups.push([status, matched])
+    }
+    // if no groups matched but a search exists, try across non-ordered statuses too
+    if (groups.length === 0 && q) {
+      for (const [status, controls] of controlsByStatus) {
+        const matched = controls.filter((c) => {
+          const hay = [c.name, c.description, c.owner, c.tester, c.sme, c.testingNotes, c.startDate, c.dueDate].filter(Boolean).join(' ').toLowerCase()
+          return hay.includes(q)
+        })
+        if (matched.length > 0) groups.push([status, matched])
+      }
+    }
+    return groups
+  }, [controlsByStatus, statusSearch, statusFilter])
 
   const controlsByAssignee = useMemo(() => {
     const map: Record<string, any[]> = {}
@@ -185,8 +215,25 @@ export default function ActiveControlsTestingList() {
 
                 {activeTab === 'status' && (
                   <div>
-                    {controlsByStatus.length === 0 && <div className="empty">No controls found</div>}
-                    {controlsByStatus.map(([status, controls]) => (
+                    <div style={{ display: 'flex', gap: 8, marginBottom: 12, alignItems: 'center' }}>
+                      <input
+                        placeholder="Search controls..."
+                        value={statusSearch}
+                        onChange={(e) => setStatusSearch(e.target.value)}
+                        style={{ padding: '6px 8px', borderRadius: 6, border: '1px solid #ddd', flex: 1 }}
+                      />
+                      <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} style={{ padding: '6px 8px', borderRadius: 6 }}>
+                        <option value="All">All</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Testing Completed">Testing Completed</option>
+                        <option value="Addressing Comments">Addressing Comments</option>
+                        <option value="Not Started">Not Started</option>
+                        <option value="Completed">Completed</option>
+                      </select>
+                    </div>
+
+                    {filteredStatusGroups.length === 0 && <div className="empty">No controls found</div>}
+                    {filteredStatusGroups.map(([status, controls]) => (
                       <div key={status} style={{ marginBottom: 14 }}>
                         <h4 style={{ margin: '6px 0' }}>{status}</h4>
                         <ul className="control-list">
