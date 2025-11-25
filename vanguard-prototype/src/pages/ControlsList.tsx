@@ -78,7 +78,9 @@ export default function ControlsList() {
 
       <div className="controls-container">
         {/* placeholder: viewMode currently controls only the dropdown selection. We'll wire different renderings next. */}
-        <div style={{ marginTop: 8, fontSize: 13, color: '#666' }}>Selected view: <strong>{viewMode}</strong></div>
+        {devMode && (
+          <div style={{ marginTop: 8, fontSize: 13, color: '#666' }}>Selected view: <strong>{viewMode}</strong></div>
+        )}
         {showMock ? (
           <>
             {/* top example removed per design — list rows will show expandable details */}

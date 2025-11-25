@@ -172,7 +172,9 @@ export default function ActiveControlsTestingList() {
       </div>
 
       <div className="controls-container">
-        <div style={{ marginTop: 8, fontSize: 13, color: '#666' }}>Selected view: <strong>{viewMode}</strong></div>
+        {devMode && (
+          <div style={{ marginTop: 8, fontSize: 13, color: '#666' }}>Selected view: <strong>{viewMode}</strong></div>
+        )}
 
         {showMock ? (
           <>
