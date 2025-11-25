@@ -114,3 +114,12 @@
 
 .row { display:flex; gap:12px; align-items:flex-start }
 
+/* Dev helper styles toggled by App dev settings */
+.dev-compact { font-size: 13px; }
+.dev-compact .panel, .dev-compact .control-list li { padding: 8px }
+
+.dev-grid { background-image: linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px); background-size: 24px 24px; }
+
+.dev-contrast { --panel: #111; color: #fff; background: #000; }
+.dev-contrast .app-header, .dev-contrast .panel { background: #111; color: #fff }
+

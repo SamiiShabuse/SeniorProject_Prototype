@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useContext } from 'react'
+import DevContext from '../contexts/DevContext'
 import { mockControls } from '../mocks/mockData'
 import type { Control } from '../lib/types'
 import './ActiveControlsTestingList.css'
@@ -24,33 +25,51 @@ export default function ControlsList() {
     return `${m[3]}/${m[2]}/${m[1]}`
   }
 
+  // Subscribe to global devMode so toggles hide/show immediately
+  const ctx = useContext(DevContext)
+  const devMode = ctx?.devMode ?? (() => {
+    try {
+      const v = localStorage.getItem('devMode')
+      return v === null ? true : v === 'true'
+    } catch (e) {
+      return true
+    }
+  })()
+
   return (
     <div className="control-list-page">
       <h2>Controls List</h2>
       <p style={{ marginTop: 6, color: '#444' }}>List of controls. Click a control to open details.</p>
 
       <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 8 }}>
-        <div>
-          <label style={{ fontSize: 13, color: '#444', marginRight: 8 }}>View:</label>
-          <select value={viewMode} onChange={(e) => setViewMode(e.target.value as any)} style={{ padding: '6px 8px', borderRadius: 6 }}>
-            <option value="Pop Up">Pop Up</option>
-            <option value="Compact">Compact</option>
-            <option value="Kanban">Kanban</option>
-          </select>
-        </div>
+        {devMode && (
+          <div>
+            <label style={{ fontSize: 13, color: '#444', marginRight: 8 }}>View:</label>
+            <select value={viewMode} onChange={(e) => setViewMode(e.target.value as any)} style={{ padding: '6px 8px', borderRadius: 6 }}>
+              <option value="Pop Up">Pop Up</option>
+              <option value="Compact">Compact</option>
+              <option value="Kanban">Kanban</option>
+            </select>
+          </div>
+        )}
 
-        <p style={{ margin: 0 }}>
-          <a href="#" onClick={(e) => { e.preventDefault(); setShowMock((s) => !s) }}>
-            {showMock ? 'Hide mock data' : 'Show mock data'}
-          </a>
-        </p>
-        <div>
-          <label style={{ fontSize: 13, color: '#444', marginRight: 8 }}>Edit Mode:</label>
-          <select value={editPreference} onChange={(e) => setEditPreference(e.target.value as any)} style={{ padding: '6px 8px', borderRadius: 6 }}>
-            <option value="route">Route (open edit page)</option>
-            <option value="modal">Inline Modal</option>
-          </select>
-        </div>
+        {devMode ? (
+          <p style={{ margin: 0 }}>
+            <a href="#" onClick={(e) => { e.preventDefault(); setShowMock((s) => !s) }}>
+              {showMock ? 'Hide mock data' : 'Show mock data'}
+            </a>
+          </p>
+        ) : null}
+
+        {devMode && (
+          <div>
+            <label style={{ fontSize: 13, color: '#444', marginRight: 8 }}>Edit Mode:</label>
+            <select value={editPreference} onChange={(e) => setEditPreference(e.target.value as any)} style={{ padding: '6px 8px', borderRadius: 6 }}>
+              <option value="route">Route (open edit page)</option>
+              <option value="modal">Inline Modal</option>
+            </select>
+          </div>
+        )}
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 12 }}>

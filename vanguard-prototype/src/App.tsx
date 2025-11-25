@@ -18,6 +18,7 @@ import IndividualCorrespondingControl from './pages/IndividualCorrespondingContr
 import UpdateIndividualControlTestingDetails from './pages/UpdateIndividualControlTestingDetails'
 import AssignTesterToCorrespondingControl from './pages/AssignTesterToCorrespondingControl'
 import MockDisplay from './pages/MockDisplay'
+import DevContext from './contexts/DevContext'
 
 function AuthenticatedApp() {
   const [devMode, setDevMode] = useState<boolean>(() => {
@@ -33,8 +34,23 @@ function AuthenticatedApp() {
     try { localStorage.setItem('devMode', devMode ? 'true' : 'false') } catch {}
   }, [devMode])
 
+  type DevSettings = { compact: boolean; grid: boolean; contrast: boolean }
+  const [devSettings, setDevSettings] = useState<DevSettings>(() => {
+    try {
+      const raw = localStorage.getItem('devSettings')
+      return raw ? JSON.parse(raw) : { compact: false, grid: false, contrast: false }
+    } catch (e) { return { compact: false, grid: false, contrast: false } }
+  })
+
+  useEffect(() => {
+    try { localStorage.setItem('devSettings', JSON.stringify(devSettings)) } catch {}
+  }, [devSettings])
+
+  const rootClass = `app-shell with-topbar${devSettings.compact ? ' dev-compact' : ''}${devSettings.grid ? ' dev-grid' : ''}${devSettings.contrast ? ' dev-contrast' : ''}`
+
   return (
-    <div className={`app-shell with-topbar`}>
+    <DevContext.Provider value={{ devMode, setDevMode, devSettings, setDevSettings }}>
+      <div className={rootClass}>
   <header className="app-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <h1 style={{ margin: 0 }}>Vanguard Control System (Prototype)</h1>
@@ -51,6 +67,19 @@ function AuthenticatedApp() {
           >
             {devMode ? 'Dev: On' : 'Dev: Off'}
           </button>
+          {devMode && (
+            <div style={{ marginLeft: 8, display: 'flex', gap: 8, alignItems: 'center' }}>
+              <label style={{ fontSize: 13, display: 'flex', gap: 6, alignItems: 'center' }}>
+                <input type="checkbox" checked={devSettings.compact} onChange={(e) => setDevSettings((s: DevSettings) => ({ ...s, compact: e.target.checked }))} /> Compact
+              </label>
+              <label style={{ fontSize: 13, display: 'flex', gap: 6, alignItems: 'center' }}>
+                <input type="checkbox" checked={devSettings.grid} onChange={(e) => setDevSettings((s: DevSettings) => ({ ...s, grid: e.target.checked }))} /> Grid
+              </label>
+              <label style={{ fontSize: 13, display: 'flex', gap: 6, alignItems: 'center' }}>
+                <input type="checkbox" checked={devSettings.contrast} onChange={(e) => setDevSettings((s: DevSettings) => ({ ...s, contrast: e.target.checked }))} /> High contrast
+              </label>
+            </div>
+          )}
         </div>
         <nav className="app-nav">
           <Link to="/home">Summary</Link>
@@ -87,6 +116,7 @@ function AuthenticatedApp() {
         </Routes>
       </main>
     </div>
+    </DevContext.Provider>
   )
 }
 

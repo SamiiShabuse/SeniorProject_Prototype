@@ -95,7 +95,7 @@ export default function EditControlModal({ control, onClose, onSaved }: Props) {
               <h4 style={{ marginTop: 0 }}>Statuses</h4>
               <div style={{ marginBottom: 8 }}>
                 <label>DAT status</label>
-                <select value={datStatus} onChange={(e) => setDatStatus(e.target.value)} style={{ width: '100%', marginTop: 6 }}>
+                <select value={datStatus} onChange={(e) => setDatStatus(e.target.value as any)} style={{ width: '100%', marginTop: 6 }}>
                   <option>Not Started</option>
                   <option>In Progress</option>
                   <option>Testing Completed</option>
@@ -105,7 +105,7 @@ export default function EditControlModal({ control, onClose, onSaved }: Props) {
               </div>
               <div>
                 <label>OET status</label>
-                <select value={oetStatus} onChange={(e) => setOetStatus(e.target.value)} style={{ width: '100%', marginTop: 6 }}>
+                <select value={oetStatus} onChange={(e) => setOetStatus(e.target.value as any)} style={{ width: '100%', marginTop: 6 }}>
                   <option>Not Started</option>
                   <option>In Progress</option>
                   <option>Testing Completed</option>
