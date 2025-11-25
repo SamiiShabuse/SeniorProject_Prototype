@@ -16,6 +16,7 @@ export default function ActiveControlsTestingList() {
   const [editPreference, setEditPreference] = useState<'route' | 'modal'>('route')
   const [statusSearch, setStatusSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState<'All' | string>('All')
+  const [assigneeFilter, setAssigneeFilter] = useState<'All' | string>('All')
   const [creating, setCreating] = useState(false)
   const [refreshKey, setRefreshKey] = useState(0)
 
@@ -77,8 +78,6 @@ export default function ActiveControlsTestingList() {
     return ordered
   }, [filtered])
 
-  const STATUS_ORDER = ['In Progress', 'Testing Completed', 'Addressing Comments', 'Not Started', 'Completed']
-
   const filteredStatusGroups = useMemo(() => {
     const q = String(statusSearch || '').trim().toLowerCase()
     const groups: Array<[string, Control[]]> = []
@@ -116,6 +115,21 @@ export default function ActiveControlsTestingList() {
     const keys = Object.keys(map).sort((a, b) => a.localeCompare(b))
     return keys.map((k) => ({ assignee: k, controls: map[k] }))
   }, [refreshKey])
+
+  const testersList = useMemo(() => {
+    const map: Record<string, boolean> = {}
+    for (const c of mockControls) {
+      const key = String(c.tester ?? '').trim() || 'Unassigned'
+      map[key] = true
+    }
+    const list = Object.keys(map).sort((a, b) => a.localeCompare(b))
+    return ['All', ...list]
+  }, [])
+
+  const filteredAssigneeGroups = useMemo(() => {
+    if (assigneeFilter === 'All') return controlsByAssignee
+    return controlsByAssignee.filter((g) => g.assignee === assigneeFilter)
+  }, [controlsByAssignee, assigneeFilter])
 
   return (
     <div className="control-list-page">
@@ -280,8 +294,17 @@ export default function ActiveControlsTestingList() {
 
                 {activeTab === 'assignee' && (
                   <div>
-                    {controlsByAssignee.length === 0 && <div className="empty">No controls found</div>}
-                    {controlsByAssignee.map((group) => (
+                    <div style={{ display: 'flex', gap: 8, marginBottom: 12, alignItems: 'center' }}>
+                      <label style={{ fontSize: 13, color: '#444', marginRight: 8 }}>Assignee:</label>
+                      <select value={assigneeFilter} onChange={(e) => setAssigneeFilter(e.target.value)} style={{ padding: '6px 8px', borderRadius: 6 }}>
+                        {testersList.map((t) => (
+                          <option key={t} value={t}>{t}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {filteredAssigneeGroups.length === 0 && <div className="empty">No controls found</div>}
+                    {filteredAssigneeGroups.map((group) => (
                       <div key={group.assignee} style={{ marginBottom: 12 }}>
                         <div style={{ background: '#f6f6f6', padding: '8px 12px', borderRadius: 6, marginBottom: 8 }}><strong>{group.assignee}</strong></div>
                         <ul className="control-list">
