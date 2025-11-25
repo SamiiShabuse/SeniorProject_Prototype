@@ -42,11 +42,14 @@ function AuthenticatedApp() {
   const holdRAF = useRef<number | null>(null)
   const longPressTriggered = useRef(false)
   const holdStart = useRef<number | null>(null)
+  const holdTarget = useRef<'button' | 'title' | null>(null)
   const [holdProgress, setHoldProgress] = useState(0)
   const HOLD_MS = 3000
+  const [hotspotHover, setHotspotHover] = useState(false)
 
-  function startHold(onComplete: () => void) {
+  function startHold(onComplete: () => void, target: 'button' | 'title' = 'button') {
     longPressTriggered.current = false
+    holdTarget.current = target
     holdStart.current = performance.now()
     setHoldProgress(0)
 
@@ -61,6 +64,7 @@ function AuthenticatedApp() {
         holdStart.current = null
         setHoldProgress(0)
         holdRAF.current = null
+        holdTarget.current = null
         return
       }
       holdRAF.current = requestAnimationFrame(step)
@@ -76,6 +80,7 @@ function AuthenticatedApp() {
     }
     holdStart.current = null
     setHoldProgress(0)
+    holdTarget.current = null
   }
 
   useEffect(() => {
@@ -112,33 +117,44 @@ function AuthenticatedApp() {
               title={devButtonHidden ? 'Hold 3s to show Dev button' : undefined}
             >Vanguard Control System (Prototype)</h1>
 
-            {/* show progress ring next to title when holding to reveal the hidden dev button */}
-            {devButtonHidden && holdProgress > 0 && (
-              <svg width={22} height={22} viewBox="0 0 36 36" style={{ marginLeft: -6 }}>
-                <defs>
-                  <linearGradient id="g2" x1="0%" x2="100%" y1="0%" y2="0%">
-                    <stop offset="0%" stopColor="#1a88ff" />
-                    <stop offset="100%" stopColor="#5fb0ff" />
-                  </linearGradient>
-                </defs>
-                <circle cx="18" cy="18" r="16" fill="none" stroke="#eee" strokeWidth="4" />
-                <circle cx="18" cy="18" r="16" fill="none" stroke="url(#g2)" strokeWidth="4"
-                  strokeDasharray={Math.PI * 2 * 16}
-                  strokeDashoffset={((1 - holdProgress) * Math.PI * 2 * 16).toString()}
-                  strokeLinecap="round"
-                  transform="rotate(-90 18 18)"
-                />
-              </svg>
-            )}
+            {/* title no longer shows a separate progress ring; fill animation is applied to the button/hotspot */}
           </div>
-          {!devButtonHidden && (
-            <div style={{ position: 'relative', display: 'inline-block' }}>
+          <div style={{ position: 'relative', display: 'inline-block' }}>
+            {devButtonHidden ? (
+              // invisible hotspot where the button used to be — allows holding same spot to reveal
               <button
-                onMouseDown={() => startHold(() => setDevButtonHidden((v) => !v))}
-                onMouseUp={() => clearHold()}
-                onMouseLeave={() => clearHold()}
-                onTouchStart={() => startHold(() => setDevButtonHidden((v) => !v))}
-                onTouchEnd={() => clearHold()}
+                aria-label="Reveal Dev Button"
+                onPointerDown={(e) => { try { (e.target as HTMLElement).setPointerCapture?.(e.pointerId) } catch {} startHold(() => setDevButtonHidden(false), 'button') }}
+                onPointerUp={(e) => { try { (e.target as HTMLElement).releasePointerCapture?.(e.pointerId) } catch {} clearHold() }}
+                onPointerCancel={(e) => { try { (e.target as HTMLElement).releasePointerCapture?.(e.pointerId) } catch {} clearHold() }}
+                onClick={() => { /* prevent accidental clicks while hidden */ }}
+                onMouseEnter={() => setHotspotHover(true)}
+                onMouseLeave={() => { setHotspotHover(false) }}
+                style={{
+                  padding: '6px 10px',
+                  borderRadius: 6,
+                  border: hotspotHover ? '1px solid rgba(0,0,0,0.06)' : '1px solid transparent',
+                  background: hotspotHover ? 'rgba(0,0,0,0.04)' : 'transparent',
+                  cursor: 'pointer',
+                  opacity: 1,
+                  // match the visible Dev button size/appearance when hidden
+                  display: 'inline-block',
+                  minWidth: 80,
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}
+                title="Hold 3s to reveal Dev button"
+                >
+                  {/* fill overlay for hidden hotspot (lighter -> darker gray as holdProgress increases) */}
+                  {holdTarget.current === 'button' && holdProgress > 0 && (
+                    <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${Math.round(holdProgress * 100)}%`, background: `rgba(0,0,0,${0.04 + holdProgress * 0.16})`, pointerEvents: 'none', transition: 'width 0s' }} />
+                  )}
+                </button>
+            ) : (
+              <button
+                onPointerDown={(e) => { try { (e.target as HTMLElement).setPointerCapture?.(e.pointerId) } catch {} startHold(() => setDevButtonHidden((v) => !v), 'button') }}
+                onPointerUp={(e) => { try { (e.target as HTMLElement).releasePointerCapture?.(e.pointerId) } catch {} clearHold() }}
+                onPointerCancel={(e) => { try { (e.target as HTMLElement).releasePointerCapture?.(e.pointerId) } catch {} clearHold() }}
                 onClick={() => { if (longPressTriggered.current) { longPressTriggered.current = false; return } setDevMode((s) => !s) }}
                 style={{
                   padding: '6px 10px',
@@ -146,32 +162,20 @@ function AuthenticatedApp() {
                   border: '1px solid rgba(0,0,0,0.12)',
                   background: devMode ? '#f0f8ff' : '#fff',
                   cursor: 'pointer',
+                  position: 'relative',
+                  overflow: 'hidden'
                 }}
                 title="Toggle Dev Mode (short click) — Hold 3s to hide button"
               >
-                {devMode ? 'Dev: On' : 'Dev: Off'}
+                {/* fill overlay for visible button (fixed shade) */}
+                {holdTarget.current === 'button' && holdProgress > 0 && (
+                  <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${Math.round(holdProgress * 100)}%`, background: 'rgba(0,0,0,0.08)', pointerEvents: 'none', transition: 'width 0s' }} />
+                )}
+                <span style={{ position: 'relative', zIndex: 1 }}>{devMode ? 'Dev: On' : 'Dev: Off'}</span>
               </button>
-
-              {/* progress ring */}
-              {holdProgress > 0 && (
-                <svg width={22} height={22} viewBox="0 0 36 36" style={{ position: 'absolute', right: -12, top: -6 }}>
-                  <defs>
-                    <linearGradient id="g1" x1="0%" x2="100%" y1="0%" y2="0%">
-                      <stop offset="0%" stopColor="#1a88ff" />
-                      <stop offset="100%" stopColor="#5fb0ff" />
-                    </linearGradient>
-                  </defs>
-                  <circle cx="18" cy="18" r="16" fill="none" stroke="#eee" strokeWidth="4" />
-                  <circle cx="18" cy="18" r="16" fill="none" stroke="url(#g1)" strokeWidth="4"
-                    strokeDasharray={Math.PI * 2 * 16}
-                    strokeDashoffset={((1 - holdProgress) * Math.PI * 2 * 16).toString()}
-                    strokeLinecap="round"
-                    transform="rotate(-90 18 18)"
-                  />
-                </svg>
-              )}
-            </div>
-          )}
+            )}
+            {/* fill overlay replaces the separate progress ring */}
+          </div>
           {devMode && (
             <div style={{ marginLeft: 8, display: 'flex', gap: 8, alignItems: 'center' }}>
               <label style={{ fontSize: 13, display: 'flex', gap: 6, alignItems: 'center' }}>
