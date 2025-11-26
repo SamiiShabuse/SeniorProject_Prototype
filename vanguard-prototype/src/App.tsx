@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import { useEffect, useState, useRef } from 'react'
 
 import Summary from './pages/Summary'
-import ControlsList from './pages/ControlsList'
+// ControlsList replaced by ActiveControlsTestingList (converted to be the main Controls list)
 import IndividualControl from './pages/IndividualControl'
 import CreateState from './pages/CreateState'
 import UpdateControlDetail from './pages/UpdateControlDetail'
@@ -192,9 +192,8 @@ function AuthenticatedApp() {
         </div>
         <nav className="app-nav">
           <Link to="/home">Summary</Link>
-          <Link to="/controls">Controls List</Link>
-          <Link to="/active-testing">Active Controls</Link>
-          <Link to="/requests">Requests</Link>
+          <Link to="/controls">Controls</Link>
+          <Link to="/requests">Tests</Link>
           {devMode && <Link to="/mock">Mock Data</Link>}
           {/* top navigation only; left-sidebar and bottom/nav-position controls removed per stakeholder request */}
         </nav>
@@ -203,13 +202,13 @@ function AuthenticatedApp() {
       <main className="app-main">
         <Routes>
           <Route path="/home" element={<Summary />} />
-          <Route path="/controls" element={<ControlsList />} />
+          <Route path="/controls" element={<ActiveControlsTestingList />} />
           <Route path="/controls/create" element={<CreateState />} />
           <Route path="/controls/:id" element={<IndividualControl />} />
           <Route path="/controls/:id/update" element={<UpdateControlDetail />} />
           <Route path="/controls/:id/retire" element={<RetireIndividualControl />} />
 
-          <Route path="/active-testing" element={<ActiveControlsTestingList />} />
+          {/* /active-testing route removed; Active Controls now served at /controls */}
           <Route path="/corresponding/:id" element={<IndividualCorrespondingControl />} />
           <Route path="/corresponding/:id/update" element={<UpdateIndividualControlTestingDetails />} />
           <Route path="/corresponding/:id/assign" element={<AssignTesterToCorrespondingControl />} />
