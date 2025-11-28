@@ -202,28 +202,26 @@ export default function ActiveControlsTestingList() {
                               <div className="row-title">{c.name}</div>
                               <div className="row-sub">Owner: {c.owner} • Tester: {c.tester ?? '—'}</div>
                             </div>
-                            <div className="row-right">
+                            <div className="row-right" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                               <div className="badge">Last Testing on {formatBadgeDate(c.completedDate ?? c.dueDate)}</div>
-                              <span className="chevron" style={{ marginLeft: 10 }}>{isExpanded ? '▴' : '▾'}</span>
+                              <button aria-label={`Edit ${c.name}`} onClick={(e) => { e.stopPropagation(); setEditingControl(c) }} style={{ padding: '6px 8px', borderRadius: 6, border: '1px solid #ddd', background: '#fff', cursor: 'pointer' }}>Edit</button>
+                              <span className="chevron" style={{ marginLeft: 4 }}>{isExpanded ? '▴' : '▾'}</span>
                             </div>
                           </div>
                           {isExpanded && (
                             <div className={`expanded-panel open`}>
                               <div style={{ marginTop: 8 }}>
                                 <div className="expanded-card">
-                                    <div style={{ display: 'flex', gap: 16 }}>
-                                    <div style={{ flex: 1 }}>
-                                      <div style={{ fontSize: 13, color: '#333', marginBottom: 8 }}>{c.description}</div>
-                                    </div>
-                                    <div style={{ width: 260 }}>
-                                      <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control Owner:</strong> {c.owner}</div>
-                                      <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control SME:</strong> {c.sme ?? '—'}</div>
-                                      <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Escalation Required:</strong> {c.needsEscalation ? 'Yes' : 'No'}</div>
-                                    </div>
-                                    <div style={{ display: 'flex', alignItems: 'flex-start', marginLeft: 'auto' }}>
-                                      <button onClick={(e) => { e.stopPropagation(); setEditingControl(c) }} style={{ padding: '6px 10px', borderRadius: 6, border: '1px solid #ccc', background: '#fff', cursor: 'pointer' }}>Edit</button>
-                                    </div>
-                                  </div>
+                                          <div style={{ display: 'flex', gap: 16 }}>
+                                            <div style={{ flex: 1 }}>
+                                              <div style={{ fontSize: 13, color: '#333', marginBottom: 8 }}>{c.description}</div>
+                                            </div>
+                                            <div style={{ width: 260 }}>
+                                              <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control Owner:</strong> {c.owner}</div>
+                                              <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control SME:</strong> {c.sme ?? '—'}</div>
+                                              <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Escalation Required:</strong> {c.needsEscalation ? 'Yes' : 'No'}</div>
+                                            </div>
+                                          </div>
                                 </div>
                               </div>
                             </div>
@@ -267,9 +265,10 @@ export default function ActiveControlsTestingList() {
                                     <div className="row-title">{c.name}</div>
                                     <div className="row-sub">Owner: {c.owner} • Tester: {c.tester ?? '—'}</div>
                                   </div>
-                                  <div className="row-right">
+                                  <div className="row-right" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                                     <div className="badge">{status}</div>
-                                    <span className="chevron" style={{ marginLeft: 10 }}>{isExpanded ? '▴' : '▾'}</span>
+                                    <button aria-label={`Edit ${c.name}`} onClick={(e) => { e.stopPropagation(); setEditingControl(c) }} style={{ padding: '6px 8px', borderRadius: 6, border: '1px solid #ddd', background: '#fff', cursor: 'pointer' }}>Edit</button>
+                                    <span className="chevron" style={{ marginLeft: 4 }}>{isExpanded ? '▴' : '▾'}</span>
                                   </div>
                                 </div>
                                 {isExpanded && (
@@ -284,9 +283,6 @@ export default function ActiveControlsTestingList() {
                                             <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control Owner:</strong> {c.owner}</div>
                                             <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control SME:</strong> {c.sme ?? '—'}</div>
                                             <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Escalation Required:</strong> {c.needsEscalation ? 'Yes' : 'No'}</div>
-                                          </div>
-                                          <div style={{ display: 'flex', alignItems: 'flex-start', marginLeft: 'auto' }}>
-                                            <button onClick={(e) => { e.stopPropagation(); setEditingControl(c) }} style={{ padding: '6px 10px', borderRadius: 6, border: '1px solid #ccc', background: '#fff', cursor: 'pointer' }}>Edit</button>
                                           </div>
                                         </div>
                                       </div>
@@ -327,9 +323,10 @@ export default function ActiveControlsTestingList() {
                                     <div className="row-title">{c.name}</div>
                                     <div className="row-sub">Tester: {c.tester ?? '—'}</div>
                                   </div>
-                                  <div className="row-right">
+                                  <div className="row-right" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                                     <div className="badge">{String(c.dat?.status ?? c.oet?.status ?? 'Not Started')}</div>
-                                    <span className="chevron" style={{ marginLeft: 10 }}>{isExpanded ? '▴' : '▾'}</span>
+                                    <button aria-label={`Edit ${c.name}`} onClick={(e) => { e.stopPropagation(); setEditingControl(c) }} style={{ padding: '6px 8px', borderRadius: 6, border: '1px solid #ddd', background: '#fff', cursor: 'pointer' }}>Edit</button>
+                                    <span className="chevron" style={{ marginLeft: 4 }}>{isExpanded ? '▴' : '▾'}</span>
                                   </div>
                                 </div>
                                 {isExpanded && (
@@ -344,9 +341,6 @@ export default function ActiveControlsTestingList() {
                                             <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control Owner:</strong> {c.owner}</div>
                                             <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control SME:</strong> {c.sme ?? '—'}</div>
                                             <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Escalation Required:</strong> {c.needsEscalation ? 'Yes' : 'No'}</div>
-                                          </div>
-                                          <div style={{ display: 'flex', alignItems: 'flex-start', marginLeft: 'auto' }}>
-                                            <button onClick={(e) => { e.stopPropagation(); setEditingControl(c) }} style={{ padding: '6px 10px', borderRadius: 6, border: '1px solid #ccc', background: '#fff', cursor: 'pointer' }}>Edit</button>
                                           </div>
                                         </div>
                                       </div>
