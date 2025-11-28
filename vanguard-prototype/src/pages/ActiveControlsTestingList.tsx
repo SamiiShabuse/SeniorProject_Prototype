@@ -4,13 +4,15 @@ import type { Control } from '../lib/types'
 import './ActiveControlsTestingList.css'
 import ControlModal from '../components/ControlModal'
 import CreateControlModal from '../components/CreateControlModal'
+import EditControlModal from '../components/EditControlModal'
 import ControlsKanban from '../components/ControlsKanban'
 import DevContext from '../contexts/DevContext'
 
 export default function ActiveControlsTestingList() {
   const [showMock, setShowMock] = useState(true)
-  const [viewMode, setViewMode] = useState<'Pop Up' | 'Compact' | 'Kanban'>('Pop Up')
+  const [viewMode, setViewMode] = useState<'Pop Up' | 'Compact' | 'Kanban'>('Compact')
   const [selectedControl, setSelectedControl] = useState<Control | null>(null)
+  const [editingControl, setEditingControl] = useState<Control | null>(null)
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<'request' | 'status' | 'assignee'>('request')
   const [editPreference, setEditPreference] = useState<'route' | 'modal'>('route')
@@ -209,7 +211,7 @@ export default function ActiveControlsTestingList() {
                             <div className={`expanded-panel open`}>
                               <div style={{ marginTop: 8 }}>
                                 <div className="expanded-card">
-                                  <div style={{ display: 'flex', gap: 16 }}>
+                                    <div style={{ display: 'flex', gap: 16 }}>
                                     <div style={{ flex: 1 }}>
                                       <div style={{ fontSize: 13, color: '#333', marginBottom: 8 }}>{c.description}</div>
                                     </div>
@@ -217,6 +219,9 @@ export default function ActiveControlsTestingList() {
                                       <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control Owner:</strong> {c.owner}</div>
                                       <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control SME:</strong> {c.sme ?? '—'}</div>
                                       <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Escalation Required:</strong> {c.needsEscalation ? 'Yes' : 'No'}</div>
+                                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'flex-start', marginLeft: 'auto' }}>
+                                      <button onClick={(e) => { e.stopPropagation(); setEditingControl(c) }} style={{ padding: '6px 10px', borderRadius: 6, border: '1px solid #ccc', background: '#fff', cursor: 'pointer' }}>Edit</button>
                                     </div>
                                   </div>
                                 </div>
@@ -280,6 +285,9 @@ export default function ActiveControlsTestingList() {
                                             <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control SME:</strong> {c.sme ?? '—'}</div>
                                             <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Escalation Required:</strong> {c.needsEscalation ? 'Yes' : 'No'}</div>
                                           </div>
+                                          <div style={{ display: 'flex', alignItems: 'flex-start', marginLeft: 'auto' }}>
+                                            <button onClick={(e) => { e.stopPropagation(); setEditingControl(c) }} style={{ padding: '6px 10px', borderRadius: 6, border: '1px solid #ccc', background: '#fff', cursor: 'pointer' }}>Edit</button>
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
@@ -337,6 +345,9 @@ export default function ActiveControlsTestingList() {
                                             <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control SME:</strong> {c.sme ?? '—'}</div>
                                             <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Escalation Required:</strong> {c.needsEscalation ? 'Yes' : 'No'}</div>
                                           </div>
+                                          <div style={{ display: 'flex', alignItems: 'flex-start', marginLeft: 'auto' }}>
+                                            <button onClick={(e) => { e.stopPropagation(); setEditingControl(c) }} style={{ padding: '6px 10px', borderRadius: 6, border: '1px solid #ccc', background: '#fff', cursor: 'pointer' }}>Edit</button>
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
@@ -363,6 +374,9 @@ export default function ActiveControlsTestingList() {
       )}
       {creating && (
         <CreateControlModal onClose={() => setCreating(false)} onCreated={() => setRefreshKey((k) => k + 1)} />
+      )}
+      {editingControl && (
+        <EditControlModal control={editingControl} onClose={() => setEditingControl(null)} onSaved={() => { setRefreshKey((k) => k + 1); setEditingControl(null) }} />
       )}
     </div>
   )
