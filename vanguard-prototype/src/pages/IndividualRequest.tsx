@@ -7,17 +7,116 @@ import RequestModal from '../components/RequestModal'
 import './ActiveControlsTestingList.css'
 import DevContext from '../contexts/DevContext'
 
+function CalendarView({ requests, onDayClick }: { requests: TestRequest[], onDayClick?: (dateKey: string, d: Date) => void }) {
+  const today = new Date()
+  const [viewYear, setViewYear] = useState<number>(today.getFullYear())
+  const [viewMonth, setViewMonth] = useState<number>(today.getMonth())
+
+  function startOfMonthMatrix(year: number, month: number) {
+    const first = new Date(year, month, 1)
+    const startDay = first.getDay() // 0 (Sun) - 6
+    const start = new Date(year, month, 1 - startDay)
+    const weeks: Date[][] = []
+    let cur = new Date(start)
+    for (let wk = 0; wk < 6; wk++) {
+      const week: Date[] = []
+      for (let d = 0; d < 7; d++) {
+        week.push(new Date(cur))
+        cur.setDate(cur.getDate() + 1)
+      }
+      weeks.push(week)
+    }
+    return weeks
+  }
+
+  function formatKey(d: Date) {
+    const y = d.getFullYear()
+    const m = String(d.getMonth() + 1).padStart(2, '0')
+    const dd = String(d.getDate()).padStart(2, '0')
+    return `${y}-${m}-${dd}`
+  }
+
+  const requestsByDate = useMemo(() => {
+    const map: Record<string, TestRequest[]> = {}
+    for (const r of requests) {
+      if (!r.dueDate) continue
+      const k = String(r.dueDate)
+      map[k] = map[k] || []
+      map[k].push(r)
+    }
+    return map
+  }, [requests])
+
+  const weeks = useMemo(() => startOfMonthMatrix(viewYear, viewMonth), [viewYear, viewMonth])
+
+  const monthNames = [
+    'January','February','March','April','May','June','July','August','September','October','November','December'
+  ]
+
+  const years = useMemo(() => {
+    const list: number[] = []
+    const start = today.getFullYear() - 2
+    for (let y = start; y <= today.getFullYear() + 2; y++) list.push(y)
+    return list
+  }, [])
+
+  return (
+    <div style={{ border: '1px solid #eee', borderRadius: 8, padding: 16, background: '#fff' }}>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 12 }}>
+        <button onClick={() => { const nm = viewMonth - 1; if (nm < 0) { setViewMonth(11); setViewYear((y) => y - 1) } else setViewMonth(nm) }} style={{ border: 'none', background: 'transparent', cursor: 'pointer' }}>&lt;</button>
+        <select value={viewMonth} onChange={(e) => setViewMonth(Number(e.target.value))} style={{ padding: 6 }}>
+          {monthNames.map((m, i) => <option key={m} value={i}>{m}</option>)}
+        </select>
+        <select value={viewYear} onChange={(e) => setViewYear(Number(e.target.value))} style={{ padding: 6 }}>
+          {years.map((y) => <option key={y} value={y}>{y}</option>)}
+        </select>
+        <div style={{ marginLeft: 'auto' }} />
+        <button onClick={() => { const nm = viewMonth + 1; if (nm > 11) { setViewMonth(0); setViewYear((y) => y + 1) } else setViewMonth(nm) }} style={{ border: 'none', background: 'transparent', cursor: 'pointer' }}>&gt;</button>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 8, textAlign: 'center', color: '#666', fontSize: 13, marginBottom: 8 }}>
+        {['Su','Mo','Tu','We','Th','Fr','Sa'].map((h) => <div key={h}>{h}</div>)}
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateRows: 'repeat(6, 1fr)', gap: 8 }}>
+        {weeks.map((week, wi) => (
+          <div key={wi} style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 8 }}>
+            {week.map((d) => {
+              const inMonth = d.getMonth() === viewMonth
+              const key = formatKey(d)
+              const items = requestsByDate[key] || []
+              return (
+                <div key={key} onClick={() => onDayClick?.(key, d)} style={{ minHeight: 56, padding: 8, borderRadius: 6, background: inMonth ? '#fff' : '#fafafa', border: '1px solid #f0f0f0', position: 'relative', cursor: onDayClick ? 'pointer' : 'default' }}>
+                  <div style={{ position: 'absolute', top: 6, left: 8, fontSize: 13, color: inMonth ? '#222' : '#bbb' }}>{d.getDate()}</div>
+                  <div style={{ marginTop: 18 }}>
+                    {items.slice(0, 2).map((it) => (
+                      <div key={String(it.id || it.scope)} style={{ background: '#222', color: '#fff', padding: '6px 8px', borderRadius: 6, fontSize: 12, marginBottom: 6, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={String(it.scope ?? it.id)}>
+                        {String(it.scope ?? `Req ${it.id}`).slice(0, 24)}
+                      </div>
+                    ))}
+                    {items.length > 2 && <div style={{ fontSize: 12, color: '#666' }}>+{items.length - 2} more</div>}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export default function IndividualRequest() {
   const [showMock, setShowMock] = useState(true)
   const [viewMode, setViewMode] = useState<'Pop Up' | 'Compact' | 'Kanban'>('Pop Up')
   const [openRequest, setOpenRequest] = useState<Record<string, boolean>>({})
   const [selectedRequest, setSelectedRequest] = useState<TestRequest | null>(null)
+  const [selectedIds, setSelectedIds] = useState<Record<string, boolean>>({})
+  const [dayModalDate, setDayModalDate] = useState<string | null>(null)
   const [showCreate, setShowCreate] = useState(false)
   const [editPreference, setEditPreference] = useState<'route' | 'modal'>('route')
   const [activeTab, setActiveTab] = useState<'tests' | 'requests' | 'kanban' | 'calendar'>('requests')
   
-  const [assigneeFilter, setAssigneeFilter] = useState<'All' | string>('All')
-
   function formatBadgeDate(d?: string) {
     if (!d) return '01/01/2025'
     const m = String(d).match(/(\d{4})-(\d{2})-(\d{2})/)
@@ -36,38 +135,14 @@ export default function IndividualRequest() {
 
   // (status search/filter logic removed — not used in current layout)
 
-  const requestsByAssignee = useMemo(() => {
-    const map: Record<string, TestRequest[]> = {}
-    for (const r of mockRequests) {
-      const ctrl = mockControls.find((c) => String(c.id) === String(r.controlId))
-      const raw = ctrl?.tester ?? r.requestedBy ?? ''
-      const key = String(raw).trim() !== '' ? String(raw).trim() : 'Unassigned'
-      if (!map[key]) map[key] = []
-      map[key].push(r)
-    }
-    const keys = Object.keys(map).sort((a, b) => a.localeCompare(b))
-    return keys.map((k) => ({ assignee: k, requests: map[k] }))
-  }, [])
-
-  const assigneesList = useMemo(() => {
-    const map: Record<string, boolean> = {}
-    for (const r of mockRequests) {
-      const ctrl = mockControls.find((c) => String(c.id) === String(r.controlId))
-      const key = String(ctrl?.tester ?? r.requestedBy ?? '').trim() || 'Unassigned'
-      map[key] = true
-    }
-    const list = Object.keys(map).sort((a, b) => a.localeCompare(b))
-    return ['All', ...list]
-  }, [])
-
-  const filteredAssigneeGroups = useMemo(() => {
-    if (assigneeFilter === 'All') return requestsByAssignee
-    return requestsByAssignee.filter((g) => g.assignee === assigneeFilter)
-  }, [requestsByAssignee, assigneeFilter])
+  
 
   const controlsWithRequests = useMemo(() => {
     return mockControls.filter((c) => mockRequests.some((r) => String(r.controlId) === String(c.id)))
   }, [])
+
+  const visibleRequestKeys = useMemo(() => mockRequests.map((r, i) => String(r.id ?? `req-${i}`)), [])
+  const allVisibleSelected = visibleRequestKeys.length > 0 && visibleRequestKeys.every((k) => Boolean(selectedIds[k]))
 
   function requestsForControl(controlId: string | number) {
     return mockRequests.filter((r) => String(r.controlId) === String(controlId))
@@ -149,7 +224,23 @@ export default function IndividualRequest() {
               <RequestsKanban requests={mockRequests} />
             ) : activeTab === 'tests' ? (
               <div style={{ borderTop: '1px solid #e6e6e6', paddingTop: 12 }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '3fr 1fr 1fr 1fr 1fr 1fr', gap: 12, padding: '8px 12px', alignItems: 'center', fontWeight: 700, color: '#222', borderBottom: '1px solid #e6e6e6' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '48px 3fr 1fr 1fr 1fr 1fr 1fr', gap: 12, padding: '8px 12px', alignItems: 'center', fontWeight: 700, color: '#222', borderBottom: '1px solid #e6e6e6' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <input
+                      type="checkbox"
+                      aria-label="Select all requests"
+                      checked={allVisibleSelected}
+                      onChange={() => {
+                        if (allVisibleSelected) {
+                          setSelectedIds({})
+                        } else {
+                          const map: Record<string, boolean> = {}
+                          visibleRequestKeys.forEach((k) => { map[k] = true })
+                          setSelectedIds(map)
+                        }
+                      }}
+                    />
+                  </div>
                   <div>Control</div>
                   <div>Tester</div>
                   <div>Test Type</div>
@@ -161,8 +252,17 @@ export default function IndividualRequest() {
                 <div>
                   {mockRequests.map((r, idx) => {
                     const ctrl = mockControls.find((c) => String(c.id) === String(r.controlId))
+                    const rowKey = String(r.id ?? `req-${idx}`)
                     return (
-                      <div key={r.id || `req-${idx}`} style={{ display: 'grid', gridTemplateColumns: '3fr 1fr 1fr 1fr 1fr 1fr', gap: 12, padding: '12px', alignItems: 'center', borderBottom: '1px solid #f0f0f0' }}>
+                      <div key={rowKey} style={{ display: 'grid', gridTemplateColumns: '48px 3fr 1fr 1fr 1fr 1fr 1fr', gap: 12, padding: '12px', alignItems: 'center', borderBottom: '1px solid #f0f0f0' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <input
+                            type="checkbox"
+                            aria-label={`Select request ${rowKey}`}
+                            checked={Boolean(selectedIds[rowKey])}
+                            onChange={(e) => setSelectedIds((s) => ({ ...s, [rowKey]: e.target.checked }))}
+                          />
+                        </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                           <div style={{ width: 12, height: 12, background: '#e0e0e0', borderRadius: 2 }} />
                           <div>
@@ -232,42 +332,11 @@ export default function IndividualRequest() {
               </ul>
             ) : (
               <div>
-                <div style={{ display: 'flex', gap: 8, marginBottom: 12, alignItems: 'center' }}>
-                  <label style={{ fontSize: 13, color: '#444', marginRight: 8 }}>Assignee:</label>
-                  <select value={assigneeFilter} onChange={(e) => setAssigneeFilter(e.target.value)} style={{ padding: '6px 8px', borderRadius: 6 }}>
-                    {assigneesList.map((t) => (
-                      <option key={t} value={t}>{t}</option>
-                    ))}
-                  </select>
-                </div>
-
-                {filteredAssigneeGroups.length === 0 && <div className="empty">No requests found</div>}
-                {filteredAssigneeGroups.map((group) => (
-                  <div key={group.assignee} style={{ marginBottom: 12 }}>
-                    <div style={{ background: '#f6f6f6', padding: '8px 12px', borderRadius: 6, marginBottom: 8 }}><strong>{group.assignee}</strong></div>
-                    <ul className="control-list">
-                      {group.requests.map((r) => {
-                        const idx = mockRequests.indexOf(r)
-                        const key = String(r.id || `req-${idx}`)
-                        const isOpen = Boolean(openRequest[key])
-                        return (
-                          <li key={key} className={`control-row ${isOpen ? 'expanded' : ''}`}>
-                            <div className="control-link" role="button" tabIndex={0} onClick={() => { if (viewMode === 'Compact') setOpenRequest((s) => ({ ...s, [key]: !s[key] })); else setSelectedRequest(r) }} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { if (viewMode === 'Compact') setOpenRequest((s) => ({ ...s, [key]: !s[key] })); else setSelectedRequest(r) } }}>
-                              <div className="row-left">
-                                <div className="row-title">{r.id ? `Request ${r.id}` : `Request`}</div>
-                                <div className="row-sub">{String(r.scope).slice(0, 100)}</div>
-                              </div>
-                              <div className="row-right">
-                                <div className="badge">{String(r.status ?? 'Pending')}</div>
-                                <span className="chevron" style={{ marginLeft: 10 }}>{isOpen ? '▴' : '▾'}</span>
-                              </div>
-                            </div>
-                          </li>
-                        )
-                      })}
-                    </ul>
-                  </div>
-                ))}
+                {/* Calendar view: month selector, year selector, prev/next, and month grid */}
+                <CalendarView
+                  requests={mockRequests}
+                  onDayClick={(k) => setDayModalDate(k)}
+                />
               </div>
             )}
           </>
@@ -279,6 +348,29 @@ export default function IndividualRequest() {
       {selectedRequest && (
         <RequestModal request={selectedRequest} onClose={() => setSelectedRequest(null)} editPreference={editPreference} />
       )}
+          {dayModalDate && (
+            <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }} onClick={() => setDayModalDate(null)}>
+              <div style={{ width: 620, maxHeight: '80vh', overflow: 'auto', background: '#fff', borderRadius: 8, padding: 16 }} onClick={(e) => e.stopPropagation()}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                  <strong style={{ fontSize: 16 }}>{dayModalDate}</strong>
+                  <button onClick={() => setDayModalDate(null)} style={{ border: 'none', background: 'transparent', cursor: 'pointer' }}>Close</button>
+                </div>
+                <div>
+                  {(mockRequests.filter((r) => String(r.dueDate) === dayModalDate) || []).map((r) => (
+                    <div key={String(r.id || r.scope)} style={{ padding: 10, borderBottom: '1px solid #f0f0f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div>
+                        <div style={{ fontWeight: 600 }}>{String(r.scope ?? `Request ${r.id}`)}</div>
+                        <div style={{ color: '#666', fontSize: 13 }}>{r.status ?? 'Pending'}</div>
+                      </div>
+                      <div>
+                        <button onClick={() => { setSelectedRequest(r); setDayModalDate(null) }} style={{ padding: '6px 10px', borderRadius: 6, background: '#1a88ff', color: '#fff', border: 'none', cursor: 'pointer' }}>Open</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
       {showCreate && (
         <CreateRequestModal
           onClose={() => setShowCreate(false)}
