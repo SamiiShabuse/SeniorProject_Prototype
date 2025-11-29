@@ -10,14 +10,14 @@ interface Props {
 }
 
 export default function EditControlModal({ control, onClose, onSaved }: Props) {
-  const [name, setName] = useState(control.name ?? '')
-  const [owner, setOwner] = useState(control.owner ?? '')
+  const [name] = useState(control.name ?? '')
+  const [owner] = useState(control.owner ?? '')
   const [description, setDescription] = useState(control.description ?? '')
-  const [tester, setTester] = useState(control.tester ?? '')
-  const [sme, setSme] = useState(control.sme ?? '')
-  const [needsEscalation, setNeedsEscalation] = useState(Boolean(control.needsEscalation))
-  const [datStatus, setDatStatus] = useState(control.dat?.status ?? 'Not Started')
-  const [oetStatus, setOetStatus] = useState(control.oet?.status ?? 'Not Started')
+  const [tester] = useState(control.tester ?? '')
+  const [sme] = useState(control.sme ?? '')
+  const [needsEscalation] = useState(Boolean(control.needsEscalation))
+  const [datStatus] = useState(control.dat?.status ?? 'Not Started')
+  const [oetStatus] = useState(control.oet?.status ?? 'Not Started')
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {

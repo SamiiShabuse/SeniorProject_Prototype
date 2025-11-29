@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { useState, useContext, useMemo } from 'react'
 import { mockRequests, mockControls } from '../mocks/mockData'
 import CreateRequestModal from '../components/CreateRequestModal'
@@ -16,8 +15,7 @@ export default function IndividualRequest() {
   const [showCreate, setShowCreate] = useState(false)
   const [editPreference, setEditPreference] = useState<'route' | 'modal'>('route')
   const [activeTab, setActiveTab] = useState<'tests' | 'requests' | 'kanban' | 'calendar'>('requests')
-  const [statusSearch, setStatusSearch] = useState('')
-  const [statusFilter, setStatusFilter] = useState<'All' | string>('All')
+  
   const [assigneeFilter, setAssigneeFilter] = useState<'All' | string>('All')
 
   function formatBadgeDate(d?: string) {
@@ -36,64 +34,7 @@ export default function IndividualRequest() {
     } catch (e) { return true }
   })()
 
-  // helpers
-  function controlsForRequest(idx: number, r: any) {
-    const found = mockControls.filter((c) => String(c.id) === String(r.controlId))
-    if (found.length >= 3) return found.slice(0, 3)
-    const extras: any[] = []
-    if (mockControls.length > 0) {
-      const base = Math.max(0, idx % mockControls.length)
-      for (let i = 0; i < 5 && extras.length < 3; i++) {
-        const pick = mockControls[(base + i) % mockControls.length]
-        if (!found.find((f) => f.id === pick.id)) extras.push(pick)
-      }
-    }
-    return [...found, ...extras].slice(0, 3)
-  }
-
-  const requestsByStatus = useMemo(() => {
-    const order = ['Pending', 'In Progress', 'Complete']
-    const map: Record<string, TestRequest[]> = {}
-    for (const r of mockRequests) {
-      const status = String(r.status || 'Pending')
-      if (!map[status]) map[status] = []
-      map[status].push(r)
-    }
-    const ordered: Array<[string, TestRequest[]]> = []
-    for (const s of order) {
-      if (map[s] && map[s].length > 0) ordered.push([s, map[s]])
-    }
-    for (const k of Object.keys(map)) {
-      if (!order.includes(k) && map[k].length > 0) ordered.push([k, map[k]])
-    }
-    return ordered
-  }, [])
-
-  const filteredStatusGroups = useMemo(() => {
-    const q = String(statusSearch || '').trim().toLowerCase()
-    const groups: Array<[string, TestRequest[]]> = []
-    for (const [status, requests] of requestsByStatus) {
-      if (statusFilter !== 'All' && status !== statusFilter) continue
-      const matched = requests.filter((r) => {
-        if (!q) return true
-        const ctrl = mockControls.find((c) => String(c.id) === String(r.controlId))
-        const hay = [r.scope, r.requestedBy, r.dueDate, r.id, ctrl?.name].filter(Boolean).join(' ').toLowerCase()
-        return hay.includes(q)
-      })
-      if (matched.length > 0) groups.push([status, matched])
-    }
-    if (groups.length === 0 && q) {
-      for (const [status, requests] of requestsByStatus) {
-        const matched = requests.filter((r) => {
-          const ctrl = mockControls.find((c) => String(c.id) === String(r.controlId))
-          const hay = [r.scope, r.requestedBy, r.dueDate, r.id, ctrl?.name].filter(Boolean).join(' ').toLowerCase()
-          return hay.includes(q)
-        })
-        if (matched.length > 0) groups.push([status, matched])
-      }
-    }
-    return groups
-  }, [requestsByStatus, statusSearch, statusFilter])
+  // (status search/filter logic removed — not used in current layout)
 
   const requestsByAssignee = useMemo(() => {
     const map: Record<string, TestRequest[]> = {}
@@ -123,6 +64,14 @@ export default function IndividualRequest() {
     if (assigneeFilter === 'All') return requestsByAssignee
     return requestsByAssignee.filter((g) => g.assignee === assigneeFilter)
   }, [requestsByAssignee, assigneeFilter])
+
+  const controlsWithRequests = useMemo(() => {
+    return mockControls.filter((c) => mockRequests.some((r) => String(r.controlId) === String(c.id)))
+  }, [])
+
+  function requestsForControl(controlId: string | number) {
+    return mockRequests.filter((r) => String(r.controlId) === String(controlId))
+  }
 
   return (
     <div className="control-list-page">
@@ -198,7 +147,7 @@ export default function IndividualRequest() {
 
             {activeTab === 'kanban' ? (
               <RequestsKanban requests={mockRequests} />
-            ) : activeTab === 'requests' ? (
+            ) : activeTab === 'tests' ? (
               <div style={{ borderTop: '1px solid #e6e6e6', paddingTop: 12 }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '3fr 1fr 1fr 1fr 1fr 1fr', gap: 12, padding: '8px 12px', alignItems: 'center', fontWeight: 700, color: '#222', borderBottom: '1px solid #e6e6e6' }}>
                   <div>Control</div>
@@ -224,64 +173,55 @@ export default function IndividualRequest() {
                         <div style={{ color: '#444' }}>{ctrl?.tester ?? r.requestedBy ?? '—'}</div>
                         <div style={{ color: '#444' }}>{String(r.scope ?? '').slice(0, 40)}</div>
                         <div style={{ color: '#444' }}>{r.status ?? 'Pending'}</div>
-                        <div style={{ color: '#444' }}>{r.step ?? '—'}</div>
+                        <div style={{ color: '#444' }}>{(r as any).step ?? '—'}</div>
                         <div style={{ color: '#666' }}>{formatBadgeDate(r.dueDate)}</div>
                       </div>
                     )
                   })}
                 </div>
               </div>
-            ) : activeTab === 'tests' ? (
+            ) : activeTab === 'requests' ? (
               <ul className="control-list">
-                {mockRequests.length === 0 && <li className="empty">No requests</li>}
-                {mockRequests.map((r, idx) => {
-                  const key = String(r.id || `req-${idx}`)
+                {controlsWithRequests.length === 0 && <li className="empty">No controls with requests</li>}
+                {controlsWithRequests.map((c) => {
+                  const key = `ctrl-${c.id}`
                   const isOpen = Boolean(openRequest[key])
-                  const rows = controlsForRequest(idx, r)
+                  const related = requestsForControl(c.id)
                   return (
                     <li key={key} className={`control-row ${isOpen ? 'expanded' : ''}`}>
                       <div
                         className="control-link"
                         role="button"
                         tabIndex={0}
-                        onClick={() => {
-                          if (viewMode === 'Compact') setOpenRequest((s) => ({ ...s, [key]: !s[key] }))
-                          else setSelectedRequest(r)
-                        }}
-                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { if (viewMode === 'Compact') setOpenRequest((s) => ({ ...s, [key]: !s[key] })); else setSelectedRequest(r) } }}
+                        onClick={() => setOpenRequest((s) => ({ ...s, [key]: !s[key] }))}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setOpenRequest((s) => ({ ...s, [key]: !s[key] })) }}
                       >
                         <div className="row-left">
-                          <div className="row-title">Request #{idx + 1}</div>
-                          <div className="row-sub">{String(r.scope).slice(0, 100)}</div>
-                          <div style={{ fontSize: 13, color: '#666', marginTop: 6 }}>Requested by: {r.requestedBy}</div>
+                          <div className="row-title">{c.name}</div>
+                          <div className="row-sub">{String(c.description ?? c.testingNotes ?? '').slice(0, 100)}</div>
+                          <div style={{ fontSize: 13, color: '#666', marginTop: 6 }}>Tester: {c.tester ?? '—'}</div>
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', gap: 6 }}>
-                          <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <div className="badge" style={{ marginRight: 12 }}>{r.status ?? 'Pending'}</div>
-                            <span className={`chevron ${isOpen ? 'open' : ''}`}>{viewMode === 'Compact' ? (isOpen ? '▴' : '▾') : '▾'}</span>
-                          </div>
-                          <div style={{ fontSize: 12, color: '#444' }}>Due: {formatBadgeDate(r.dueDate)}</div>
-                          <div style={{ marginTop: 6 }}><Link to={`/requests/${r.id}/update`}>Open / Edit</Link></div>
+                        <div className="row-right">
+                          <div className="badge">{String(related.length)} request{related.length !== 1 ? 's' : ''}</div>
+                          <span className="chevron" style={{ marginLeft: 10 }}>{isOpen ? '▴' : '▾'}</span>
                         </div>
                       </div>
 
                       <div className={`expanded-panel ${isOpen ? 'open' : ''}`}>
                         <div style={{ marginTop: 8 }}>
                           <div className="expanded-card">
-                            <div style={{ flex: 1 }}>
-                              <div style={{ display: 'grid', gridTemplateColumns: '1fr 160px 140px 140px 160px', gap: 8, alignItems: 'center' }}>
-                                {rows.map((c: any) => (
-                                  <div key={`${key}-row-${c.id}`} style={{ display: 'contents' }}>
-                                    <div style={{ padding: '8px 0' }}>
-                                      <Link to={`/controls/${c.id}`} style={{ color: '#1a88ff' }}>{c.name}</Link>
+                            <div style={{ padding: 8 }}>
+                              <strong>Associated Requests</strong>
+                              <ul style={{ marginTop: 8 }}>
+                                {related.map((r) => (
+                                  <li key={`req-${r.id || r.scope}`} style={{ padding: '6px 0', borderBottom: '1px solid #f0f0f0' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
+                                      <div style={{ color: '#222' }}>{String(r.scope ?? r.id ?? 'Request')}</div>
+                                      <div style={{ color: '#666' }}>{r.status ?? 'Pending'}</div>
                                     </div>
-                                    <div style={{ padding: '8px 0', fontWeight: 600 }}>{c.tester ?? '—'}</div>
-                                    <div style={{ padding: '8px 0' }}>Started on {formatBadgeDate(c.startDate)}</div>
-                                    <div style={{ padding: '8px 0' }}>ETA {formatBadgeDate(c.dueDate)}</div>
-                                    <div style={{ padding: '8px 0' }}>{c.testingNotes ? String(c.testingNotes) : (r.scope ? String(r.scope).slice(0, 40) : '—')}</div>
-                                  </div>
+                                  </li>
                                 ))}
-                              </div>
+                              </ul>
                             </div>
                           </div>
                         </div>
@@ -351,5 +291,5 @@ export default function IndividualRequest() {
         />
       )}
     </div>
-      )
-    }
+  )
+}
