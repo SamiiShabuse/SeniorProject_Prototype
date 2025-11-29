@@ -15,12 +15,10 @@ export default function IndividualRequest() {
   const [selectedRequest, setSelectedRequest] = useState<TestRequest | null>(null)
   const [showCreate, setShowCreate] = useState(false)
   const [editPreference, setEditPreference] = useState<'route' | 'modal'>('route')
-  const [activeTab, setActiveTab] = useState<'request' | 'status' | 'assignee'>('request')
+  const [activeTab, setActiveTab] = useState<'tests' | 'requests' | 'kanban' | 'calendar'>('requests')
   const [statusSearch, setStatusSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState<'All' | string>('All')
   const [assigneeFilter, setAssigneeFilter] = useState<'All' | string>('All')
-
-  const isKanban = viewMode === 'Kanban'
 
   function formatBadgeDate(d?: string) {
     if (!d) return '01/01/2025'
@@ -38,7 +36,7 @@ export default function IndividualRequest() {
     } catch (e) { return true }
   })()
 
-  // pick up to 3 controls related to a request: prefer exact id matches, then nearby controls
+  // helpers
   function controlsForRequest(idx: number, r: any) {
     const found = mockControls.filter((c) => String(c.id) === String(r.controlId))
     if (found.length >= 3) return found.slice(0, 3)
@@ -183,202 +181,161 @@ export default function IndividualRequest() {
         {devMode && (
           <div style={{ marginTop: 8, fontSize: 13, color: '#666' }}>Selected view: <strong>{viewMode}</strong></div>
         )}
-        {showMock ? (
-          viewMode === 'Kanban' ? (
-            <RequestsKanban requests={mockRequests} />
-          ) : (
-            <>
-              <div style={{ display: 'flex', gap: 18, marginBottom: 12 }}>
-                <div role="button" tabIndex={0} onClick={() => setActiveTab('request')} onKeyDown={(e) => { if (e.key === 'Enter') setActiveTab('request') }} style={{ borderBottom: activeTab === 'request' ? '2px solid #222' : '2px solid transparent', paddingBottom: 8, cursor: 'pointer' }}>Request</div>
-                <div role="button" tabIndex={0} onClick={() => setActiveTab('status')} onKeyDown={(e) => { if (e.key === 'Enter') setActiveTab('status') }} style={{ borderBottom: activeTab === 'status' ? '2px solid #222' : '2px solid transparent', paddingBottom: 8, cursor: 'pointer', color: activeTab === 'status' ? '#111' : '#888' }}>Status</div>
-                <div role="button" tabIndex={0} onClick={() => setActiveTab('assignee')} onKeyDown={(e) => { if (e.key === 'Enter') setActiveTab('assignee') }} style={{ borderBottom: activeTab === 'assignee' ? '2px solid #222' : '2px solid transparent', paddingBottom: 8, cursor: 'pointer', color: activeTab === 'assignee' ? '#111' : '#888' }}>Assignee</div>
-              </div>
 
-              {isKanban ? (
-                <RequestsKanban requests={mockRequests} />
-              ) : (
-                <>
-                  {activeTab === 'request' && (
-                    <ul className="control-list">
-                      {mockRequests.length === 0 && <li className="empty">No requests</li>}
-                      {mockRequests.map((r, idx) => {
-                        const key = String(r.id || `req-${idx}`)
-                        const isOpen = Boolean(openRequest[key])
-                        const rows = controlsForRequest(idx, r)
-                        return (
-                          <li key={key} className={`control-row ${isOpen ? 'expanded' : ''}`}>
-                            <div
-                              className="control-link"
-                              role="button"
-                              tabIndex={0}
-                              onClick={() => {
-                                if (viewMode === 'Compact') setOpenRequest((s) => ({ ...s, [key]: !s[key] }))
-                                else setSelectedRequest(r)
-                              }}
-                              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { if (viewMode === 'Compact') setOpenRequest((s) => ({ ...s, [key]: !s[key] })); else setSelectedRequest(r) } }}
-                            >
-                              <div className="row-left">
-                                <div className="row-title">Request #{idx + 1}</div>
-                                <div className="row-sub">{String(r.scope).slice(0, 100)}</div>
-                                <div style={{ fontSize: 13, color: '#666', marginTop: 6 }}>Requested by: {r.requestedBy}</div>
-                              </div>
-                              <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', gap: 6 }}>
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                  <div className="badge" style={{ marginRight: 12 }}>{r.status ?? 'Pending'}</div>
-                                  <span className={`chevron ${isOpen ? 'open' : ''}`}>{viewMode === 'Compact' ? (isOpen ? '▴' : '▾') : '▾'}</span>
-                                </div>
-                                <div style={{ fontSize: 12, color: '#444' }}>Due: {formatBadgeDate(r.dueDate)}</div>
-                                <div style={{ marginTop: 6 }}><Link to={`/requests/${r.id}/update`}>Open / Edit</Link></div>
+        {showMock ? (
+          <>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <div style={{ display: 'flex', gap: 18 }}>
+                <div role="button" tabIndex={0} onClick={() => setActiveTab('tests')} onKeyDown={(e) => { if (e.key === 'Enter') setActiveTab('tests') }} style={{ borderBottom: activeTab === 'tests' ? '2px solid #222' : '2px solid transparent', paddingBottom: 8, cursor: 'pointer' }}>Tests</div>
+                <div role="button" tabIndex={0} onClick={() => setActiveTab('requests')} onKeyDown={(e) => { if (e.key === 'Enter') setActiveTab('requests') }} style={{ borderBottom: activeTab === 'requests' ? '2px solid #222' : '2px solid transparent', paddingBottom: 8, cursor: 'pointer', color: activeTab === 'requests' ? '#111' : '#888' }}>Requests</div>
+                <div role="button" tabIndex={0} onClick={() => setActiveTab('kanban')} onKeyDown={(e) => { if (e.key === 'Enter') setActiveTab('kanban') }} style={{ borderBottom: activeTab === 'kanban' ? '2px solid #222' : '2px solid transparent', paddingBottom: 8, cursor: 'pointer', color: activeTab === 'kanban' ? '#111' : '#888' }}>Kanban</div>
+                <div role="button" tabIndex={0} onClick={() => setActiveTab('calendar')} onKeyDown={(e) => { if (e.key === 'Enter') setActiveTab('calendar') }} style={{ borderBottom: activeTab === 'calendar' ? '2px solid #222' : '2px solid transparent', paddingBottom: 8, cursor: 'pointer', color: activeTab === 'calendar' ? '#111' : '#888' }}>Calendar</div>
+              </div>
+              <div>
+                <button onClick={() => setShowCreate(true)} style={{ padding: '8px 12px', borderRadius: 6, background: '#444', color: '#fff', border: 'none' }}>+ New Request</button>
+              </div>
+            </div>
+
+            {activeTab === 'kanban' ? (
+              <RequestsKanban requests={mockRequests} />
+            ) : activeTab === 'requests' ? (
+              <div style={{ borderTop: '1px solid #e6e6e6', paddingTop: 12 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '3fr 1fr 1fr 1fr 1fr 1fr', gap: 12, padding: '8px 12px', alignItems: 'center', fontWeight: 700, color: '#222', borderBottom: '1px solid #e6e6e6' }}>
+                  <div>Control</div>
+                  <div>Tester</div>
+                  <div>Test Type</div>
+                  <div>Status</div>
+                  <div>In-Progress Step</div>
+                  <div>Date Updated</div>
+                </div>
+
+                <div>
+                  {mockRequests.map((r, idx) => {
+                    const ctrl = mockControls.find((c) => String(c.id) === String(r.controlId))
+                    return (
+                      <div key={r.id || `req-${idx}`} style={{ display: 'grid', gridTemplateColumns: '3fr 1fr 1fr 1fr 1fr 1fr', gap: 12, padding: '12px', alignItems: 'center', borderBottom: '1px solid #f0f0f0' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                          <div style={{ width: 12, height: 12, background: '#e0e0e0', borderRadius: 2 }} />
+                          <div>
+                            <div style={{ fontWeight: 600 }}>{ctrl?.name ?? `Request ${r.id ?? idx + 1}`}</div>
+                            <div style={{ color: '#666', fontSize: 13 }}>{String(r.scope || '').slice(0, 80)}</div>
+                          </div>
+                        </div>
+                        <div style={{ color: '#444' }}>{ctrl?.tester ?? r.requestedBy ?? '—'}</div>
+                        <div style={{ color: '#444' }}>{String(r.scope ?? '').slice(0, 40)}</div>
+                        <div style={{ color: '#444' }}>{r.status ?? 'Pending'}</div>
+                        <div style={{ color: '#444' }}>{r.step ?? '—'}</div>
+                        <div style={{ color: '#666' }}>{formatBadgeDate(r.dueDate)}</div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            ) : activeTab === 'tests' ? (
+              <ul className="control-list">
+                {mockRequests.length === 0 && <li className="empty">No requests</li>}
+                {mockRequests.map((r, idx) => {
+                  const key = String(r.id || `req-${idx}`)
+                  const isOpen = Boolean(openRequest[key])
+                  const rows = controlsForRequest(idx, r)
+                  return (
+                    <li key={key} className={`control-row ${isOpen ? 'expanded' : ''}`}>
+                      <div
+                        className="control-link"
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => {
+                          if (viewMode === 'Compact') setOpenRequest((s) => ({ ...s, [key]: !s[key] }))
+                          else setSelectedRequest(r)
+                        }}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { if (viewMode === 'Compact') setOpenRequest((s) => ({ ...s, [key]: !s[key] })); else setSelectedRequest(r) } }}
+                      >
+                        <div className="row-left">
+                          <div className="row-title">Request #{idx + 1}</div>
+                          <div className="row-sub">{String(r.scope).slice(0, 100)}</div>
+                          <div style={{ fontSize: 13, color: '#666', marginTop: 6 }}>Requested by: {r.requestedBy}</div>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', gap: 6 }}>
+                          <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <div className="badge" style={{ marginRight: 12 }}>{r.status ?? 'Pending'}</div>
+                            <span className={`chevron ${isOpen ? 'open' : ''}`}>{viewMode === 'Compact' ? (isOpen ? '▴' : '▾') : '▾'}</span>
+                          </div>
+                          <div style={{ fontSize: 12, color: '#444' }}>Due: {formatBadgeDate(r.dueDate)}</div>
+                          <div style={{ marginTop: 6 }}><Link to={`/requests/${r.id}/update`}>Open / Edit</Link></div>
+                        </div>
+                      </div>
+
+                      <div className={`expanded-panel ${isOpen ? 'open' : ''}`}>
+                        <div style={{ marginTop: 8 }}>
+                          <div className="expanded-card">
+                            <div style={{ flex: 1 }}>
+                              <div style={{ display: 'grid', gridTemplateColumns: '1fr 160px 140px 140px 160px', gap: 8, alignItems: 'center' }}>
+                                {rows.map((c: any) => (
+                                  <div key={`${key}-row-${c.id}`} style={{ display: 'contents' }}>
+                                    <div style={{ padding: '8px 0' }}>
+                                      <Link to={`/controls/${c.id}`} style={{ color: '#1a88ff' }}>{c.name}</Link>
+                                    </div>
+                                    <div style={{ padding: '8px 0', fontWeight: 600 }}>{c.tester ?? '—'}</div>
+                                    <div style={{ padding: '8px 0' }}>Started on {formatBadgeDate(c.startDate)}</div>
+                                    <div style={{ padding: '8px 0' }}>ETA {formatBadgeDate(c.dueDate)}</div>
+                                    <div style={{ padding: '8px 0' }}>{c.testingNotes ? String(c.testingNotes) : (r.scope ? String(r.scope).slice(0, 40) : '—')}</div>
+                                  </div>
+                                ))}
                               </div>
                             </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  )
+                })}
+              </ul>
+            ) : (
+              <div>
+                <div style={{ display: 'flex', gap: 8, marginBottom: 12, alignItems: 'center' }}>
+                  <label style={{ fontSize: 13, color: '#444', marginRight: 8 }}>Assignee:</label>
+                  <select value={assigneeFilter} onChange={(e) => setAssigneeFilter(e.target.value)} style={{ padding: '6px 8px', borderRadius: 6 }}>
+                    {assigneesList.map((t) => (
+                      <option key={t} value={t}>{t}</option>
+                    ))}
+                  </select>
+                </div>
 
-                            <div className={`expanded-panel ${isOpen ? 'open' : ''}`}>
-                              <div style={{ marginTop: 8 }}>
-                                <div className="expanded-card">
-                                  <div style={{ flex: 1 }}>
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 160px 140px 140px 160px', gap: 8, alignItems: 'center' }}>
-                                      {rows.map((c: any) => (
-                                        <div key={`${key}-row-${c.id}`} style={{ display: 'contents' }}>
-                                          <div style={{ padding: '8px 0' }}>
-                                            <Link to={`/controls/${c.id}`} style={{ color: '#1a88ff' }}>{c.name}</Link>
-                                          </div>
-                                          <div style={{ padding: '8px 0', fontWeight: 600 }}>{c.tester ?? '—'}</div>
-                                          <div style={{ padding: '8px 0' }}>Started on {formatBadgeDate(c.startDate)}</div>
-                                          <div style={{ padding: '8px 0' }}>ETA {formatBadgeDate(c.dueDate)}</div>
-                                          <div style={{ padding: '8px 0' }}>{c.testingNotes ? String(c.testingNotes) : (r.scope ? String(r.scope).slice(0, 40) : '—')}</div>
-                                        </div>
-                                      ))}
-                                    </div>
-                                  </div>
-                                </div>
+                {filteredAssigneeGroups.length === 0 && <div className="empty">No requests found</div>}
+                {filteredAssigneeGroups.map((group) => (
+                  <div key={group.assignee} style={{ marginBottom: 12 }}>
+                    <div style={{ background: '#f6f6f6', padding: '8px 12px', borderRadius: 6, marginBottom: 8 }}><strong>{group.assignee}</strong></div>
+                    <ul className="control-list">
+                      {group.requests.map((r) => {
+                        const idx = mockRequests.indexOf(r)
+                        const key = String(r.id || `req-${idx}`)
+                        const isOpen = Boolean(openRequest[key])
+                        return (
+                          <li key={key} className={`control-row ${isOpen ? 'expanded' : ''}`}>
+                            <div className="control-link" role="button" tabIndex={0} onClick={() => { if (viewMode === 'Compact') setOpenRequest((s) => ({ ...s, [key]: !s[key] })); else setSelectedRequest(r) }} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { if (viewMode === 'Compact') setOpenRequest((s) => ({ ...s, [key]: !s[key] })); else setSelectedRequest(r) } }}>
+                              <div className="row-left">
+                                <div className="row-title">{r.id ? `Request ${r.id}` : `Request`}</div>
+                                <div className="row-sub">{String(r.scope).slice(0, 100)}</div>
+                              </div>
+                              <div className="row-right">
+                                <div className="badge">{String(r.status ?? 'Pending')}</div>
+                                <span className="chevron" style={{ marginLeft: 10 }}>{isOpen ? '▴' : '▾'}</span>
                               </div>
                             </div>
                           </li>
                         )
                       })}
                     </ul>
-                  )}
-
-                  {activeTab === 'status' && (
-                    <div>
-                      <div style={{ display: 'flex', gap: 8, marginBottom: 12, alignItems: 'center' }}>
-                        <input
-                          placeholder="Search requests..."
-                          value={statusSearch}
-                          onChange={(e) => setStatusSearch(e.target.value)}
-                          style={{ padding: '6px 8px', borderRadius: 6, border: '1px solid #ddd', flex: 1 }}
-                        />
-                        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} style={{ padding: '6px 8px', borderRadius: 6 }}>
-                          <option value="All">All</option>
-                          <option value="Pending">Pending</option>
-                          <option value="In Progress">In Progress</option>
-                          <option value="Complete">Complete</option>
-                        </select>
-                      </div>
-
-                      {filteredStatusGroups.length === 0 && <div className="empty">No requests found</div>}
-                      {filteredStatusGroups.map(([status, requests]) => (
-                        <div key={status} style={{ marginBottom: 14 }}>
-                          <h4 style={{ margin: '6px 0' }}>{status}</h4>
-                          <ul className="control-list">
-                            {requests.map((r) => {
-                              const idx = mockRequests.indexOf(r)
-                              const key = String(r.id || `req-${idx}`)
-                              const isOpen = Boolean(openRequest[key])
-                              const rows = controlsForRequest(idx, r)
-                              return (
-                                <li key={key} className={`control-row ${isOpen ? 'expanded' : ''}`}>
-                                  <div className="control-link" role="button" tabIndex={0} onClick={() => { if (viewMode === 'Compact') setOpenRequest((s) => ({ ...s, [key]: !s[key] })); else setSelectedRequest(r) }} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { if (viewMode === 'Compact') setOpenRequest((s) => ({ ...s, [key]: !s[key] })); else setSelectedRequest(r) } }}>
-                                    <div className="row-left">
-                                      <div className="row-title">{r.id ? `Request ${r.id}` : `Request`}</div>
-                                      <div className="row-sub">{String(r.scope).slice(0, 100)}</div>
-                                      <div style={{ fontSize: 13, color: '#666', marginTop: 6 }}>Requested by: {r.requestedBy}</div>
-                                    </div>
-                                    <div className="row-right">
-                                      <div className="badge">{status}</div>
-                                      <span className="chevron" style={{ marginLeft: 10 }}>{isOpen ? '▴' : '▾'}</span>
-                                    </div>
-                                  </div>
-                                  {isOpen && (
-                                    <div className={`expanded-panel open`}>
-                                      <div style={{ marginTop: 8 }}>
-                                        <div className="expanded-card">
-                                          <div style={{ flex: 1 }}>
-                                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 160px 140px 140px 160px', gap: 8, alignItems: 'center' }}>
-                                              {rows.map((c: any) => (
-                                                <div key={`${key}-row-${c.id}`} style={{ display: 'contents' }}>
-                                                  <div style={{ padding: '8px 0' }}>
-                                                    <Link to={`/controls/${c.id}`} style={{ color: '#1a88ff' }}>{c.name}</Link>
-                                                  </div>
-                                                  <div style={{ padding: '8px 0', fontWeight: 600 }}>{c.tester ?? '—'}</div>
-                                                  <div style={{ padding: '8px 0' }}>Started on {formatBadgeDate(c.startDate)}</div>
-                                                  <div style={{ padding: '8px 0' }}>ETA {formatBadgeDate(c.dueDate)}</div>
-                                                  <div style={{ padding: '8px 0' }}>{c.testingNotes ? String(c.testingNotes) : (r.scope ? String(r.scope).slice(0, 40) : '—')}</div>
-                                                </div>
-                                              ))}
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  )}
-                                </li>
-                              )
-                            })}
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {activeTab === 'assignee' && (
-                    <div>
-                      <div style={{ display: 'flex', gap: 8, marginBottom: 12, alignItems: 'center' }}>
-                        <label style={{ fontSize: 13, color: '#444', marginRight: 8 }}>Assignee:</label>
-                        <select value={assigneeFilter} onChange={(e) => setAssigneeFilter(e.target.value)} style={{ padding: '6px 8px', borderRadius: 6 }}>
-                          {assigneesList.map((t) => (
-                            <option key={t} value={t}>{t}</option>
-                          ))}
-                        </select>
-                      </div>
-
-                      {filteredAssigneeGroups.length === 0 && <div className="empty">No requests found</div>}
-                      {filteredAssigneeGroups.map((group) => (
-                        <div key={group.assignee} style={{ marginBottom: 12 }}>
-                          <div style={{ background: '#f6f6f6', padding: '8px 12px', borderRadius: 6, marginBottom: 8 }}><strong>{group.assignee}</strong></div>
-                          <ul className="control-list">
-                            {group.requests.map((r) => {
-                              const idx = mockRequests.indexOf(r)
-                              const key = String(r.id || `req-${idx}`)
-                              const isOpen = Boolean(openRequest[key])
-                              return (
-                                <li key={key} className={`control-row ${isOpen ? 'expanded' : ''}`}>
-                                  <div className="control-link" role="button" tabIndex={0} onClick={() => { if (viewMode === 'Compact') setOpenRequest((s) => ({ ...s, [key]: !s[key] })); else setSelectedRequest(r) }} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { if (viewMode === 'Compact') setOpenRequest((s) => ({ ...s, [key]: !s[key] })); else setSelectedRequest(r) } }}>
-                                    <div className="row-left">
-                                      <div className="row-title">{r.id ? `Request ${r.id}` : `Request`}</div>
-                                      <div className="row-sub">{String(r.scope).slice(0, 100)}</div>
-                                    </div>
-                                    <div className="row-right">
-                                      <div className="badge">{String(r.status ?? 'Pending')}</div>
-                                      <span className="chevron" style={{ marginLeft: 10 }}>{isOpen ? '▴' : '▾'}</span>
-                                    </div>
-                                  </div>
-                                </li>
-                              )
-                            })}
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </>
-              )}
-            </>
-          )
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
         ) : (
           <div style={{ color: '#666' }}><em>Mock data hidden</em></div>
         )}
       </div>
+
       {selectedRequest && (
         <RequestModal request={selectedRequest} onClose={() => setSelectedRequest(null)} editPreference={editPreference} />
       )}
@@ -394,5 +351,5 @@ export default function IndividualRequest() {
         />
       )}
     </div>
-  )
-}
+      )
+    }
