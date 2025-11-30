@@ -19,7 +19,7 @@ const MockDisplay: React.FC = () => {
       <div>
         {mockControls.map((c: Control) => (
           <Card key={c.id} title={`${c.id} — ${c.name}`} subtitle={`Owner: ${c.owner ?? '—'}`}>
-            <div style={{ fontSize: 14 }}>{c.description}</div>
+            <div style={{ fontSize: 14 }}>{c.sme ?? c.description}</div>
             <div style={{ marginTop: 6, fontSize: 12, color: '#444' }}>DAT: {c.dat?.status} • OET: {c.oet?.status}</div>
             <div style={{ marginTop: 6, fontSize: 12, color: '#444' }}>Start: {formatDate(c.startDate)} • Due: {formatDate(c.dueDate)}</div>
           </Card>

@@ -249,7 +249,6 @@ export default function IndividualRequest() {
                           />
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                          <div style={{ width: 12, height: 12, background: '#e0e0e0', borderRadius: 2 }} />
                           <div>
                             <div style={{ fontWeight: 600 }}>{ctrl?.name ?? `Request ${r.id ?? idx + 1}`}</div>
                             <div style={{ color: '#666', fontSize: 13 }}>{String(r.scope || '').slice(0, 80)}</div>
@@ -283,7 +282,7 @@ export default function IndividualRequest() {
                       >
                         <div className="row-left">
                           <div className="row-title">{c.name}</div>
-                          <div className="row-sub">{String(c.description ?? c.testingNotes ?? '').slice(0, 100)}</div>
+                          <div className="row-sub">{String(c.sme ?? c.description ?? c.testingNotes ?? '').slice(0, 100)}</div>
                           <div style={{ fontSize: 13, color: '#666', marginTop: 6 }}>Tester: {c.tester ?? '—'}</div>
                         </div>
                         <div className="row-right">

@@ -31,9 +31,8 @@ export default function IndividualControl() {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
         <div>
-          <div><strong>Owner:</strong> {control.owner}</div>
-          <div><strong>SME:</strong> {control.sme ?? '—'}</div>
-          <div><strong>Tester:</strong> {control.tester ?? '—'}</div>
+          <div><strong>Control SME:</strong> {control.owner ?? '—'}</div>
+          <div><strong>Control Owner:</strong> {control.tester ?? '—'}</div>
           <div><strong>Needs escalation:</strong> {control.needsEscalation ? 'Yes' : 'No'}</div>
         </div>
 
@@ -47,10 +46,10 @@ export default function IndividualControl() {
         </div>
       </div>
 
-      {control.description && (
+      {(control.sme || control.description) && (
         <div style={{ marginTop: 12 }}>
           <strong>Description</strong>
-          <p>{control.description}</p>
+          <p>{control.sme ?? control.description}</p>
         </div>
       )}
 

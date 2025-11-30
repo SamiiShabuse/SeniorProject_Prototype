@@ -24,9 +24,10 @@ export default function CreateState() {
     const newControl: Control = {
       id: generateVGCPId(),
       name: name.trim(),
-      description: description.trim() || undefined,
+      // Persist the description textarea as SME text (primary description shown in UI comes from `sme`)
+      description: undefined,
       owner: owner.trim(),
-      sme: sme.trim() || undefined,
+      sme: (description.trim() || sme.trim()) || undefined,
       tester: tester.trim() || undefined,
       needsEscalation,
       dat: { status: datStatus as any },
@@ -54,7 +55,7 @@ export default function CreateState() {
         </div>
 
         <div style={{ marginBottom: 8 }}>
-          <label style={{ display: 'block' }}>Description</label>
+          <label style={{ display: 'block' }}>Description (Control SME text)</label>
           <textarea value={description} onChange={(e) => setDescription(e.target.value)} style={{ width: '100%' }} />
         </div>
 

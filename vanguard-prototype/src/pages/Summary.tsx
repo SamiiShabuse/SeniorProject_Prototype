@@ -40,7 +40,7 @@ export default function Summary() {
   const notStartedRequests = mockRequests.filter((r) => String(r.status ?? '').toLowerCase() === 'pending').length
   const openRequests = mockRequests.filter((r) => (r.status ?? '').toLowerCase() !== 'complete').length
   const totalControls = mockControls.length
-  const completed = mockControls.filter((c) => String(c.dat?.status ?? '').toLowerCase() === 'completed' || /completed/i.test(String(c.testingNotes ?? '') + String(c.description ?? ''))).length
+  const completed = mockControls.filter((c) => String(c.dat?.status ?? '').toLowerCase() === 'completed' || /completed/i.test(String(c.testingNotes ?? '') + String(c.sme ?? ''))).length
   const completionPct = totalControls === 0 ? 0 : Math.round((completed / totalControls) * 100)
 
   const animatedTotal = useCountUp(totalTests, 800, playAnim)

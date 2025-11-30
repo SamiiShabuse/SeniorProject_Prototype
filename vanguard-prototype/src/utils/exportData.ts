@@ -24,7 +24,7 @@ export function exportControlsToCSV(controls: Control[], filename = 'controls_ex
   const rows = controls.map((c) => [
     c.id,
     c.name || '',
-    c.description || '',
+    c.sme || c.description || '',
     c.owner || '',
     c.sme || '',
     c.tester || '',
@@ -91,7 +91,7 @@ export function exportControlsToExcel(controls: Control[], filename = 'controls_
   const worksheetData = controls.map((c) => ({
     'Control ID': c.id,
     Name: c.name || '',
-    Description: c.description || '',
+    Description: c.sme || c.description || '',
     Owner: c.owner || '',
     SME: c.sme || '',
     Tester: c.tester || '',
@@ -151,7 +151,7 @@ export function exportDashboardSummary(
         activeControls: controls.filter(
           (c) =>
             (c.dat?.status ?? '').toLowerCase() !== 'completed' &&
-            !(String(c.dat?.status ?? '').trim() === '' && /completed/i.test(String(c.testingNotes ?? '') + String(c.description ?? '')))
+            !(String(c.dat?.status ?? '').trim() === '' && /completed/i.test(String(c.testingNotes ?? '') + String(c.sme ?? '')))
         ).length,
         openRequests: requests.filter((r) => (r.status ?? '').toLowerCase() !== 'complete').length,
       },
@@ -169,7 +169,7 @@ export function exportDashboardSummary(
     const controlsData = controls.map((c) => ({
       'Control ID': c.id,
       Name: c.name || '',
-      Description: c.description || '',
+      Description: c.sme || c.description || '',
       Owner: c.owner || '',
       SME: c.sme || '',
       Tester: c.tester || '',
@@ -204,7 +204,7 @@ export function exportDashboardSummary(
         Value: controls.filter(
           (c) =>
             (c.dat?.status ?? '').toLowerCase() !== 'completed' &&
-            !(String(c.dat?.status ?? '').trim() === '' && /completed/i.test(String(c.testingNotes ?? '') + String(c.description ?? '')))
+            !(String(c.dat?.status ?? '').trim() === '' && /completed/i.test(String(c.testingNotes ?? '') + String(c.sme ?? '')))
         ).length,
       },
       {
@@ -248,7 +248,11 @@ export function exportSelectedComponents(
       payload.summary = {
         totalControls: controls.length,
         totalRequests: requests.length,
-        activeControls: controls.filter((c) => (c.dat?.status ?? '').toLowerCase() !== 'completed').length,
+        activeControls: controls.filter(
+          (c) =>
+            (c.dat?.status ?? '').toLowerCase() !== 'completed' &&
+            !(String(c.dat?.status ?? '').trim() === '' && /completed/i.test(String(c.testingNotes ?? '') + String(c.sme ?? '')))
+        ).length,
         openRequests: requests.filter((r) => (r.status ?? '').toLowerCase() !== 'complete').length,
       }
     }
@@ -290,11 +294,11 @@ export function exportSelectedComponents(
     XLSX.utils.book_append_sheet(workbook, summarySheet, 'Summary')
   }
 
-  if (include('controls')) {
+    if (include('controls')) {
     const controlsData = controls.map((c) => ({
       'Control ID': c.id,
       Name: c.name || '',
-      Description: c.description || '',
+      Description: c.sme || c.description || '',
       Owner: c.owner || '',
       SME: c.sme || '',
       Tester: c.tester || '',

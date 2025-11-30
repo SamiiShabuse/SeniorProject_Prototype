@@ -22,7 +22,8 @@ export default function UpdateControlDetail() {
     if (!control) return
     setName(control.name ?? '')
     setOwner(control.owner ?? '')
-    setDescription(control.description ?? '')
+    // Treat the editable description textarea as the SME text (current SME content)
+    setDescription(control.sme ?? control.description ?? '')
     setTester(control.tester ?? '')
     setSme(control.sme ?? '')
     setNeedsEscalation(Boolean(control.needsEscalation))
@@ -51,9 +52,9 @@ export default function UpdateControlDetail() {
 
     const patch: Partial<Control> = {
       name: name.trim(),
-      description: description.trim() || undefined,
+      // Persist the textarea as SME text (description shown in UI is the SME content)
+      sme: (description.trim() || sme.trim()) || undefined,
       owner: owner.trim(),
-      sme: sme.trim() || undefined,
       tester: tester.trim() || undefined,
       needsEscalation,
       dat: { status: datStatus as any },
@@ -80,7 +81,7 @@ export default function UpdateControlDetail() {
         </div>
 
         <div style={{ marginBottom: 8 }}>
-          <label style={{ display: 'block' }}>Description</label>
+          <label style={{ display: 'block' }}>Description (Control SME text)</label>
           <textarea value={description} onChange={(e) => setDescription(e.target.value)} style={{ width: '100%' }} />
         </div>
 

@@ -102,7 +102,7 @@ export default function ControlsList() {
                     >
                       <div className="row-left">
                         <div className="row-title">{c.name}</div>
-                        <div className="row-sub">Owner: {c.owner} • Tester: {c.tester ?? '—'}</div>
+                        <div className="row-sub">SME: {c.owner} • Control Owner: {c.tester ?? '—'}</div>
                       </div>
                       <div className="row-right">
                         <div className="badge">Last Testing on {formatBadgeDate(c.completedDate ?? c.dueDate)}</div>
@@ -116,11 +116,11 @@ export default function ControlsList() {
                           <div className="expanded-card">
                             <div style={{ display: 'flex', gap: 16 }}>
                               <div style={{ flex: 1 }}>
-                                <div style={{ fontSize: 13, color: '#333', marginBottom: 8 }}>{c.description}</div>
+                                <div style={{ fontSize: 13, color: '#333', marginBottom: 8 }}>{c.sme ?? c.description}</div>
                               </div>
                               <div style={{ width: 260 }}>
-                                <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control Owner:</strong> {c.owner}</div>
-                                <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control SME:</strong> {c.sme ?? '—'}</div>
+                                <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control Owner:</strong> {c.tester ?? '—'}</div>
+                                <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control SME:</strong> {c.owner ?? '—'}</div>
                                 <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Escalation Required:</strong> {c.needsEscalation ? 'Yes' : 'No'}</div>
                               </div>
                             </div>
