@@ -206,7 +206,13 @@ export default function IndividualRequest() {
             </div>
 
             {activeTab === 'kanban' ? (
-              <RequestsKanban requests={mockRequests} />
+              <RequestsKanban
+                requests={mockRequests}
+                onRequestClick={(id) => {
+                  const req = mockRequests.find((r) => String(r.id) === String(id))
+                  if (req) setSelectedRequest(req)
+                }}
+              />
             ) : activeTab === 'tests' ? (
               <div style={{ borderTop: '1px solid #e6e6e6', paddingTop: 12 }}>
                 <div style={{ display: 'grid', gridTemplateColumns: '48px 3fr 1fr 1fr 1fr 1fr 1fr', gap: 12, padding: '8px 12px', alignItems: 'center', fontWeight: 700, color: '#222', borderBottom: '1px solid #e6e6e6' }}>

@@ -8,9 +8,10 @@ import { updateMockRequest } from '../mocks/mockData'
 
 type Props = {
   requests: TestRequest[]
+  onRequestClick?: (requestId: string) => void
 }
 
-export default function RequestsKanban({ requests }: Props) {
+export default function RequestsKanban({ requests, onRequestClick }: Props) {
   const navigate = useNavigate()
   const [draggedOverColumn, setDraggedOverColumn] = useState<string | null>(null)
   const [draggedItem, setDraggedItem] = useState<{ id: string; type: string } | null>(null)
@@ -67,7 +68,10 @@ export default function RequestsKanban({ requests }: Props) {
                 draggable
                 onDragStart={(e) => handleDragStart(e, r.id)}
                 onDragEnd={handleDragEnd}
-                onClick={() => navigate(`/requests/${r.id}`)}
+                onClick={() => {
+                  if (onRequestClick) onRequestClick(String(r.id))
+                  else navigate(`/requests/${r.id}`)
+                }}
               />
             ))}
         </Column>
