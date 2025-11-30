@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { mockControls } from '../mocks/mockData'
 import { mockRequests } from '../mocks/mockData'
 import { exportDashboardSummary } from '../utils/exportData'
@@ -39,6 +40,7 @@ function SmallDonut({ value, size = 80 }: { value: number; size?: number }) {
 
 export default function Summary() {
   const [showExportMenu, setShowExportMenu] = useState(false)
+  const navigate = useNavigate()
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [playAnim, setPlayAnim] = useState(true)
 
@@ -93,23 +95,23 @@ export default function Summary() {
 
       {/* Top tiles */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 12, marginBottom: 18 }}>
-        <div style={{ padding: 14, borderRadius: 10, background: '#fff', boxShadow: '0 6px 18px rgba(0,0,0,0.04)' }}>
+        <div role="button" onClick={() => navigate('/controls')} style={{ padding: 14, borderRadius: 10, background: '#fff', boxShadow: '0 6px 18px rgba(0,0,0,0.04)', cursor: 'pointer' }}>
           <div style={{ color: '#666', fontSize: 12 }}>Total</div>
           <div style={{ fontSize: 22, fontWeight: 700 }}>{animatedTotal}</div>
         </div>
-        <div style={{ padding: 14, borderRadius: 10, background: '#fff', boxShadow: '0 6px 18px rgba(0,0,0,0.04)' }}>
+        <div role="button" onClick={() => navigate('/controls?status=active')} style={{ padding: 14, borderRadius: 10, background: '#fff', boxShadow: '0 6px 18px rgba(0,0,0,0.04)', cursor: 'pointer' }}>
           <div style={{ color: '#666', fontSize: 12 }}>Active</div>
           <div style={{ fontSize: 22, fontWeight: 700 }}>{animatedActive}</div>
         </div>
-        <div style={{ padding: 14, borderRadius: 10, background: '#fff', boxShadow: '0 6px 18px rgba(0,0,0,0.04)' }}>
+        <div role="button" onClick={() => navigate('/requests?status=open')} style={{ padding: 14, borderRadius: 10, background: '#fff', boxShadow: '0 6px 18px rgba(0,0,0,0.04)', cursor: 'pointer' }}>
           <div style={{ color: '#666', fontSize: 12 }}>Open Requests</div>
           <div style={{ fontSize: 22, fontWeight: 700 }}>{animatedOpen}</div>
         </div>
-        <div style={{ padding: 14, borderRadius: 10, background: '#fff', boxShadow: '0 6px 18px rgba(0,0,0,0.04)' }}>
+        <div role="button" onClick={() => navigate('/controls?status=completed')} style={{ padding: 14, borderRadius: 10, background: '#fff', boxShadow: '0 6px 18px rgba(0,0,0,0.04)', cursor: 'pointer' }}>
           <div style={{ color: '#666', fontSize: 12 }}>Completion</div>
           <div style={{ fontSize: 22, fontWeight: 700 }}>{animatedCompletion}%</div>
         </div>
-        <div style={{ padding: 14, borderRadius: 10, background: '#fff', boxShadow: '0 6px 18px rgba(0,0,0,0.04)' }}>
+        <div role="button" onClick={() => navigate('/controls?tab=owners')} style={{ padding: 14, borderRadius: 10, background: '#fff', boxShadow: '0 6px 18px rgba(0,0,0,0.04)', cursor: 'pointer' }}>
           <div style={{ color: '#666', fontSize: 12 }}>Owners</div>
           <div style={{ fontSize: 22, fontWeight: 700 }}>{Object.keys(mockControls.reduce<Record<string, number>>((acc, c) => { acc[c.owner || 'Unassigned'] = (acc[c.owner || 'Unassigned'] || 0) + 1; return acc }, {})).length}</div>
         </div>
