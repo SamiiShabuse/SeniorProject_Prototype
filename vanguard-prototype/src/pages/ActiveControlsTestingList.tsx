@@ -13,6 +13,7 @@ export default function ActiveControlsTestingList() {
   const [viewMode, setViewMode] = useState<'Pop Up' | 'Compact' | 'Kanban'>('Compact')
   const [selectedControl, setSelectedControl] = useState<Control | null>(null)
   const [editingControl, setEditingControl] = useState<Control | null>(null)
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null)
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<'request' | 'status' | 'assignee'>('request')
   const [editPreference, setEditPreference] = useState<'route' | 'modal'>('route')
@@ -204,24 +205,35 @@ export default function ActiveControlsTestingList() {
                             </div>
                             <div className="row-right" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                               <div className="badge">Last Testing on {formatBadgeDate(c.completedDate ?? c.dueDate)}</div>
-                              <button aria-label={`Edit ${c.name}`} onClick={(e) => { e.stopPropagation(); setEditingControl(c) }} style={{ padding: '6px 8px', borderRadius: 6, border: '1px solid #ddd', background: '#fff', cursor: 'pointer' }}>Edit</button>
                               <span className="chevron" style={{ marginLeft: 4 }}>{isExpanded ? '▴' : '▾'}</span>
                             </div>
                           </div>
-                          {isExpanded && (
+                            {isExpanded && (
                             <div className={`expanded-panel open`}>
                               <div style={{ marginTop: 8 }}>
-                                <div className="expanded-card">
-                                          <div style={{ display: 'flex', gap: 16 }}>
-                                            <div style={{ flex: 1 }}>
-                                              <div style={{ fontSize: 13, color: '#333', marginBottom: 8 }}>{c.description}</div>
-                                            </div>
-                                            <div style={{ width: 260 }}>
-                                              <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control Owner:</strong> {c.owner}</div>
-                                              <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control SME:</strong> {c.sme ?? '—'}</div>
-                                              <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Escalation Required:</strong> {c.needsEscalation ? 'Yes' : 'No'}</div>
-                                            </div>
-                                          </div>
+                                <div className="expanded-card" style={{ position: 'relative' }}>
+                                  {/* Actions dropdown appears inside expanded panel */}
+                                  <div style={{ position: 'absolute', right: 10, top: 10 }}>
+                                    <div style={{ position: 'relative' }}>
+                                      <button aria-label={`Actions for ${c.name}`} onClick={(e) => { e.stopPropagation(); setOpenMenuId((s) => (s === c.id ? null : c.id)) }} style={{ padding: '6px 8px', borderRadius: 6, border: '1px solid #ddd', background: '#fff', cursor: 'pointer' }}>⋯</button>
+                                      {openMenuId === c.id && (
+                                        <div style={{ position: 'absolute', right: 0, top: 'calc(100% + 6px)', background: '#fff', border: '1px solid #eee', boxShadow: '0 8px 24px rgba(0,0,0,0.08)', borderRadius: 6, zIndex: 30 }}>
+                                          <button onClick={(e) => { e.stopPropagation(); setEditingControl(c); setOpenMenuId(null) }} style={{ display: 'block', padding: 10, width: 180, textAlign: 'left', border: 'none', background: 'transparent', cursor: 'pointer' }}>Edit</button>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+
+                                  <div style={{ display: 'flex', gap: 16 }}>
+                                    <div style={{ flex: 1 }}>
+                                      <div style={{ fontSize: 13, color: '#333', marginBottom: 8 }}>{c.description}</div>
+                                    </div>
+                                    <div style={{ width: 260 }}>
+                                      <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control Owner:</strong> {c.owner}</div>
+                                      <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control SME:</strong> {c.sme ?? '—'}</div>
+                                      <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Escalation Required:</strong> {c.needsEscalation ? 'Yes' : 'No'}</div>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -267,14 +279,24 @@ export default function ActiveControlsTestingList() {
                                   </div>
                                   <div className="row-right" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                                     <div className="badge">{status}</div>
-                                    <button aria-label={`Edit ${c.name}`} onClick={(e) => { e.stopPropagation(); setEditingControl(c) }} style={{ padding: '6px 8px', borderRadius: 6, border: '1px solid #ddd', background: '#fff', cursor: 'pointer' }}>Edit</button>
                                     <span className="chevron" style={{ marginLeft: 4 }}>{isExpanded ? '▴' : '▾'}</span>
                                   </div>
                                 </div>
                                 {isExpanded && (
                                   <div className={`expanded-panel open`}>
                                     <div style={{ marginTop: 8 }}>
-                                      <div className="expanded-card">
+                                      <div className="expanded-card" style={{ position: 'relative' }}>
+                                        <div style={{ position: 'absolute', right: 10, top: 10 }}>
+                                          <div style={{ position: 'relative' }}>
+                                            <button aria-label={`Actions for ${c.name}`} onClick={(e) => { e.stopPropagation(); setOpenMenuId((s) => (s === c.id ? null : c.id)) }} style={{ padding: '6px 8px', borderRadius: 6, border: '1px solid #ddd', background: '#fff', cursor: 'pointer' }}>⋯</button>
+                                            {openMenuId === c.id && (
+                                              <div style={{ position: 'absolute', right: 0, top: 'calc(100% + 6px)', background: '#fff', border: '1px solid #eee', boxShadow: '0 8px 24px rgba(0,0,0,0.08)', borderRadius: 6, zIndex: 30 }}>
+                                                <button onClick={(e) => { e.stopPropagation(); setEditingControl(c); setOpenMenuId(null) }} style={{ display: 'block', padding: 10, width: 180, textAlign: 'left', border: 'none', background: 'transparent', cursor: 'pointer' }}>Edit</button>
+                                              </div>
+                                            )}
+                                          </div>
+                                        </div>
+
                                         <div style={{ display: 'flex', gap: 16 }}>
                                           <div style={{ flex: 1 }}>
                                             <div style={{ fontSize: 13, color: '#333', marginBottom: 8 }}>{c.description}</div>
@@ -325,14 +347,24 @@ export default function ActiveControlsTestingList() {
                                   </div>
                                   <div className="row-right" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                                     <div className="badge">{String(c.dat?.status ?? c.oet?.status ?? 'Not Started')}</div>
-                                    <button aria-label={`Edit ${c.name}`} onClick={(e) => { e.stopPropagation(); setEditingControl(c) }} style={{ padding: '6px 8px', borderRadius: 6, border: '1px solid #ddd', background: '#fff', cursor: 'pointer' }}>Edit</button>
                                     <span className="chevron" style={{ marginLeft: 4 }}>{isExpanded ? '▴' : '▾'}</span>
                                   </div>
                                 </div>
                                 {isExpanded && (
                                   <div className={`expanded-panel open`}>
                                     <div style={{ marginTop: 8 }}>
-                                      <div className="expanded-card">
+                                      <div className="expanded-card" style={{ position: 'relative' }}>
+                                        <div style={{ position: 'absolute', right: 10, top: 10 }}>
+                                          <div style={{ position: 'relative' }}>
+                                            <button aria-label={`Actions for ${c.name}`} onClick={(e) => { e.stopPropagation(); setOpenMenuId((s) => (s === c.id ? null : c.id)) }} style={{ padding: '6px 8px', borderRadius: 6, border: '1px solid #ddd', background: '#fff', cursor: 'pointer' }}>⋯</button>
+                                            {openMenuId === c.id && (
+                                              <div style={{ position: 'absolute', right: 0, top: 'calc(100% + 6px)', background: '#fff', border: '1px solid #eee', boxShadow: '0 8px 24px rgba(0,0,0,0.08)', borderRadius: 6, zIndex: 30 }}>
+                                                <button onClick={(e) => { e.stopPropagation(); setEditingControl(c); setOpenMenuId(null) }} style={{ display: 'block', padding: 10, width: 180, textAlign: 'left', border: 'none', background: 'transparent', cursor: 'pointer' }}>Edit</button>
+                                              </div>
+                                            )}
+                                          </div>
+                                        </div>
+
                                         <div style={{ display: 'flex', gap: 16 }}>
                                           <div style={{ flex: 1 }}>
                                             <div style={{ fontSize: 13, color: '#333', marginBottom: 8 }}>{c.description}</div>
