@@ -183,22 +183,7 @@ export default function IndividualRequest() {
           </p>
         ) : null}
 
-        <div style={{ marginLeft: 'auto' }}>
-          <button
-            onClick={() => setShowCreate(true)}
-            style={{
-              backgroundColor: '#1a88ff',
-              color: '#fff',
-              border: 'none',
-              padding: '8px 12px',
-              borderRadius: 6,
-              cursor: 'pointer',
-              fontWeight: 600,
-            }}
-          >
-            Create New Request
-          </button>
-        </div>
+        
       </div>
 
       <div className="controls-container">
