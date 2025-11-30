@@ -139,9 +139,76 @@ export default function Summary() {
       <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 14 }}>
         <div style={{ padding: 16, borderRadius: 10, background: '#fff', boxShadow: '0 8px 24px rgba(0,0,0,0.04)' }}>
           <h3 style={{ marginTop: 0 }}>Overview</h3>
-          <div style={{ height: 320, borderRadius: 8, background: '#f6f6f6', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999' }}>
-            {/* Placeholder for Gantt / main visualization */}
-            <div>Schedule visualization (Gantt) placeholder</div>
+          <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+            {/* OET Distribution */}
+            <div style={{ flex: 1, minWidth: 220 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                <strong>DAT Distribution</strong>
+                <div style={{ color: '#666', fontSize: 12 }}>{totalControls} controls</div>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {(() => {
+                  const map: Record<string, number> = {}
+                  for (const c of mockControls) {
+                    const k = String(c.dat?.status ?? 'Unspecified')
+                    map[k] = (map[k] || 0) + 1
+                  }
+                  const list = Object.entries(map).sort((a, b) => b[1] - a[1])
+                  return list.map(([k, v]) => {
+                    const pct = Math.round((v / Math.max(1, totalControls)) * 100)
+                    return (
+                      <div key={k} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <div style={{ width: 8, height: 32, background: '#e6eefc', borderRadius: 4 }} />
+                        <div style={{ flex: 1 }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
+                            <div style={{ color: '#222' }}>{k}</div>
+                            <div style={{ color: '#666' }}>{v} ({pct}%)</div>
+                          </div>
+                          <div style={{ height: 8, background: '#f0f4ff', borderRadius: 6, marginTop: 6 }}>
+                            <div style={{ width: `${pct}%`, height: '100%', background: '#4f7ef8', borderRadius: 6 }} />
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })
+                })()}
+              </div>
+            </div>
+
+            {/* OET Distribution */}
+            <div style={{ flex: 1, minWidth: 220 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                <strong>OET Distribution</strong>
+                <div style={{ color: '#666', fontSize: 12 }}>{totalControls} controls</div>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {(() => {
+                  const map: Record<string, number> = {}
+                  for (const c of mockControls) {
+                    const k = String(c.oet?.status ?? 'Unspecified')
+                    map[k] = (map[k] || 0) + 1
+                  }
+                  const list = Object.entries(map).sort((a, b) => b[1] - a[1])
+                  return list.map(([k, v]) => {
+                    const pct = Math.round((v / Math.max(1, totalControls)) * 100)
+                    return (
+                      <div key={k} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <div style={{ width: 8, height: 32, background: '#fff3e6', borderRadius: 4 }} />
+                        <div style={{ flex: 1 }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
+                            <div style={{ color: '#222' }}>{k}</div>
+                            <div style={{ color: '#666' }}>{v} ({pct}%)</div>
+                          </div>
+                          <div style={{ height: 8, background: '#fff7f0', borderRadius: 6, marginTop: 6 }}>
+                            <div style={{ width: `${pct}%`, height: '100%', background: '#ff9a3c', borderRadius: 6 }} />
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })
+                })()}
+              </div>
+            </div>
           </div>
         </div>
 
