@@ -230,3 +230,124 @@ export function exportDashboardSummary(
   }
 }
 
+// Export selected dashboard components (controls, requests, summary, upcoming, teamBandwidth)
+export function exportSelectedComponents(
+  controls: Control[],
+  requests: TestRequest[],
+  selected: string[],
+  format: 'json' | 'excel' = 'json'
+) {
+  const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-')
+  const baseFilename = `dashboard_components_export_${timestamp}`
+
+  const include = (name: string) => selected.includes(name)
+
+  if (format === 'json') {
+    const payload: Record<string, any> = { exportedAt: new Date().toISOString() }
+    if (include('summary')) {
+      payload.summary = {
+        totalControls: controls.length,
+        totalRequests: requests.length,
+        activeControls: controls.filter((c) => (c.dat?.status ?? '').toLowerCase() !== 'completed').length,
+        openRequests: requests.filter((r) => (r.status ?? '').toLowerCase() !== 'complete').length,
+      }
+    }
+    if (include('controls')) payload.controls = controls
+    if (include('requests')) payload.requests = requests
+    if (include('upcoming')) payload.upcoming = controls.filter((c) => c.dueDate)
+
+    if (include('teamBandwidth')) {
+      const map: Record<string, { inProgress: number; total: number }> = {}
+      for (const r of requests) {
+        const ctrl = controls.find((c) => String(c.id) === String(r.controlId))
+        const tester = String(ctrl?.tester ?? 'Unassigned')
+        if (!map[tester]) map[tester] = { inProgress: 0, total: 0 }
+        map[tester].total += 1
+        if (String(r.status ?? '').toLowerCase() === 'in progress') map[tester].inProgress += 1
+      }
+      payload.teamBandwidth = map
+    }
+
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' })
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(blob)
+    link.download = `${baseFilename}.json`
+    link.click()
+    return
+  }
+
+  // Excel export: create sheets only for selected components
+  const workbook = XLSX.utils.book_new()
+
+  if (include('summary')) {
+    const summarySheet = XLSX.utils.json_to_sheet([
+      { Metric: 'Total Controls', Value: controls.length },
+      { Metric: 'Total Requests', Value: requests.length },
+      { Metric: 'Active Controls', Value: controls.filter((c) => (c.dat?.status ?? '').toLowerCase() !== 'completed').length },
+      { Metric: 'Open Requests', Value: requests.filter((r) => (r.status ?? '').toLowerCase() !== 'complete').length },
+      { Metric: 'Exported At', Value: new Date().toISOString() },
+    ])
+    XLSX.utils.book_append_sheet(workbook, summarySheet, 'Summary')
+  }
+
+  if (include('controls')) {
+    const controlsData = controls.map((c) => ({
+      'Control ID': c.id,
+      Name: c.name || '',
+      Description: c.description || '',
+      Owner: c.owner || '',
+      SME: c.sme || '',
+      Tester: c.tester || '',
+      'DAT Status': c.dat?.status || '',
+      'OET Status': c.oet?.status || '',
+      'Needs Escalation': c.needsEscalation ? 'Yes' : 'No',
+      'Start Date': c.startDate || '',
+      'Due Date': c.dueDate || '',
+      ETA: c.eta || '',
+      'Completed Date': c.completedDate || '',
+      'Testing Notes': c.testingNotes || '',
+    }))
+    const sheet = XLSX.utils.json_to_sheet(controlsData)
+    XLSX.utils.book_append_sheet(workbook, sheet, 'Controls')
+  }
+
+  if (include('requests')) {
+    const requestsData = requests.map((r) => ({
+      'Request ID': r.id,
+      'Control ID': r.controlId,
+      'Requested By': r.requestedBy,
+      Scope: r.scope,
+      'Due Date': r.dueDate,
+      Status: r.status,
+    }))
+    const sheet = XLSX.utils.json_to_sheet(requestsData)
+    XLSX.utils.book_append_sheet(workbook, sheet, 'Requests')
+  }
+
+  if (include('upcoming')) {
+    const upcoming = controls.filter((c) => c.dueDate).map((c) => ({
+      'Control ID': c.id,
+      Name: c.name || '',
+      'Due Date': c.dueDate || '',
+    }))
+    const sheet = XLSX.utils.json_to_sheet(upcoming)
+    XLSX.utils.book_append_sheet(workbook, sheet, 'Upcoming')
+  }
+
+  if (include('teamBandwidth')) {
+    const map: Record<string, { inProgress: number; total: number }> = {}
+    for (const r of requests) {
+      const ctrl = controls.find((c) => String(c.id) === String(r.controlId))
+      const tester = String(ctrl?.tester ?? 'Unassigned')
+      if (!map[tester]) map[tester] = { inProgress: 0, total: 0 }
+      map[tester].total += 1
+      if (String(r.status ?? '').toLowerCase() === 'in progress') map[tester].inProgress += 1
+    }
+    const rows = Object.entries(map).map(([name, counts]) => ({ Tester: name, InProgress: counts.inProgress, Total: counts.total }))
+    const sheet = XLSX.utils.json_to_sheet(rows)
+    XLSX.utils.book_append_sheet(workbook, sheet, 'TeamBandwidth')
+  }
+
+  XLSX.writeFile(workbook, `${baseFilename}.xlsx`)
+}
+
