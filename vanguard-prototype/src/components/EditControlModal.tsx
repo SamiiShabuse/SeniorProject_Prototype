@@ -12,9 +12,9 @@ interface Props {
 export default function EditControlModal({ control, onClose, onSaved }: Props) {
   const [name] = useState(control.name ?? '')
   const [owner] = useState(control.owner ?? '')
-  const [description, setDescription] = useState(control.description ?? '')
+  const [smeText, setSmeText] = useState(control.sme ?? '')
   const [tester] = useState(control.tester ?? '')
-  const [sme] = useState(control.sme ?? '')
+  
   const [needsEscalation] = useState(Boolean(control.needsEscalation))
   const [datStatus] = useState(control.dat?.status ?? 'Not Started')
   const [oetStatus] = useState(control.oet?.status ?? 'Not Started')
@@ -31,9 +31,9 @@ export default function EditControlModal({ control, onClose, onSaved }: Props) {
     const patch: Partial<Control> = {
       name: name.trim(),
       owner: owner.trim(),
-      description: description.trim() || undefined,
+      // SME content updated from textarea; leave description unchanged
       tester: tester.trim() || undefined,
-      sme: sme.trim() || undefined,
+      sme: smeText.trim() || undefined,
       needsEscalation,
       dat: { status: datStatus as any },
       oet: { status: oetStatus as any },
@@ -66,14 +66,14 @@ export default function EditControlModal({ control, onClose, onSaved }: Props) {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px 260px', gap: 16 }}>
             {/* Left: description panel */}
             <div style={{ background: '#f2f2f2', borderRadius: 8, padding: 16, minHeight: 220 }}>
-              <div style={{ color: '#666', fontSize: 13, marginBottom: 8 }}>Description</div>
-              <textarea value={description} onChange={(e) => setDescription(e.target.value)} style={{ width: '100%', minHeight: 150, borderRadius: 6, padding: 12, border: '1px solid #e0e0e0', resize: 'vertical' }} />
+                <div style={{ color: '#666', fontSize: 13, marginBottom: 8 }}>Description (shows current SME)</div>
+                <textarea value={smeText} onChange={(e) => setSmeText(e.target.value)} style={{ width: '100%', minHeight: 150, borderRadius: 6, padding: 12, border: '1px solid #e0e0e0', resize: 'vertical' }} />
             </div>
 
             {/* Middle: metadata */}
             <div style={{ borderRadius: 8, padding: 12, background: '#fff', boxShadow: 'inset 0 0 0 1px #f3f3f3' }}>
-              <div style={{ fontSize: 13, color: '#666', marginBottom: 6 }}>Control Owner: <strong style={{ color: '#222' }}>{owner || '—'}</strong></div>
-              <div style={{ fontSize: 13, color: '#666', marginBottom: 6 }}>Control SME: <strong style={{ color: '#222' }}>{sme || '—'}</strong></div>
+              <div style={{ fontSize: 13, color: '#666', marginBottom: 6 }}>Control SME: <strong style={{ color: '#222' }}>{owner || '—'}</strong></div>
+              <div style={{ fontSize: 13, color: '#666', marginBottom: 6 }}>Control Owner: <strong style={{ color: '#222' }}>{tester || '—'}</strong></div>
               <div style={{ fontSize: 13, color: '#666', marginBottom: 6 }}>Control Escalation Required: <strong style={{ color: '#222' }}>{needsEscalation ? 'Yes' : 'No'}</strong></div>
               <div style={{ fontSize: 13, color: '#666', marginBottom: 6 }}>Control ID: <strong style={{ color: '#222' }}>{control.id}</strong></div>
               <div style={{ fontSize: 13, color: '#666', marginBottom: 6 }}>VGCP ID: <strong style={{ color: '#222' }}>{control.id}</strong></div>

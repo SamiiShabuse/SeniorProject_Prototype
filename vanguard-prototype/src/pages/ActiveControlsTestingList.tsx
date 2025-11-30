@@ -201,7 +201,7 @@ export default function ActiveControlsTestingList() {
                           <div className="control-link" role="button" tabIndex={0} onClick={() => { if (viewMode === 'Compact') setExpandedId((s) => (s === c.id ? null : c.id)); else setSelectedControl(c) }} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { if (viewMode === 'Compact') setExpandedId((s) => (s === c.id ? null : c.id)); else setSelectedControl(c) } }}>
                             <div className="row-left">
                               <div className="row-title">{c.name}</div>
-                              <div className="row-sub">Owner: {c.owner} • Tester: {c.tester ?? '—'}</div>
+                              <div className="row-sub">SME: {c.owner} • Control Owner: {c.tester ?? '—'}</div>
                             </div>
                             <div className="row-right" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                               <div className="badge">Last Testing on {formatBadgeDate(c.completedDate ?? c.dueDate)}</div>
@@ -226,11 +226,11 @@ export default function ActiveControlsTestingList() {
 
                                   <div style={{ display: 'flex', gap: 16 }}>
                                     <div style={{ flex: 1 }}>
-                                      <div style={{ fontSize: 13, color: '#333', marginBottom: 8 }}>{c.description}</div>
+                                      <div style={{ fontSize: 13, color: '#333', marginBottom: 8 }}>{c.sme ?? c.description}</div>
                                     </div>
                                     <div style={{ width: 260 }}>
-                                      <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control Owner:</strong> {c.owner}</div>
-                                      <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control SME:</strong> {c.sme ?? '—'}</div>
+                                              <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control SME:</strong> {c.owner}</div>
+                                              <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control Owner:</strong> {c.tester ?? '—'}</div>
                                       <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Escalation Required:</strong> {c.needsEscalation ? 'Yes' : 'No'}</div>
                                     </div>
                                   </div>
@@ -297,16 +297,16 @@ export default function ActiveControlsTestingList() {
                                           </div>
                                         </div>
 
-                                        <div style={{ display: 'flex', gap: 16 }}>
-                                          <div style={{ flex: 1 }}>
-                                            <div style={{ fontSize: 13, color: '#333', marginBottom: 8 }}>{c.description}</div>
-                                          </div>
-                                          <div style={{ width: 260 }}>
-                                            <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control Owner:</strong> {c.owner}</div>
-                                            <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control SME:</strong> {c.sme ?? '—'}</div>
-                                            <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Escalation Required:</strong> {c.needsEscalation ? 'Yes' : 'No'}</div>
-                                          </div>
-                                        </div>
+                                            <div style={{ display: 'flex', gap: 16 }}>
+                                              <div style={{ flex: 1 }}>
+                                                <div style={{ fontSize: 13, color: '#333', marginBottom: 8 }}>{c.sme ?? c.description ?? '—'}</div>
+                                              </div>
+                                              <div style={{ width: 260 }}>
+                                                <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control Owner:</strong> {c.tester ?? '—'}</div>
+                                                <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control SME:</strong> {c.owner ?? '—'}</div>
+                                                <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Escalation Required:</strong> {c.needsEscalation ? 'Yes' : 'No'}</div>
+                                              </div>
+                                            </div>
                                       </div>
                                     </div>
                                   </div>
@@ -342,9 +342,9 @@ export default function ActiveControlsTestingList() {
                               <li key={c.id} className={`control-row ${isExpanded ? 'expanded' : ''}`}>
                                 <div className="control-link" role="button" tabIndex={0} onClick={() => { if (viewMode === 'Compact') setExpandedId((s) => (s === c.id ? null : c.id)); else setSelectedControl(c) }} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { if (viewMode === 'Compact') setExpandedId((s) => (s === c.id ? null : c.id)); else setSelectedControl(c) } }}>
                                   <div className="row-left">
-                                    <div className="row-title">{c.name}</div>
-                                    <div className="row-sub">Tester: {c.tester ?? '—'}</div>
-                                  </div>
+                                      <div className="row-title">{c.name}</div>
+                                      <div className="row-sub">Control Owner: {c.tester ?? '—'}</div>
+                                    </div>
                                   <div className="row-right" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                                     <div className="badge">{String(c.dat?.status ?? c.oet?.status ?? 'Not Started')}</div>
                                     <span className="chevron" style={{ marginLeft: 4 }}>{isExpanded ? '▴' : '▾'}</span>
@@ -367,11 +367,11 @@ export default function ActiveControlsTestingList() {
 
                                         <div style={{ display: 'flex', gap: 16 }}>
                                           <div style={{ flex: 1 }}>
-                                            <div style={{ fontSize: 13, color: '#333', marginBottom: 8 }}>{c.description}</div>
+                                            <div style={{ fontSize: 13, color: '#333', marginBottom: 8 }}>{c.sme ?? c.description ?? '—'}</div>
                                           </div>
                                           <div style={{ width: 260 }}>
-                                            <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control Owner:</strong> {c.owner}</div>
-                                            <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control SME:</strong> {c.sme ?? '—'}</div>
+                                            <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control Owner:</strong> {c.tester ?? '—'}</div>
+                                            <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Control SME:</strong> {c.owner ?? '—'}</div>
                                             <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Escalation Required:</strong> {c.needsEscalation ? 'Yes' : 'No'}</div>
                                           </div>
                                         </div>
