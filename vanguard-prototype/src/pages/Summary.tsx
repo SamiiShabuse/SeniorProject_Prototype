@@ -45,16 +45,34 @@ export default function Summary() {
   const [playAnim, setPlayAnim] = useState(true)
 
   // Basic metrics
+  const totalTests = mockRequests.length
+  const notStartedRequests = mockRequests.filter((r) => String(r.status ?? '').toLowerCase() === 'pending').length
+  const openRequests = mockRequests.filter((r) => (r.status ?? '').toLowerCase() !== 'complete').length
   const totalControls = mockControls.length
   const completed = mockControls.filter((c) => String(c.dat?.status ?? '').toLowerCase() === 'completed' || /completed/i.test(String(c.testingNotes ?? '') + String(c.description ?? ''))).length
   const completionPct = totalControls === 0 ? 0 : Math.round((completed / totalControls) * 100)
-  const openRequests = mockRequests.filter((r) => (r.status ?? '').toLowerCase() !== 'complete').length
-  const activeControls = mockControls.filter((c) => (c.dat?.status ?? '').toLowerCase() !== 'completed').length
 
-  const animatedTotal = useCountUp(totalControls, 800, playAnim)
-  const animatedActive = useCountUp(activeControls, 800, playAnim)
+  const animatedTotal = useCountUp(totalTests, 800, playAnim)
+  const animatedNotStarted = useCountUp(notStartedRequests, 800, playAnim)
   const animatedOpen = useCountUp(openRequests, 800, playAnim)
   const animatedCompletion = useCountUp(completionPct, 800, playAnim)
+
+  // Average time to complete controls (days) using startDate -> completedDate on controls
+  const avgDaysToComplete = (() => {
+    const diffs: number[] = []
+    for (const c of mockControls) {
+      if (!c.startDate || !c.completedDate) continue
+      const s = new Date(c.startDate)
+      const e = new Date(c.completedDate)
+      if (isNaN(s.getTime()) || isNaN(e.getTime())) continue
+      const days = Math.max(0, Math.round((e.getTime() - s.getTime()) / (1000 * 60 * 60 * 24)))
+      diffs.push(days)
+    }
+    if (diffs.length === 0) return 0
+    const sum = diffs.reduce((a, b) => a + b, 0)
+    return Math.round(sum / diffs.length)
+  })()
+  const animatedAvgDays = useCountUp(avgDaysToComplete, 800, playAnim)
 
   useEffect(() => {
     if (!playAnim) return
@@ -95,13 +113,13 @@ export default function Summary() {
 
       {/* Top tiles */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 12, marginBottom: 18 }}>
-        <div role="button" onClick={() => navigate('/controls')} style={{ padding: 14, borderRadius: 10, background: '#fff', boxShadow: '0 6px 18px rgba(0,0,0,0.04)', cursor: 'pointer' }}>
-          <div style={{ color: '#666', fontSize: 12 }}>Total</div>
+        <div role="button" onClick={() => navigate('/requests')} style={{ padding: 14, borderRadius: 10, background: '#fff', boxShadow: '0 6px 18px rgba(0,0,0,0.04)', cursor: 'pointer' }}>
+          <div style={{ color: '#666', fontSize: 12 }}>Total Tests</div>
           <div style={{ fontSize: 22, fontWeight: 700 }}>{animatedTotal}</div>
         </div>
-        <div role="button" onClick={() => navigate('/controls?status=active')} style={{ padding: 14, borderRadius: 10, background: '#fff', boxShadow: '0 6px 18px rgba(0,0,0,0.04)', cursor: 'pointer' }}>
-          <div style={{ color: '#666', fontSize: 12 }}>Active</div>
-          <div style={{ fontSize: 22, fontWeight: 700 }}>{animatedActive}</div>
+        <div role="button" onClick={() => navigate('/requests?status=pending')} style={{ padding: 14, borderRadius: 10, background: '#fff', boxShadow: '0 6px 18px rgba(0,0,0,0.04)', cursor: 'pointer' }}>
+          <div style={{ color: '#666', fontSize: 12 }}>Not Started</div>
+          <div style={{ fontSize: 22, fontWeight: 700 }}>{animatedNotStarted}</div>
         </div>
         <div role="button" onClick={() => navigate('/requests?status=open')} style={{ padding: 14, borderRadius: 10, background: '#fff', boxShadow: '0 6px 18px rgba(0,0,0,0.04)', cursor: 'pointer' }}>
           <div style={{ color: '#666', fontSize: 12 }}>Open Requests</div>
@@ -111,9 +129,9 @@ export default function Summary() {
           <div style={{ color: '#666', fontSize: 12 }}>Completion</div>
           <div style={{ fontSize: 22, fontWeight: 700 }}>{animatedCompletion}%</div>
         </div>
-        <div role="button" onClick={() => navigate('/controls?tab=owners')} style={{ padding: 14, borderRadius: 10, background: '#fff', boxShadow: '0 6px 18px rgba(0,0,0,0.04)', cursor: 'pointer' }}>
-          <div style={{ color: '#666', fontSize: 12 }}>Owners</div>
-          <div style={{ fontSize: 22, fontWeight: 700 }}>{Object.keys(mockControls.reduce<Record<string, number>>((acc, c) => { acc[c.owner || 'Unassigned'] = (acc[c.owner || 'Unassigned'] || 0) + 1; return acc }, {})).length}</div>
+        <div role="button" onClick={() => navigate('/controls?metric=avgDays')} style={{ padding: 14, borderRadius: 10, background: '#fff', boxShadow: '0 6px 18px rgba(0,0,0,0.04)', cursor: 'pointer' }}>
+          <div style={{ color: '#666', fontSize: 12 }}>Avg Days to Complete</div>
+          <div style={{ fontSize: 22, fontWeight: 700 }}>{animatedAvgDays}</div>
         </div>
       </div>
 
