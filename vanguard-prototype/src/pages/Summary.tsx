@@ -23,20 +23,7 @@ function useCountUp(to: number, duration = 600, play = true) {
   return val
 }
 
-// Very small inline chart placeholders to avoid extra dependencies
-function SmallDonut({ value, size = 80 }: { value: number; size?: number }) {
-  const radius = size / 2 - 4
-  const circumference = 2 * Math.PI * radius
-  const pct = Math.max(0, Math.min(100, value))
-  const dash = (pct / 100) * circumference
-  return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden>
-      <circle cx={size / 2} cy={size / 2} r={radius} fill="#f3f6fb" />
-      <circle cx={size / 2} cy={size / 2} r={radius} stroke="#4caf50" strokeWidth={8} strokeDasharray={`${dash} ${circumference - dash}`} strokeLinecap="round" fill="none" transform={`rotate(-90 ${size / 2} ${size / 2})`} />
-      <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize={12} fontWeight={700} fill="#172b4d">{pct}%</text>
-    </svg>
-  )
-}
+// (Removed SmallDonut — not required after layout changes)
 
 export default function Summary() {
   const [showExportMenu, setShowExportMenu] = useState(false)
@@ -213,31 +200,17 @@ export default function Summary() {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div style={{ padding: 12, borderRadius: 10, background: '#fff', boxShadow: '0 6px 18px rgba(0,0,0,0.04)' }}>
-            <div style={{ fontSize: 13, color: '#666' }}>Completion</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <SmallDonut value={completionPct} size={90} />
-              <div>
-                <div style={{ fontWeight: 700, fontSize: 18 }}>{completionPct}%</div>
-                <div style={{ color: '#666', fontSize: 13 }}>{completed} of {totalControls} completed</div>
-              </div>
-            </div>
-          </div>
-
-          <div style={{ padding: 12, borderRadius: 10, background: '#fff', boxShadow: '0 6px 18px rgba(0,0,0,0.04)' }}>
-            <h4 style={{ margin: '0 0 8px 0' }}>Upcoming Due</h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {mockControls.filter((c) => c.dueDate).sort((a, b) => String(a.dueDate).localeCompare(String(b.dueDate))).slice(0, 4).map((c) => (
-                <div key={c.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
-                  <div>{c.name.length > 40 ? c.name.substring(0, 40) + '...' : c.name}</div>
+          <div style={{ padding: 18, borderRadius: 10, background: '#fff', boxShadow: '0 8px 24px rgba(0,0,0,0.04)', flex: 1, minHeight: 260 }}>
+            <h4 style={{ margin: '0 0 12px 0' }}>Upcoming Due</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {mockControls.filter((c) => c.dueDate).sort((a, b) => String(a.dueDate).localeCompare(String(b.dueDate))).slice(0, 8).map((c) => (
+                <div key={c.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, padding: '8px 0', borderBottom: '1px solid #f4f4f4' }}>
+                  <div style={{ fontWeight: 600 }}>{c.name.length > 60 ? c.name.substring(0, 60) + '...' : c.name}</div>
                   <div style={{ color: '#666' }}>{formatBadgeDate(c.dueDate)}</div>
                 </div>
               ))}
+              {mockControls.filter((c) => c.dueDate).length === 0 && <div className="empty">No upcoming due dates</div>}
             </div>
-          </div>
-
-          <div style={{ padding: 12, borderRadius: 10, background: '#fff', boxShadow: '0 6px 18px rgba(0,0,0,0.04)', textAlign: 'center' }}>
-            <div style={{ color: '#666', fontSize: 13 }}>Small widget</div>
           </div>
         </div>
       </div>
