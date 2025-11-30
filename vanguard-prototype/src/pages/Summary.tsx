@@ -137,11 +137,11 @@ export default function Summary() {
 
       {/* Main area: left large + right column */}
       <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 14 }}>
-        <div style={{ padding: 16, borderRadius: 10, background: '#fff', boxShadow: '0 8px 24px rgba(0,0,0,0.04)' }}>
+        <div style={{ padding: 20, borderRadius: 10, background: '#fff', boxShadow: '0 8px 24px rgba(0,0,0,0.04)' }}>
           <h3 style={{ marginTop: 0 }}>Overview</h3>
-          <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-            {/* OET Distribution */}
-            <div style={{ flex: 1, minWidth: 220 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+            {/* DAT Distribution (stacked) */}
+            <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                 <strong>DAT Distribution</strong>
                 <div style={{ color: '#666', fontSize: 12 }}>{totalControls} controls</div>
@@ -175,8 +175,8 @@ export default function Summary() {
               </div>
             </div>
 
-            {/* OET Distribution */}
-            <div style={{ flex: 1, minWidth: 220 }}>
+            {/* OET Distribution (stacked) */}
+            <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                 <strong>OET Distribution</strong>
                 <div style={{ color: '#666', fontSize: 12 }}>{totalControls} controls</div>
@@ -242,12 +242,8 @@ export default function Summary() {
         </div>
       </div>
 
-      {/* Bottom: simple lists */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginTop: 14 }}>
-        <div style={{ padding: 12, borderRadius: 10, background: '#fff', boxShadow: '0 6px 18px rgba(0,0,0,0.04)' }}>
-          <h4 style={{ marginTop: 0 }}>Ratings</h4>
-          <div style={{ color: '#666' }}>Summary of DAT/testing ratings.</div>
-        </div>
+      {/* Bottom: simple lists (Ratings removed; Top owners full width) */}
+      <div style={{ marginTop: 14 }}>
         <div style={{ padding: 12, borderRadius: 10, background: '#fff', boxShadow: '0 6px 18px rgba(0,0,0,0.04)' }}>
           <h4 style={{ marginTop: 0 }}>Top owners</h4>
           <div>
